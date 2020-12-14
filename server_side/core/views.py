@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import render
 from users import models as users_model
@@ -6,4 +7,5 @@ from users import models as users_model
 
 
 class HomeView(View):
-    pass
+    def get(self, request):
+        return render(request, "base.html")

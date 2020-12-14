@@ -5,10 +5,6 @@ from . import models
 # Create your views here.
 
 
-class E:
-    pass
-
-
 class PlaceView(DetailView):
     """ RoomView Definition """
 
