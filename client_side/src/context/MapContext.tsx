@@ -2,10 +2,12 @@ import { Context, createContext } from 'react'
 
 interface MapContextType {
   map?: any
+  places?: any
 }
 
 const initialMapContextValue: MapContextType = {
-  map: null
+  map: null,
+  places: null
 }
 
 const MapContext: Context<MapContextType> = createContext(
