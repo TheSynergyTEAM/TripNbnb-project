@@ -1,4 +1,5 @@
 import { Input } from 'antd'
+import MapContext from 'context/MapContext'
 import styled from 'styled-components'
 
 const { Search } = Input
@@ -16,16 +17,22 @@ const StyledBox = styled.div`
 `
 
 const SearchBox: React.FC = () => {
-  const onSearch = (value: string) => console.log(value)
+  const handleSearch = (value: string, map: any) => {
+    console.log(value, map)
+  }
 
   return (
-    <StyledBox>
-      <Search
-        placeholder="여행지, 관광 명소"
-        onSearch={onSearch}
-        style={{ width: '100%' }}
-      />
-    </StyledBox>
+    <MapContext.Consumer>
+      {({ map }) => (
+        <StyledBox>
+          <Search
+            placeholder="여행지, 관광 명소"
+            onSearch={(value) => handleSearch(value, map)}
+            style={{ width: '100%' }}
+          />
+        </StyledBox>
+      )}
+    </MapContext.Consumer>
   )
 }
 
