@@ -39,6 +39,8 @@ class Place(core_models.TimeStampedModel):
     description = models.TextField()
     city = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
+    mapx = models.CharField(max_length=50)
+    mapy = models.CharField(max_length=50)
     writer = models.ForeignKey(
         "users.User", related_name="place", on_delete=models.CASCADE
     )

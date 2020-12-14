@@ -15,6 +15,8 @@ class User(AbstractUser):
     )
 
     profile_img = models.ImageField(blank=True)
-    gender = models.CharField(max_length=10, blank=True)
+    gender = models.CharField(
+        choices=GENDER_CHOICES, default=GENDER_FEMALE, max_length=10, blank=True
+    )
     biography = models.TextField()
     birthdate = models.DateField(blank=True, null=True)
