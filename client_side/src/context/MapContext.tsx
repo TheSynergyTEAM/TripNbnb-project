@@ -1,8 +1,8 @@
 import { Context, createContext } from 'react'
 
 interface MapContextType {
-  map?: any
-  places?: any
+  map?: daum.maps.Map | null
+  places?: daum.maps.services.Places | null
 }
 
 const initialMapContextValue: MapContextType = {

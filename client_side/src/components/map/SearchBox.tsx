@@ -3,21 +3,6 @@ import MapContext from 'context/MapContext'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-interface KeywordSearchResult {
-  address_name: string
-  category_group_code: string
-  category_group_name: string
-  category_name: string
-  distance: string
-  id: string
-  phone: string
-  place_name: string
-  place_url: string
-  road_address_name: string
-  x: number | string
-  y: number | string
-}
-
 const { Search } = Input
 
 const StyledBox = styled.div`
@@ -34,14 +19,17 @@ const StyledBox = styled.div`
 `
 
 const SearchBox: React.FC = () => {
-  const [searchResult, setSearchResult] = useState<Array<KeywordSearchResult>>(
-    []
-  )
+  const [searchResult, setSearchResult] = useState<
+    Array<daum.maps.services.PlacesSearchResultItem>
+  >([])
   const [isSearch, setIsSearch] = useState(false)
   const { places } = useContext(MapContext)
   const handleSearch = (value: string) => {
-    const cb = (result: Array<KeywordSearchResult>, status: any) => {
-      if (status === window.kakao.maps.services.Status.OK) {
+    const cb = (
+      result: Array<daum.maps.services.PlacesSearchResultItem>,
+      status: any
+    ): void => {
+      if (status === daum.maps.services.Status.OK) {
         setIsSearch(true)
         if (result.length) {
           // 여행지, 관광 명소
@@ -50,15 +38,17 @@ const SearchBox: React.FC = () => {
           )
 
           if (!attraction.length) {
+            console.log(result)
             setSearchResult([])
           } else {
+            console.log(attraction)
             setSearchResult(attraction)
           }
         }
       }
     }
 
-    places.keywordSearch(value, cb)
+    ;(places as daum.maps.services.Places).keywordSearch(value, cb)
   }
 
   useEffect(() => {

@@ -47,5 +47,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "daum.maps.d.ts": "Musma/daum.maps.d.ts"
   }
 }
