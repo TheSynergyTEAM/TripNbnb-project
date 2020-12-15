@@ -2,10 +2,13 @@ import { Input } from 'antd'
 import MapContext from 'context/MapContext'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import List from './List'
 
 const { Search } = Input
 
 const StyledBox = styled.div`
+  max-height: 70%;
+  overflow-y: auto;
   top: 2rem;
   left: 2rem;
   position: fixed;
@@ -15,11 +18,26 @@ const StyledBox = styled.div`
   border: 1px solid #ccc;
   border-radius: 5px;
   z-index: 10;
+  transition: all 0.5s ease;
+`
+
+const StyledSearch = styled(Search)`
+  background-color: white;
   padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 15;
+`
+
+const ResultWrapper = styled.div`
+  /* margin-top: 0.5rem; */
 `
 
 const SearchBox: React.FC = () => {
   const [searchResult, setSearchResult] = useState<
+    Array<daum.maps.services.PlacesSearchResultItem>
+  >([])
+  const [allSearchResult, setAllSearchResult] = useState<
     Array<daum.maps.services.PlacesSearchResultItem>
   >([])
   const [isSearch, setIsSearch] = useState(false)
@@ -31,19 +49,19 @@ const SearchBox: React.FC = () => {
     ): void => {
       if (status === daum.maps.services.Status.OK) {
         setIsSearch(true)
+        setSearchResult([])
+        setAllSearchResult([])
         if (result.length) {
           // 여행지, 관광 명소
           const attraction = result.filter(
             (item) => item.category_group_code === 'AT4'
           )
+          const noAttraction = result.filter(
+            (item) => item.category_group_code !== 'AT4'
+          )
 
-          if (!attraction.length) {
-            console.log(result)
-            setSearchResult([])
-          } else {
-            console.log(attraction)
-            setSearchResult(attraction)
-          }
+          setSearchResult(attraction)
+          setAllSearchResult(noAttraction)
         }
       }
     }
@@ -54,25 +72,37 @@ const SearchBox: React.FC = () => {
   useEffect(() => {
     return () => {
       setSearchResult([])
+      setAllSearchResult([])
       setIsSearch(false)
     }
   }, [])
 
   return (
     <StyledBox className="shadow-box">
-      <Search
+      <StyledSearch
         placeholder="여행지, 관광 명소"
         onSearch={handleSearch}
         style={{ width: '100%' }}
       />
       {isSearch && (
-        <div>
-          {searchResult.length ? (
-            <div className="result"></div>
+        <ResultWrapper>
+          <List items={searchResult} title="여행지, 관광명소 검색 결과" />
+          <List items={allSearchResult} title="기타 장소 검색 결과" />
+          {/* {searchResult.length ? (
+            <div className="result">
+              {searchResult.map((result) => (
+                <div>{result.place_name}</div>
+              ))}
+            </div>
           ) : (
-            <div className="no-result"></div>
-          )}
-        </div>
+            <div className="no-result">
+              {allSearchResult.length &&
+                allSearchResult.map((result) => (
+                  <div key={result.id}>{result.place_name}</div>
+                ))}
+            </div>
+          )} */}
+        </ResultWrapper>
       )}
     </StyledBox>
   )
