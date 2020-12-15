@@ -41,6 +41,7 @@ const SearchBox: React.FC = () => {
     Array<daum.maps.services.PlacesSearchResultItem>
   >([])
   const [isSearch, setIsSearch] = useState(false)
+  const [keyword, setKeyword] = useState('')
   const { places } = useContext(MapContext)
   const handleSearch = (value: string) => {
     const cb = (
@@ -51,6 +52,7 @@ const SearchBox: React.FC = () => {
         setIsSearch(true)
         setSearchResult([])
         setAllSearchResult([])
+        setKeyword(value)
         if (result.length) {
           // 여행지, 관광 명소
           const attraction = result.filter(
@@ -86,22 +88,16 @@ const SearchBox: React.FC = () => {
       />
       {isSearch && (
         <ResultWrapper>
-          <List items={searchResult} title="여행지, 관광명소 검색 결과" />
-          <List items={allSearchResult} title="기타 장소 검색 결과" />
-          {/* {searchResult.length ? (
-            <div className="result">
-              {searchResult.map((result) => (
-                <div>{result.place_name}</div>
-              ))}
-            </div>
-          ) : (
-            <div className="no-result">
-              {allSearchResult.length &&
-                allSearchResult.map((result) => (
-                  <div key={result.id}>{result.place_name}</div>
-                ))}
-            </div>
-          )} */}
+          <List
+            keyword={keyword}
+            items={searchResult}
+            title="여행지, 관광명소 검색 결과"
+          />
+          <List
+            keyword={keyword}
+            items={allSearchResult}
+            title="기타 장소 검색 결과"
+          />
         </ResultWrapper>
       )}
     </StyledBox>
