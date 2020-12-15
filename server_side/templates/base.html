@@ -11,9 +11,10 @@
 <body>
     <h1>test</h1>
     <header>
+        <a href="{% url 'users:login' %}">Login</a>
         {% block search-bar %}
-            <form method="get" action="{% url 'places:search' %}">
-                <input value="" name="city" placeholder="Search By City"/>
+            <form method="get" action="{% url 'core:search' %}">
+                <input value="" name="search_value" placeholder="Search By City"/>
             </form>
         {% endblock search-bar %}
     </header>
