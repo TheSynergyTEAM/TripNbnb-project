@@ -1,5 +1,5 @@
 import { Input } from 'antd'
-import MapContext from 'context/MapContext'
+import MapContext from 'context/Map'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import List from './List'

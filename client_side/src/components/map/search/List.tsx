@@ -2,7 +2,7 @@ import { List as AntdList, Typography } from 'antd'
 import { purple } from '@ant-design/colors'
 import styled from 'styled-components'
 import { useContext } from 'react'
-import MapContext from 'context/MapContext'
+import MapContext from 'context/Map'
 
 interface ListComponentProps {
   keyword: string

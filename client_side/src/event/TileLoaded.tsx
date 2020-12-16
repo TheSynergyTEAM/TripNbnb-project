@@ -1,4 +1,4 @@
-import MapContext from 'context/MapContext'
+import MapContext from 'context/Map'
 import { useContext, useEffect } from 'react'
 
 const IdleEvent: React.FC = () => {

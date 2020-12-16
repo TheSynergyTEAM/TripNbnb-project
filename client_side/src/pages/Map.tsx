@@ -2,7 +2,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import MapContainer from 'components/map/Container'
 import SearchBox from 'components/map/search/Box'
 import { useEffect, useState } from 'react'
-import MapContext from 'context/MapContext'
+import MapContext from 'context/Map'
 import TileLoadedEvent from 'event/TileLoaded'
 
 const Map: React.FC<RouteComponentProps> = () => {
