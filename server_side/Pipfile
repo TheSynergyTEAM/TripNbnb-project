@@ -9,6 +9,8 @@ black = "*"
 [packages]
 django = "==2.2.13"
 pillow = "*"
+requests = "*"
+django-environ = "*"
 
 [requires]
 python_version = "3.8"
