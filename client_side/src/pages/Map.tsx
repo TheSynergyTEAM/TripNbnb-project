@@ -3,6 +3,7 @@ import MapContainer from 'components/map/Container'
 import SearchBox from 'components/map/search/Box'
 import { useEffect, useState } from 'react'
 import MapContext from 'context/MapContext'
+import TileLoadedEvent from 'event/TileLoaded'
 
 const Map: React.FC<RouteComponentProps> = () => {
   const [map, setMap] = useState<daum.maps.Map | null>(null)
@@ -26,14 +27,6 @@ const Map: React.FC<RouteComponentProps> = () => {
     setPlaces(__places__)
     setMarker(__marker__)
 
-    // browser test
-    // @ts-ignore
-    window.__map__ = __map__
-    // @ts-ignore
-    window.__places__ = __places__
-    // @ts-ignore
-    window.__marker__ = __marker__
-
     return () => {
       setMap(null)
       setPlaces(null)
@@ -46,6 +39,7 @@ const Map: React.FC<RouteComponentProps> = () => {
       <MapContext.Provider value={{ map, places, marker }}>
         <SearchBox />
         <MapContainer />
+        {map && <TileLoadedEvent />}
       </MapContext.Provider>
     </div>
   )
