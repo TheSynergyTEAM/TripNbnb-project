@@ -1,6 +1,8 @@
 import { List as AntdList, Typography } from 'antd'
 import { purple } from '@ant-design/colors'
 import styled from 'styled-components'
+import { useContext } from 'react'
+import MapContext from 'context/MapContext'
 
 interface ListComponentProps {
   keyword: string
@@ -31,14 +33,28 @@ const ListHeader: React.FC<{ title: string; keyword: string }> = ({
 }
 
 const List: React.FC<ListComponentProps> = ({ keyword, title, items }) => {
+  const { map } = useContext(MapContext)
+
+  const moveToTarget = (
+    item: daum.maps.services.PlacesSearchResultItem,
+    e: React.MouseEvent
+  ) => {
+    map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
+  }
+
   return (
     <AntdList
+      locale={{ emptyText: '검색 결과가 없습니다.' }}
       itemLayout="vertical"
       style={{ padding: '0 1rem', margin: '0' }}
       header={<ListHeader keyword={keyword} title={title} />}
       dataSource={items}
       renderItem={(item) => (
-        <AntdList.Item key={item.id}>
+        <AntdList.Item
+          key={item.id}
+          onClick={(e) => moveToTarget(item, e)}
+          style={{ cursor: 'pointer' }}
+        >
           <AntdList.Item.Meta
             title={item.place_name}
             description={item.address_name}
