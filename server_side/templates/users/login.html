@@ -1,1 +1,11 @@
-{{form.as_p}}
+{% extends 'base.html' %}
+{% block content %}
+    {% include "social_login.html" %}
+    <form method="POST" action="{%url "users:login"%}">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button>
+            Login
+        </button>
+    </form>
+{% endblock content %}
