@@ -1,35 +1,55 @@
 import styled from 'styled-components'
-import { Button, Typography } from 'antd'
+import { Button } from 'antd'
 import { purple } from '@ant-design/colors'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import UserContext from 'context/User'
+import Login from 'event/Login'
+import Avatar from 'antd/lib/avatar/avatar'
 
 const StyledHeader = styled.header`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
   padding: 1rem 0.5rem;
-  margin-bottom: 1rem;
 `
 
-const Title = styled(Typography.Title)`
-  background-color: ${purple.primary};
-  color: #fff !important;
-  padding: 0 0.5rem;
+const Title = styled.div`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: ${purple.primary};
 `
 
 const Header: React.FC = () => {
-  const { user, isLoggedIn } = useContext(UserContext)
+  const [openPopup, setOpenPopup] = useState(false)
+  const { isLoggedIn, user } = useContext(UserContext)
+
+  const handleLogin = () => {
+    if (isLoggedIn) {
+      return
+    }
+
+    setOpenPopup(true)
+  }
 
   return (
-    <StyledHeader>
-      <Title level={3}>
-        {process.env.REACT_APP_PROJECT_NAME?.toUpperCase()}
-      </Title>
+    <StyledHeader className="shadow-box">
+      <Title>{process.env.REACT_APP_PROJECT_NAME?.toUpperCase()}</Title>
       {isLoggedIn ? (
-        <div>user's profile</div>
+        <div>
+          <Avatar
+            {...(user.properties.thumbnail_image
+              ? { src: user.properties.thumbnail_image }
+              : {})}
+            size={40}
+          >
+            {user.properties.thumbnail_image ? '' : user.properties.nickname[0]}
+          </Avatar>
+        </div>
       ) : (
         <div className="login">
-          <Button>로그인</Button>
+          <Button onClick={handleLogin}>로그인</Button>
+          {openPopup && <Login />}
         </div>
       )}
     </StyledHeader>

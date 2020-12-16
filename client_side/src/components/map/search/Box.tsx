@@ -9,7 +9,7 @@ const { Search } = Input
 const StyledBox = styled.div`
   max-height: 70%;
   overflow-y: auto;
-  top: 2rem;
+  top: 5.5rem;
   left: 2rem;
   position: fixed;
   max-width: 300px;
