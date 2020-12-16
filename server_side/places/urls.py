@@ -5,5 +5,5 @@ app_name = "places"
 
 urlpatterns = [
     path("<int:pk>", views.PlaceView.as_view(), name="detail"),
-    path("search/", views.SearchView.as_view(), name="search"),
+    path("search", views.search, name="search"),
 ]

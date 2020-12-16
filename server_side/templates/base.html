@@ -12,7 +12,7 @@
     <h1>test</h1>
     <header>
         {% block search-bar %}
-            <form method="get" action="{% url 'core:search' %}">
+            <form method="get" action="{% url 'places:search' %}">
                 <input value="" name="search_value" placeholder="Search By City"/>
             </form>
         {% endblock search-bar %}
