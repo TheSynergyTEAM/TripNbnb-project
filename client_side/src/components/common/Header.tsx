@@ -38,12 +38,14 @@ const Header: React.FC = () => {
       {isLoggedIn ? (
         <div>
           <Avatar
-            {...(user.properties.thumbnail_image
-              ? { src: user.properties.thumbnail_image }
+            {...(user?.properties.thumbnail_image
+              ? { src: user?.properties.thumbnail_image }
               : {})}
             size={40}
           >
-            {user.properties.thumbnail_image ? '' : user.properties.nickname[0]}
+            {user?.properties.thumbnail_image
+              ? ''
+              : user?.properties.nickname[0]}
           </Avatar>
         </div>
       ) : (

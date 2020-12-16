@@ -1,20 +1,37 @@
 import { createContext } from 'react'
 
+interface Properties {
+  nickname: string
+  thumbnail_image?: string
+  profile_image?: string
+}
+
+interface KakaoAccount {
+  profile?: Properties
+}
+
+interface User {
+  id: number
+  connected_at: string
+  properties: Properties
+  kakao_account: KakaoAccount
+}
+
 interface UserContextType {
-  user: any
+  user: User | null
   isLoggedIn: boolean
-  toggleUser: (user: any) => void
+  toggleUser: (user: User) => void
 }
 
 const initialUserContextValue: UserContextType = {
   user: null,
   isLoggedIn: false,
-  toggleUser(user) {
+  toggleUser(user: User) {
     this.user = user
     this.isLoggedIn = true
   }
 }
 
-const User = createContext(initialUserContextValue)
+const UserContext = createContext(initialUserContextValue)
 
-export default User
+export default UserContext
