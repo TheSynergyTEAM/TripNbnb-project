@@ -17,9 +17,7 @@ const Title = styled.div`
 
 const columns = {
   outer: {
-    xs: 24,
-    md: 18,
-    lg: 12
+    span: 12
   },
   inner: {
     xs: 12,
@@ -30,7 +28,7 @@ const columns = {
 
 const StyledNavWrapper = styled.ul`
   margin: 0;
-  padding: 0 0 0 0.5rem;
+  padding: 0 0 0 2rem;
   list-style-type: none;
 `
 
@@ -46,10 +44,10 @@ const NavWrapper: React.FC = ({ children }) => {
   )
 }
 
-const NavItem: React.FC<{ to: string; name: string }> = (props) => {
+const NavItem: React.FC<{ to: string; name?: string }> = (props) => {
   return (
-    <li>
-      <NavLink to={props.to}>{props.name}</NavLink>
+    <li style={{ display: 'inline-block' }}>
+      <NavLink to={props.to}>{props.name || props.children}</NavLink>
     </li>
   )
 }
@@ -69,47 +67,38 @@ const Header: React.FC = () => {
 
   return (
     <Row
-      justify="center"
+      justify="space-between"
       align="middle"
       style={{ padding: '1rem', borderBottom: '1px solid #ddd' }}
     >
-      <Col {...columns.outer}>
-        <Row justify="space-between" align="middle">
-          <Col {...columns.inner}>
-            <NavLink to="/">
-              <Title>{process.env.REACT_APP_PROJECT_NAME?.toUpperCase()}</Title>
-            </NavLink>
-          </Col>
-          <Col
-            {...columns.inner}
-            style={{ display: breakpoint.lg ? 'block' : 'none' }}
-          >
-            <NavWrapper>
-              <NavItem to="/map" name="Map" />
-            </NavWrapper>
-          </Col>
-          <Col {...columns.inner} style={{ textAlign: 'right' }}>
-            {isLoggedIn ? (
-              <div>
-                <Avatar
-                  {...(user?.properties.thumbnail_image
-                    ? { src: user?.properties.thumbnail_image }
-                    : {})}
-                  size={30}
-                >
-                  {user?.properties.thumbnail_image
-                    ? ''
-                    : user?.properties.nickname[0]}
-                </Avatar>
-              </div>
-            ) : (
-              <div className="login">
-                <Button onClick={handleLogin}>로그인</Button>
-                {openPopup && <Login />}
-              </div>
-            )}
-          </Col>
-        </Row>
+      <Col {...columns.inner}>
+        <NavItem to="/">
+          <Title>{process.env.REACT_APP_PROJECT_NAME?.toUpperCase()}</Title>
+        </NavItem>
+        <NavWrapper>
+          <NavItem to="/map" name="Map" />
+        </NavWrapper>
+      </Col>
+      <Col {...columns.inner} style={{ textAlign: 'right' }}>
+        {isLoggedIn ? (
+          <div>
+            <Avatar
+              {...(user?.properties.thumbnail_image
+                ? { src: user?.properties.thumbnail_image }
+                : {})}
+              size={30}
+            >
+              {user?.properties.thumbnail_image
+                ? ''
+                : user?.properties.nickname[0]}
+            </Avatar>
+          </div>
+        ) : (
+          <div className="login">
+            <Button onClick={handleLogin}>로그인</Button>
+            {openPopup && <Login />}
+          </div>
+        )}
       </Col>
     </Row>
   )

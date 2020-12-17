@@ -33,13 +33,32 @@ const ListHeader: React.FC<{ title: string; keyword: string }> = ({
 }
 
 const List: React.FC<ListComponentProps> = ({ keyword, title, items }) => {
-  const { map } = useContext(MapContext)
+  const { map, places } = useContext(MapContext)
 
   const moveToTarget = (
     item: daum.maps.services.PlacesSearchResultItem,
     e: React.MouseEvent
   ) => {
-    map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
+    const lat = parseFloat(item.y)
+    const lng = parseFloat(item.x)
+    map?.setCenter(new daum.maps.LatLng(lat, lng))
+    places?.categorySearch(
+      // @ts-ignore
+      'AT4',
+      (result, status) => {
+        if (status === daum.maps.services.Status.OK) {
+          result.forEach((item) => {
+            const placeLat = parseFloat(item.y)
+            const placeLng = parseFloat(item.x)
+            const marker = new daum.maps.Marker({
+              position: new daum.maps.LatLng(placeLat, placeLng)
+            })
+            marker.setMap(map as daum.maps.Map)
+          })
+        }
+      },
+      { x: lng, y: lat }
+    )
   }
 
   return (
