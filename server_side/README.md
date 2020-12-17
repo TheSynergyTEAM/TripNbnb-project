@@ -27,7 +27,6 @@
 
 ## To do
 - Review Admin, Place Admin, List Admin
-- Add Signup feature
-- Add Login feature not with using Social API
-- Detail View of user profile, places' detail, lists of places and reviews. 
+- URL set 
+- Details of user profile, places' detail, lists of places and reviews. 
 

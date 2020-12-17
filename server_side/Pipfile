@@ -11,6 +11,8 @@ django = "==2.2.13"
 pillow = "*"
 requests = "*"
 django-environ = "*"
+django-cors-headers = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.8"

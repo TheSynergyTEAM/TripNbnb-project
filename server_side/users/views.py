@@ -5,8 +5,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import FormView
 from django.urls import reverse_lazy
 from . import forms, models
+from rest_framework import viewsets  # add this
+from .serializers import UserSerializer  # add this
+
 
 # Create your views here.
+class UserView(viewsets.ModelViewSet):  # add this
+    serializer_class = UserSerializer  # add this
+    queryset = models.User.objects.all()
 
 
 class LoginView(FormView):

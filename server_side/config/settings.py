@@ -39,7 +39,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = ["corsheaders", "rest_framework"]
 
 PROJECT_APPS = [
     "core.apps.CoreConfig",
@@ -47,7 +47,7 @@ PROJECT_APPS = [
     "places.apps.PlacesConfig",
     "reviews.apps.ReviewsConfig",
     "lists.apps.ListsConfig",
-]
+] + THIRD_PARTY_APPS
 
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -132,5 +133,6 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-
 AUTH_USER_MODEL = "users.User"
+
+CORS_ORIGIN_WHITELIST = ["https://localhost:3000"]
