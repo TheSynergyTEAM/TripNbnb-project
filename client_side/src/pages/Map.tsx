@@ -13,7 +13,6 @@ const StyledMap = styled.div`
 const Map: React.FC<RouteComponentProps> = () => {
   const [map, setMap] = useState<daum.maps.Map | null>(null)
   const [places, setPlaces] = useState<daum.maps.services.Places | null>(null)
-  const [marker, setMarker] = useState<daum.maps.Marker | null>(null)
 
   useEffect(() => {
     // fixed body height
@@ -26,19 +25,13 @@ const Map: React.FC<RouteComponentProps> = () => {
     }
     const __places__ = new daum.maps.services.Places()
     const __map__ = new daum.maps.Map(mapContainer as HTMLElement, options)
-    const __marker__ = new daum.maps.Marker({
-      map: __map__,
-      position: new daum.maps.LatLng(32.2, 126.1)
-    })
 
     setMap(__map__)
     setPlaces(__places__)
-    setMarker(__marker__)
 
     return () => {
       setMap(null)
       setPlaces(null)
-      setMarker(null)
 
       // disabled fixed body height
       if (document.body.classList.contains('body-fixed-height')) {
@@ -49,7 +42,7 @@ const Map: React.FC<RouteComponentProps> = () => {
 
   return (
     <StyledMap>
-      <MapContext.Provider value={{ map, places, marker }}>
+      <MapContext.Provider value={{ map, places }}>
         <SearchBox />
         <MapContainer />
         {map && <TileLoadedEvent />}
