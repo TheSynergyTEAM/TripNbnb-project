@@ -3,6 +3,8 @@ import { purple } from '@ant-design/colors'
 import styled from 'styled-components'
 import { useContext } from 'react'
 import MapContext from 'context/Map'
+import { MouseOver, MouseOut, Register } from 'event/Marker'
+import Marker from 'context/Marker'
 
 interface ListComponentProps {
   keyword: string
@@ -34,30 +36,43 @@ const ListHeader: React.FC<{ title: string; keyword: string }> = ({
 
 const List: React.FC<ListComponentProps> = ({ keyword, title, items }) => {
   const { map, places } = useContext(MapContext)
+  // @ts-ignore
+  const MarkerContext = useContext(Marker)
 
   const moveToTarget = (
     item: daum.maps.services.PlacesSearchResultItem,
     e: React.MouseEvent
   ) => {
-    const lat = parseFloat(item.y)
-    const lng = parseFloat(item.x)
-    map?.setCenter(new daum.maps.LatLng(lat, lng))
+    map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
     places?.categorySearch(
       // @ts-ignore
       'AT4',
-      (result, status) => {
+      (result, status, pagenation) => {
         if (status === daum.maps.services.Status.OK) {
-          result.forEach((item) => {
-            const placeLat = parseFloat(item.y)
-            const placeLng = parseFloat(item.x)
-            const marker = new daum.maps.Marker({
-              position: new daum.maps.LatLng(placeLat, placeLng)
+          if (pagenation.hasNextPage) {
+            // 모든 검색 결과에 대해서 마커 찍기
+            pagenation.nextPage()
+          }
+          if (result.length) {
+            result.forEach((item) => {
+              // 마커 생성
+              const marker = new daum.maps.Marker({
+                position: new daum.maps.LatLng(
+                  parseFloat(item.y),
+                  parseFloat(item.x)
+                )
+              })
+              // 이벤트 등록 (MouseOver)
+              Register(marker, 'mouseover', MouseOver(marker, MarkerContext))
+              // 이벤트 등록 (MouseOut)
+              Register(marker, 'mouseout', MouseOut(MarkerContext))
+              // 맵에 마커를 찍음
+              marker.setMap(map as daum.maps.Map)
             })
-            marker.setMap(map as daum.maps.Map)
-          })
+          }
         }
       },
-      { x: lng, y: lat }
+      { x: parseFloat(item.x), y: parseFloat(item.y) }
     )
   }
 

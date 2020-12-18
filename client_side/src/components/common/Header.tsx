@@ -26,6 +26,17 @@ const columns = {
   }
 }
 
+const HeaderRow = styled(Row)`
+  background-color: white;
+  position: fixed;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 25;
+`
+
 const StyledNavWrapper = styled.ul`
   margin: 0;
   padding: 0 0 0 2rem;
@@ -55,7 +66,6 @@ const NavItem: React.FC<{ to: string; name?: string }> = (props) => {
 const Header: React.FC = () => {
   const [openPopup, setOpenPopup] = useState(false)
   const { isLoggedIn, user } = useContext(UserContext)
-  const breakpoint = useBreakpoint()
 
   const handleLogin = () => {
     if (isLoggedIn) {
@@ -66,11 +76,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <Row
-      justify="space-between"
-      align="middle"
-      style={{ padding: '1rem', borderBottom: '1px solid #ddd' }}
-    >
+    <HeaderRow justify="space-between" align="middle">
       <Col {...columns.inner}>
         <NavItem to="/">
           <Title>{process.env.REACT_APP_PROJECT_NAME?.toUpperCase()}</Title>
@@ -100,7 +106,7 @@ const Header: React.FC = () => {
           </div>
         )}
       </Col>
-    </Row>
+    </HeaderRow>
   )
 }
 

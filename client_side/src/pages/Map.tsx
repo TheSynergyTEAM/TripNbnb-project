@@ -1,9 +1,7 @@
 import { RouteComponentProps } from 'react-router-dom'
 import MapContainer from 'components/map/Container'
-import SearchBox from 'components/map/search/Box'
 import { useEffect, useState } from 'react'
 import MapContext from 'context/Map'
-import TileLoadedEvent from 'event/TileLoaded'
 import styled from 'styled-components'
 
 const StyledMap = styled.div`
@@ -43,9 +41,8 @@ const Map: React.FC<RouteComponentProps> = () => {
   return (
     <StyledMap>
       <MapContext.Provider value={{ map, places }}>
-        <SearchBox />
         <MapContainer />
-        {map && <TileLoadedEvent />}
+        {/* {map && <TileLoadedEvent />} */}
       </MapContext.Provider>
     </StyledMap>
   )
