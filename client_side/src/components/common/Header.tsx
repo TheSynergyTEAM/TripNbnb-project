@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Button, Row, Col } from 'antd'
 import { purple } from '@ant-design/colors'
-import { useCallback, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import UserContext from 'context/User'
 import Login from 'event/Login'
 import Avatar from 'antd/lib/avatar/avatar'
