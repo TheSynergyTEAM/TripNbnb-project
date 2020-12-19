@@ -10,4 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "profile_img",
+            "gender",
+            "biography",
+            "birthdate",
         )

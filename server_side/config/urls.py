@@ -16,15 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from django.conf import settings
+from django.conf.urls.static import static
 from users import views
 
 router = routers.DefaultRouter()
 router.register(r"users", views.UserView, "users")
 
 urlpatterns = [
-    path("", include("core.urls", namespace="core")),
-    path("api/", include(router.urls)),
+    # path("", include("core.urls", namespace="core")),
+    # path("api/", include(router.urls)),
     path("places/", include("places.urls", namespace="places")),
-    path("users/", include("users.urls", namespace="users")),
+    path("api/", include("users.urls", namespace="api")),
     path("admin/", admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
