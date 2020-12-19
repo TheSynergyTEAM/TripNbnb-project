@@ -15,6 +15,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/styled-components": "^5.1.5",
     "antd": "^4.9.2",
+    "axios": "^0.21.0",
     "craco-less": "^1.17.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -28,7 +29,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:server": "node src/__tests__/server/index.js"
   },
   "eslintConfig": {
     "extends": [
@@ -49,7 +51,9 @@
     ]
   },
   "devDependencies": {
-    "daum.maps.d.ts": "Musma/daum.maps.d.ts"
+    "@types/express": "^4.17.9",
+    "daum.maps.d.ts": "Musma/daum.maps.d.ts",
+    "express": "^4.17.1"
   },
   "proxy": "http://localhost:8000"
 }

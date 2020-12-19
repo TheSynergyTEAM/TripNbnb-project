@@ -1,5 +1,6 @@
 import User from 'context/User'
 import { useContext, useEffect } from 'react'
+import axios from 'axios'
 
 interface AuthResult {
   access_token: string
@@ -24,14 +25,19 @@ const Login: React.FC = () => {
         window.Kakao.Auth.setAccessToken(authObj.access_token)
         // Fetch user information
         window.Kakao.API.request({ url: '/v2/user/me' })
-          .then((user: any) => toggleUser(user))
+          .then((user: any) => {
+            toggleUser(user)
+            // No any response
+            axios.post('/api/login', user)
+          })
           .catch((error: any) => console.error(error))
       },
       fail: (reason: any) => reason
     })
-  })
+    // eslint-disable-next-line
+  }, [])
 
-  return <div className="empty" />
+  return null
 }
 
 export default Login

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Button, Row, Col } from 'antd'
 import { purple } from '@ant-design/colors'
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import UserContext from 'context/User'
 import Login from 'event/Login'
 import Avatar from 'antd/lib/avatar/avatar'
@@ -70,9 +70,9 @@ const Header: React.FC = () => {
   const handleLogin = () => {
     if (isLoggedIn) {
       return
+    } else {
+      setOpenPopup(true)
     }
-
-    setOpenPopup(true)
   }
 
   return (
