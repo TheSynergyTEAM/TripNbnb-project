@@ -5,12 +5,12 @@ const { port } = config
 
 app.use(express.json())
 
-app.post('/api/login', (req, res) => {
+app.post('/users/login', (req, res) => {
   console.log(req.body)
   res.status(200).end()
 })
 
-app.get('/api/place/:id', (req, res) => {
+app.get('/places/:id', (req, res) => {
   const { id } = req.params
 
   const fakeRating = () => (Math.random() * 5).toFixed(1)

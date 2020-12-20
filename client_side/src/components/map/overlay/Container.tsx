@@ -10,9 +10,11 @@ import axios from 'axios'
 
 const OverlayLoadingIndicator: React.FC<any> = () => {
   return (
-    <div className="overlay-loading-indicator">
+    <ContentWrapper
+      style={{ height: '150px', alignItems: 'center', width: '200px' }}
+    >
       <Spin />
-    </div>
+    </ContentWrapper>
   )
 }
 
@@ -39,10 +41,10 @@ const ContentInformation = styled.div`
 
 const OverlayContentAfterLoadedData: React.FC<any> = ({ place }) => {
   return (
-    <ContentWrapper>
+    <ContentWrapper className="shadow-box">
       <ContentImage>
         <img
-          src="https://via.placeholder.com/150"
+          src="https://picsum.photos/150/150"
           alt="placeholder"
           width={150}
           height={150}
@@ -85,7 +87,7 @@ const Container: React.FC = (props) => {
         const fakeNumber = () => Math.floor(Math.random() * (100 - 1 + 1)) + 1
 
         axios
-          .get(`/api/place/${fakeNumber()}`)
+          .get(`/places/${fakeNumber()}`)
           .then((result) => resolve(result.data))
           .catch((error) => reject(error))
       })

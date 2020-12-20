@@ -28,7 +28,7 @@ const Login: React.FC = () => {
           .then((user: any) => {
             toggleUser(user)
             // No any response
-            axios.post('/api/login', user)
+            axios.post('/users/login', user)
           })
           .catch((error: any) => console.error(error))
       },
