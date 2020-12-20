@@ -12,6 +12,7 @@ const StyledMap = styled.div`
 
 const Container: React.FC = () => {
   const [marker, setMarker] = useState(null)
+  const [markerPlace, setMarkerPlace] = useState(null)
 
   const onChangeMarker = useCallback(() => {
     return marker || null
@@ -19,7 +20,9 @@ const Container: React.FC = () => {
 
   return (
     <StyledMap id="map">
-      <Marker.Provider value={{ marker, setMarker }}>
+      <Marker.Provider
+        value={{ marker, setMarker, markerPlace, setMarkerPlace }}
+      >
         <SearchBox />
         <Content
           style={{ position: 'fixed', top: '25px', left: '25px', zIndex: 500 }}

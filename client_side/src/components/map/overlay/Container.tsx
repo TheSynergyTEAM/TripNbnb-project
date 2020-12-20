@@ -39,7 +39,10 @@ const ContentInformation = styled.div`
   padding: 0.5rem 0.8rem;
 `
 
-const OverlayContentAfterLoadedData: React.FC<any> = ({ place }) => {
+const OverlayContentAfterLoadedData: React.FC<{
+  place: any
+  kakaoPlace: daum.maps.services.PlacesSearchResultItem | null
+}> = ({ place, kakaoPlace }) => {
   return (
     <ContentWrapper className="shadow-box">
       <ContentImage>
@@ -51,6 +54,7 @@ const OverlayContentAfterLoadedData: React.FC<any> = ({ place }) => {
         />
       </ContentImage>
       <ContentInformation>
+        {kakaoPlace && <div>{kakaoPlace.place_name}</div>}
         <div>
           <Rate allowHalf disabled defaultValue={place.rating} />
         </div>
@@ -63,7 +67,7 @@ const OverlayContentAfterLoadedData: React.FC<any> = ({ place }) => {
 /* overlay test */
 
 const Container: React.FC = (props) => {
-  const { marker } = useContext(Marker)
+  const { marker, markerPlace } = useContext(Marker)
   const { map } = useContext(MapContext)
 
   useEffect(() => {
@@ -97,7 +101,10 @@ const Container: React.FC = (props) => {
     fetchPlace()
       .then((place) => {
         const loadedDataContent = renderToString(
-          <OverlayContentAfterLoadedData place={place} />
+          <OverlayContentAfterLoadedData
+            place={place}
+            kakaoPlace={markerPlace}
+          />
         )
         overlay.setContent(loadedDataContent)
       })
@@ -107,7 +114,7 @@ const Container: React.FC = (props) => {
       // 마커 마우스 이벤트(mouseout) 발생 시 맵에 표시된 오버레이 제거
       overlay.setMap(null)
     }
-  }, [marker, map])
+  }, [marker, map, markerPlace])
 
   return null
 }
