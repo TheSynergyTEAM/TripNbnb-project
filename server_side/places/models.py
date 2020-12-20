@@ -36,7 +36,7 @@ class Place(core_models.TimeStampedModel):
     """Place Model Definition"""
 
     name = models.CharField(max_length=200)
-    description = models.TextField()
+    contentid = models.IntegerField(max_length=20)
     city = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
     mapx = models.CharField(max_length=50)
@@ -44,6 +44,7 @@ class Place(core_models.TimeStampedModel):
     writer = models.ForeignKey(
         "users.User", related_name="place", on_delete=models.CASCADE
     )
+    place_img = models.ImageField(upload_to="place_imgs", blank=True)
 
     def __str__(self):
         return self.name
