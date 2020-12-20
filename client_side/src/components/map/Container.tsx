@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import SearchBox from './search/Box'
-import Overlay from 'components/map/overlay/MouseOver'
+import OverlayContainer from 'components/map/overlay/Container'
 import Marker from 'context/Marker'
 import { useCallback, useState } from 'react'
 
@@ -20,7 +20,7 @@ const Container: React.FC = () => {
     <StyledMap id="map">
       <Marker.Provider value={{ marker, setMarker }}>
         <SearchBox />
-        {onChangeMarker() && <Overlay />}
+        {onChangeMarker() && <OverlayContainer />}
       </Marker.Provider>
     </StyledMap>
   )
