@@ -9,23 +9,10 @@ const Register = (
   daum.maps.event.addListener(target, eventName, Fn)
 }
 
-const MouseOver = (marker: daum.maps.Marker, ctx: MarkerContext) => {
-  return () => {
-    // const mo = new daum.maps.CustomOverlay({
-    //   position,
-    //   content: `<div>Custom Overlay</div>`,
-    //   zIndex: 10,
-    //   yAnchor: 0.5
-    // })
-    ctx.setMarker(marker)
-  }
-}
+const MouseOver = (marker: daum.maps.Marker, ctx: MarkerContext) => () =>
+  ctx.setMarker(marker)
 
-const MouseOut = (ctx: MarkerContext) => {
-  return () => {
-    ctx.setMarker(null)
-  }
-}
+const MouseOut = (ctx: MarkerContext) => () => ctx.setMarker(null)
 
 export { Register }
 export { MouseOver, MouseOut }
