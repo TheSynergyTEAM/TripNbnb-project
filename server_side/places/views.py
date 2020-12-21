@@ -19,8 +19,6 @@ class PlaceView(viewsets.ModelViewSet):
 
 @method_decorator(csrf_exempt, name="dispatch")
 def placeview(request, pk):
-    print(dir(request.GET.dict))
-    print(request.GET.dict)
     # receive json data from clinet
     # json file
     # required data
