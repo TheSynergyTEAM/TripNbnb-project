@@ -10,6 +10,7 @@ interface ListComponentProps {
   keyword: string
   title: string
   items: daum.maps.services.PlacesSearchResult
+  onMove: Function
 }
 
 const StyledHeader = styled.div`
@@ -34,15 +35,17 @@ const ListHeader: React.FC<{ title: string; keyword: string }> = ({
   )
 }
 
-const List: React.FC<ListComponentProps> = ({ keyword, title, items }) => {
+const List: React.FC<ListComponentProps> = ({
+  keyword,
+  title,
+  items,
+  onMove
+}) => {
   const { map, places } = useContext(MapContext)
   // @ts-ignore
   const MarkerContext = useContext(Marker)
 
-  const moveToTarget = (
-    item: daum.maps.services.PlacesSearchResultItem,
-    e: React.MouseEvent
-  ) => {
+  const moveToTarget = (item: ResultItem) => {
     map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
     places?.categorySearch(
       // @ts-ignore
@@ -78,6 +81,8 @@ const List: React.FC<ListComponentProps> = ({ keyword, title, items }) => {
       },
       { x: parseFloat(item.x), y: parseFloat(item.y) }
     )
+
+    onMove()
   }
 
   return (
@@ -90,7 +95,7 @@ const List: React.FC<ListComponentProps> = ({ keyword, title, items }) => {
       renderItem={(item) => (
         <AntdList.Item
           key={item.id}
-          onClick={(e) => moveToTarget(item, e)}
+          onClick={(e) => moveToTarget(item)}
           style={{ cursor: 'pointer' }}
         >
           <AntdList.Item.Meta

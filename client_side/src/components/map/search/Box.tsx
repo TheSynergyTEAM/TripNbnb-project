@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import List from './List'
 
+type Status = daum.maps.services.Status
+
 const { Search } = Input
 
 const StyledBox = styled.div`
@@ -34,20 +36,14 @@ const ResultWrapper = styled.div`
 `
 
 const SearchBox: React.FC = () => {
-  const [searchResult, setSearchResult] = useState<
-    Array<daum.maps.services.PlacesSearchResultItem>
-  >([])
-  const [allSearchResult, setAllSearchResult] = useState<
-    Array<daum.maps.services.PlacesSearchResultItem>
-  >([])
+  const [searchResult, setSearchResult] = useState<Array<ResultItem>>([])
+  const [allSearchResult, setAllSearchResult] = useState<Array<ResultItem>>([])
   const [isSearch, setIsSearch] = useState(false)
   const [keyword, setKeyword] = useState('')
   const { places } = useContext(MapContext)
+
   const handleSearch = (value: string) => {
-    const cb = (
-      result: Array<daum.maps.services.PlacesSearchResultItem>,
-      status: any
-    ): void => {
+    const cb = (result: Array<ResultItem>, status: Status): void => {
       if (status === daum.maps.services.Status.OK) {
         setIsSearch(true)
         setSearchResult([])
@@ -68,14 +64,19 @@ const SearchBox: React.FC = () => {
       }
     }
 
-    ;(places as daum.maps.services.Places).keywordSearch(value, cb)
+    places?.keywordSearch(value, cb)
+  }
+
+  const initState = () => {
+    setSearchResult([])
+    setAllSearchResult([])
+    setIsSearch(false)
+    setKeyword('')
   }
 
   useEffect(() => {
     return () => {
-      setSearchResult([])
-      setAllSearchResult([])
-      setIsSearch(false)
+      initState()
     }
   }, [])
 
@@ -92,11 +93,13 @@ const SearchBox: React.FC = () => {
             keyword={keyword}
             items={searchResult}
             title="여행지, 관광명소 검색 결과"
+            onMove={initState}
           />
           <List
             keyword={keyword}
             items={allSearchResult}
             title="기타 장소 검색 결과"
+            onMove={initState}
           />
         </ResultWrapper>
       )}

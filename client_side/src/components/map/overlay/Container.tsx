@@ -2,69 +2,8 @@ import MapContext from 'context/Map'
 import Marker from 'context/Marker'
 import { useContext, useEffect } from 'react'
 import { renderToString } from 'react-dom/server'
-import { Spin, Rate } from 'antd'
-import styled from 'styled-components'
 import axios from 'axios'
-
-/* overlay test */
-
-const OverlayLoadingIndicator: React.FC<any> = () => {
-  return (
-    <ContentWrapper
-      style={{ height: '150px', alignItems: 'center', width: '200px' }}
-    >
-      <Spin />
-    </ContentWrapper>
-  )
-}
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  background-color: white;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  color: black;
-  position: relative;
-  bottom: 200px;
-`
-
-const ContentImage = styled.div`
-  flex: 0 0 50%;
-`
-
-const ContentInformation = styled.div`
-  flex: 0 0 50%;
-  padding: 0.5rem 0.8rem;
-`
-
-const OverlayContentAfterLoadedData: React.FC<{
-  place: any
-  kakaoPlace: daum.maps.services.PlacesSearchResultItem | null
-}> = ({ place, kakaoPlace }) => {
-  return (
-    <ContentWrapper className="shadow-box">
-      <ContentImage>
-        <img
-          src="https://picsum.photos/150/150"
-          alt="placeholder"
-          width={150}
-          height={150}
-        />
-      </ContentImage>
-      <ContentInformation>
-        {kakaoPlace && <div>{kakaoPlace.place_name}</div>}
-        <div>
-          <Rate allowHalf disabled defaultValue={place.rating} />
-        </div>
-        <div>작성된 리뷰 {place.review_count}개</div>
-      </ContentInformation>
-    </ContentWrapper>
-  )
-}
-
-/* overlay test */
+import Content from './Content'
 
 const Container: React.FC = (props) => {
   const { marker, markerPlace } = useContext(Marker)
@@ -77,13 +16,9 @@ const Container: React.FC = (props) => {
       yAnchor: 0,
       zIndex: 50
     })
-    // 컨텐츠 렌더링
-    const content = renderToString(
-      <OverlayLoadingIndicator overlay={overlay} />
-    )
-    // 오버레이에 렌더링 된 HTML 삽입
+    // 컨텐츠 로더 표시
+    const content = renderToString(<Content loading={true} />)
     overlay.setContent(content)
-    // 맵에 표시
     overlay.setMap(map as daum.maps.Map)
 
     const fetchPlace = () => {
@@ -99,11 +34,13 @@ const Container: React.FC = (props) => {
 
     // 데이터 로드 후 오버레이 표시
     fetchPlace()
-      .then((place) => {
+      .then((place: any) => {
         const loadedDataContent = renderToString(
-          <OverlayContentAfterLoadedData
-            place={place}
-            kakaoPlace={markerPlace}
+          <Content
+            rating={place.rating}
+            reviewCount={place.review_count}
+            loading={false}
+            markerPlace={markerPlace}
           />
         )
         overlay.setContent(loadedDataContent)

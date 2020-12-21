@@ -1,28 +1,67 @@
-import { Card, Skeleton } from 'antd'
+import { Card, Skeleton, Typography, Rate } from 'antd'
 
 interface ContentProps {
-  title?: string
-  rating?: number
-  reviewCount?: number
   loading: boolean
   style?: React.CSSProperties
+  rating?: number
+  reviewCount?: number
+  markerPlace?: ResultItem | any
 }
 
 const CoverImage = () => (
   <img src="https://picsum.photos/200/150" alt="placeholder" />
 )
 
-const Content: React.FC<ContentProps> = (props) => {
+const Title: React.FC<{ title: string }> = ({ title }) => {
   return (
-    <Card style={{ ...props.style, width: '200px' }} cover={<CoverImage />}>
-      <Skeleton loading={props.loading} active>
-        <Card.Meta
-          title={props.title || '제목'}
-          description={props.rating || '평점'}
-        />
-      </Skeleton>
-    </Card>
+    <Typography.Title
+      level={5}
+      style={{ whiteSpace: 'break-spaces', marginBottom: 0 }}
+    >
+      {title}
+    </Typography.Title>
   )
 }
+
+const Description: React.FC<{ rating?: number; reviewCount?: number }> = ({
+  rating,
+  reviewCount
+}) => {
+  return (
+    <>
+      <Rate
+        allowHalf
+        disabled
+        defaultValue={rating}
+        style={{ display: 'block' }}
+      />
+      <Typography.Link underline>리뷰 {reviewCount}개</Typography.Link>
+    </>
+  )
+}
+
+const Content: React.FC<ContentProps> = ({
+  rating,
+  reviewCount,
+  loading = false,
+  style,
+  markerPlace
+}) =>
+  loading ? (
+    <Card style={{ width: '200px' }}>
+      <Skeleton loading={true} active round title />
+    </Card>
+  ) : (
+    <Card
+      style={{ ...style, width: '200px' }}
+      cover={<CoverImage />}
+      size="small"
+    >
+      <Card.Meta
+        title={<Title title={markerPlace?.place_name || 'no title'} />}
+        description={<Description rating={rating} reviewCount={reviewCount} />}
+      />
+    </Card>
+  )
 
 export default Content

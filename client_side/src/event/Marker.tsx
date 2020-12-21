@@ -12,7 +12,7 @@ const Register = (
 const MouseOver = (
   marker: daum.maps.Marker,
   ctx: MarkerContext,
-  markerPlace: daum.maps.services.PlacesSearchResultItem
+  markerPlace: ResultItem
 ) => () => {
   ctx.setMarker(marker)
   ctx.setMarkerPlace(markerPlace)
