@@ -23,5 +23,10 @@ const MouseOut = (ctx: MarkerContext) => () => {
   ctx.setMarkerPlace(null)
 }
 
+const MouseClick = (ctx: MarkerContext, markerPlace: ResultItem) => () => {
+  ctx.setVisibleDetail(true)
+  ctx.setDetailItem(markerPlace)
+}
+
 export { Register }
-export { MouseOver, MouseOut }
+export { MouseOver, MouseOut, MouseClick }

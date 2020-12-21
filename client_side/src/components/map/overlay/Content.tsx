@@ -1,4 +1,5 @@
 import { Card, Skeleton, Typography, Rate } from 'antd'
+import { Title } from 'components/common/typography/Title'
 
 interface ContentProps {
   loading: boolean
@@ -11,17 +12,6 @@ interface ContentProps {
 const CoverImage = () => (
   <img src="https://picsum.photos/200/150" alt="placeholder" />
 )
-
-const Title: React.FC<{ title: string }> = ({ title }) => {
-  return (
-    <Typography.Title
-      level={5}
-      style={{ whiteSpace: 'break-spaces', marginBottom: 0 }}
-    >
-      {title}
-    </Typography.Title>
-  )
-}
 
 const Description: React.FC<{ rating?: number; reviewCount?: number }> = ({
   rating,
@@ -58,7 +48,11 @@ const Content: React.FC<ContentProps> = ({
       size="small"
     >
       <Card.Meta
-        title={<Title title={markerPlace?.place_name || 'no title'} />}
+        title={
+          <Title level={5} style={{ marginBottom: 0 }}>
+            {markerPlace?.place_name}
+          </Title>
+        }
         description={<Description rating={rating} reviewCount={reviewCount} />}
       />
     </Card>

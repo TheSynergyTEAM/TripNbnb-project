@@ -3,7 +3,7 @@ import { purple } from '@ant-design/colors'
 import styled from 'styled-components'
 import { useContext } from 'react'
 import MapContext from 'context/Map'
-import { MouseOver, MouseOut, Register } from 'event/Marker'
+import { MouseOver, MouseOut, Register, MouseClick } from 'event/Marker'
 import Marker from 'context/Marker'
 
 interface ListComponentProps {
@@ -73,6 +73,8 @@ const List: React.FC<ListComponentProps> = ({
               )
               // 이벤트 등록 (MouseOut)
               Register(marker, 'mouseout', MouseOut(MarkerContext))
+              // 이벤트 등록 (MouseClick)
+              Register(marker, 'click', MouseClick(MarkerContext, item))
               // 맵에 마커를 찍음
               marker.setMap(map as daum.maps.Map)
             })
