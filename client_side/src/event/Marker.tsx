@@ -9,10 +9,19 @@ const Register = (
   daum.maps.event.addListener(target, eventName, Fn)
 }
 
-const MouseOver = (marker: daum.maps.Marker, ctx: MarkerContext) => () =>
+const MouseOver = (
+  marker: daum.maps.Marker,
+  ctx: MarkerContext,
+  markerPlace: daum.maps.services.PlacesSearchResultItem
+) => () => {
   ctx.setMarker(marker)
+  ctx.setMarkerPlace(markerPlace)
+}
 
-const MouseOut = (ctx: MarkerContext) => () => ctx.setMarker(null)
+const MouseOut = (ctx: MarkerContext) => () => {
+  ctx.setMarker(null)
+  ctx.setMarkerPlace(null)
+}
 
 export { Register }
 export { MouseOver, MouseOut }

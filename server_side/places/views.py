@@ -1,21 +1,24 @@
 import os
+from rest_framework import viewsets  # add this
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, View
 from django.shortcuts import render, redirect, reverse
 from . import models
+from .serializers import PlaceSerializer
 
 # Create your views here.
 
-# Further task : change search to SearchView(Formview)
-def search(request):
-    search_value = request.GET.get("search_value")
-    return render(
-        request,
-        "places/search_test.html",
-        {"appkey": os.environ.get("KAKAO_ID"), "keyword": search_value},
-    )
+
+class PlaceView(viewsets.ModelViewSet):  # add this
+    serializer_class = PlaceSerializer  # add this
+    queryset = models.Place.objects.all()
+    print()
 
 
-class PlaceView(DetailView):
-    """ RoomView Definition """
-
-    model = models.Place
+@method_decorator(csrf_exempt, name="dispatch")
+def placeview(request):
+    received_json_data = json.loads(request.body.decode("utf-8"))
+    print(received_json_data)
+    pk = received_json_data.get("id")
+    return redirect("https://localhost:3000/map")

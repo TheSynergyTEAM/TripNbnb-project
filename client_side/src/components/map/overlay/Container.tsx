@@ -10,9 +10,11 @@ import axios from 'axios'
 
 const OverlayLoadingIndicator: React.FC<any> = () => {
   return (
-    <div className="overlay-loading-indicator">
+    <ContentWrapper
+      style={{ height: '150px', alignItems: 'center', width: '200px' }}
+    >
       <Spin />
-    </div>
+    </ContentWrapper>
   )
 }
 
@@ -37,18 +39,22 @@ const ContentInformation = styled.div`
   padding: 0.5rem 0.8rem;
 `
 
-const OverlayContentAfterLoadedData: React.FC<any> = ({ place }) => {
+const OverlayContentAfterLoadedData: React.FC<{
+  place: any
+  kakaoPlace: daum.maps.services.PlacesSearchResultItem | null
+}> = ({ place, kakaoPlace }) => {
   return (
-    <ContentWrapper>
+    <ContentWrapper className="shadow-box">
       <ContentImage>
         <img
-          src="https://via.placeholder.com/150"
+          src="https://picsum.photos/150/150"
           alt="placeholder"
           width={150}
           height={150}
         />
       </ContentImage>
       <ContentInformation>
+        {kakaoPlace && <div>{kakaoPlace.place_name}</div>}
         <div>
           <Rate allowHalf disabled defaultValue={place.rating} />
         </div>
@@ -61,7 +67,7 @@ const OverlayContentAfterLoadedData: React.FC<any> = ({ place }) => {
 /* overlay test */
 
 const Container: React.FC = (props) => {
-  const { marker } = useContext(Marker)
+  const { marker, markerPlace } = useContext(Marker)
   const { map } = useContext(MapContext)
 
   useEffect(() => {
@@ -85,7 +91,7 @@ const Container: React.FC = (props) => {
         const fakeNumber = () => Math.floor(Math.random() * (100 - 1 + 1)) + 1
 
         axios
-          .get(`/api/place/${fakeNumber()}`)
+          .get(`/places/${fakeNumber()}`)
           .then((result) => resolve(result.data))
           .catch((error) => reject(error))
       })
@@ -95,7 +101,10 @@ const Container: React.FC = (props) => {
     fetchPlace()
       .then((place) => {
         const loadedDataContent = renderToString(
-          <OverlayContentAfterLoadedData place={place} />
+          <OverlayContentAfterLoadedData
+            place={place}
+            kakaoPlace={markerPlace}
+          />
         )
         overlay.setContent(loadedDataContent)
       })
@@ -105,7 +114,7 @@ const Container: React.FC = (props) => {
       // 마커 마우스 이벤트(mouseout) 발생 시 맵에 표시된 오버레이 제거
       overlay.setMap(null)
     }
-  }, [marker, map])
+  }, [marker, map, markerPlace])
 
   return null
 }

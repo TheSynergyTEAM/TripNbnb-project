@@ -22,7 +22,6 @@ class UserView(viewsets.ModelViewSet):  # add this
 @method_decorator(csrf_exempt, name="dispatch")
 def kakao_login(request):
     received_json_data = json.loads(request.body.decode("utf-8"))
-    print(received_json_data)
     pk = received_json_data.get("id")
     properties = received_json_data.get("properties")
     nickname = properties.get("nickname")

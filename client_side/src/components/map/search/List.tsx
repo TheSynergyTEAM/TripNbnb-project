@@ -63,7 +63,11 @@ const List: React.FC<ListComponentProps> = ({ keyword, title, items }) => {
                 )
               })
               // 이벤트 등록 (MouseOver)
-              Register(marker, 'mouseover', MouseOver(marker, MarkerContext))
+              Register(
+                marker,
+                'mouseover',
+                MouseOver(marker, MarkerContext, item)
+              )
               // 이벤트 등록 (MouseOut)
               Register(marker, 'mouseout', MouseOut(MarkerContext))
               // 맵에 마커를 찍음
