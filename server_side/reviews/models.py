@@ -11,10 +11,10 @@ class Review(core_models.TimeStampedModel):
     review = models.TextField()
     rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
     user = models.ForeignKey(
-        "users.User", related_name="reviews", on_delete=models.CASCADE
+        "users.User", related_name="reviews_u", on_delete=models.CASCADE
     )
     place = models.ForeignKey(
-        "places.Place", related_name="reviews", on_delete=models.CASCADE
+        "places.Place", related_name="reviews_p", on_delete=models.CASCADE
     )
 
     def __str__(self):
