@@ -102,7 +102,7 @@ const Header: React.FC = () => {
         ) : (
           <div className="login">
             <Button onClick={handleLogin}>로그인</Button>
-            {openPopup && <Login />}
+            <Login popup={openPopup} />
           </div>
         )}
       </Col>
