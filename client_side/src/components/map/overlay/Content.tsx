@@ -1,5 +1,5 @@
 import { Card, Skeleton, Typography, Rate } from 'antd'
-import { Title } from 'components/common/typography/Title'
+import { Title } from 'components/common/typography'
 
 interface ContentProps {
   loading: boolean

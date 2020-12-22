@@ -1,8 +1,8 @@
 import { Carousel, Space, Image } from 'antd'
-import { Title } from 'components/common/typography/Title'
-import Marker from 'context/Marker'
-import { useContext } from 'react'
+import MarkerContext from 'context/Marker'
+import { useContext, useEffect } from 'react'
 import styled from 'styled-components'
+import Intro from './Intro'
 
 const StyledDetailWrapper = styled(Space)`
   background-color: white;
@@ -11,7 +11,7 @@ const StyledDetailWrapper = styled(Space)`
   overflow-y: auto;
   position: fixed;
   right: 0;
-  top: 64px;
+  top: 65px;
   z-index: 150;
 `
 
@@ -35,14 +35,18 @@ const ImageWrapper = () => {
 }
 
 const Container: React.FC<any> = () => {
-  const { detailItem } = useContext(Marker)
+  const { detailItem } = useContext(MarkerContext)
+
+  useEffect(() => {
+    if (detailItem !== null) {
+      console.log(detailItem)
+    }
+  }, [detailItem])
 
   return (
     <StyledDetailWrapper direction="vertical">
       <ImageWrapper />
-      <div>
-        <Title>{detailItem?.place_name}</Title>
-      </div>
+      <Intro />
     </StyledDetailWrapper>
   )
 }

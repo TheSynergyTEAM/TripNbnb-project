@@ -46,6 +46,9 @@ const List: React.FC<ListComponentProps> = ({
   const MarkerContext = useContext(Marker)
 
   const moveToTarget = (item: ResultItem) => {
+    // 마커 초기화
+    MarkerContext.displayMarkers.forEach((marker) => marker.setMap(null))
+    MarkerContext.setDisplayMarkers([])
     map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
     places?.categorySearch(
       // @ts-ignore
@@ -77,10 +80,16 @@ const List: React.FC<ListComponentProps> = ({
               Register(marker, 'click', MouseClick(MarkerContext, item))
               // 맵에 마커를 찍음
               marker.setMap(map as daum.maps.Map)
+
+              MarkerContext.setDisplayMarkers((state: any) => [
+                ...state,
+                marker
+              ])
             })
           }
         }
       },
+      // 현재 위치 기준
       { x: parseFloat(item.x), y: parseFloat(item.y) }
     )
 
@@ -104,7 +113,6 @@ const List: React.FC<ListComponentProps> = ({
             title={item.place_name}
             description={item.address_name}
           />
-          <Typography.Text>Todo Rating, etc...</Typography.Text>
         </AntdList.Item>
       )}
     ></AntdList>

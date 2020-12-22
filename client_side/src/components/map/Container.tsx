@@ -16,6 +16,7 @@ const Container: React.FC = () => {
   const [markerPlace, setMarkerPlace] = useState(null)
   const [visibleDetail, setVisibleDetail] = useState(false)
   const [detailItem, setDetailItem] = useState(null)
+  const [displayMarkers, setDisplayMarkers] = useState([])
 
   const onChangeMarker = useCallback(() => {
     return marker || null
@@ -31,10 +32,12 @@ const Container: React.FC = () => {
           markerPlace,
           visibleDetail,
           detailItem,
+          displayMarkers,
           setMarker,
           setMarkerPlace,
           setVisibleDetail,
-          setDetailItem
+          setDetailItem,
+          setDisplayMarkers
         }}
       >
         <SearchBox />
