@@ -21,17 +21,20 @@ from django.conf.urls.static import static
 from users import views as users_views
 from places import views as places_views
 from reviews import views as reviews_views
+from lists import views as lists_views
 
 router = routers.DefaultRouter()
 router.register(r"users", users_views.UserView, "users")
 router.register(r"places", places_views.PlaceView, "places")
 router.register(r"reviews", reviews_views.ReviewView, "reviews")
+router.register(r"lists", lists_views.ListView, "lists")
 
 urlpatterns = [
     path("api/", include(router.urls)),
     path("places/", include("places.urls", namespace="places")),
     path("reviews/", include("reviews.urls", namespace="reviews")),
     path("users/", include("users.urls", namespace="users")),
+    path("lists/", include("lists.urls", namespace="lists")),
     path("admin/", admin.site.urls),
 ]
 

@@ -10,3 +10,8 @@ class List(core_models.TimeStampedModel):
         "users.User", related_name="list", on_delete=models.CASCADE
     )
     places = models.ManyToManyField("places.Place", related_name="list", blank=True)
+
+    def count_places(self):
+        return self.places.count()
+
+    count_places.short_description = "Number of places"
