@@ -24,9 +24,3 @@
 - User registration and logging in as demo
 - Separated requirements files
 - SQLite by default if no env variable is set
-
-## To do
-- Review Admin, Place Admin, List Admin
-- URL set 
-- Details of user profile, places' detail, lists of places and reviews. 
-

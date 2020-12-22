@@ -1,21 +1,12 @@
 from django.db import models
+from core import models as core_models
 
 # Create your models here.
 
-class MyPlace(models.Model):
+
+class List(core_models.TimeStampedModel):
+    name = models.CharField(max_length=80)
     user = models.ForeignKey(
-        "users.User", related_name="list_place_u", on_delete=models.CASCADE
+        "users.User", related_name="list", on_delete=models.CASCADE
     )
-    place = models.ManyToManyField(
-        "places.Place", related_name="list_place_p"
-    )
-
-
-
-class MyReview(models.Model):
-    user = models.ForeignKey(
-        "users.User", related_name="list_review_u", on_delete=models.CASCADE
-    )
-    review = models.ForeignKey(
-        "reviews.Review", related_name="list_review_r", on_delete=models.CASCADE
-    )
+    places = models.ManyToManyField("places.Place", related_name="list", blank=True)
