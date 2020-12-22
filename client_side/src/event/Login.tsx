@@ -26,8 +26,9 @@ const Login: React.FC<LoginComponentProps> = ({ popup }) => {
 
     const autoLogin = async () => {
       try {
-        const user = window.Kakao.API.request({ url: '/v2/user/me' })
+        const user = await window.Kakao.API.request({ url: '/v2/user/me' })
         toggleUser(user)
+        return user
       } catch (error) {
         throw error
       }
@@ -40,34 +41,15 @@ const Login: React.FC<LoginComponentProps> = ({ popup }) => {
         window.Kakao.Auth.login({
           success: (authObj: AuthResult) => {
             window.Kakao.Auth.setAccessToken(authObj.access_token)
-            autoLogin()
+            ;(async function () {
+              const user = await autoLogin()
+              axios.post('/users/login', user)
+            })()
           },
           fail: (reason: any) => console.error(reason)
         })
       }
     }
-
-    // const autoLogin = () => {
-    //   window.Kakao.API.request({ url: '/v2/user/me' })
-    //     .then((user: any) => {
-    //       toggleUser(user)
-    //       // No effect
-    //       axios.post('/users/login', user)
-    //     })
-    //     .catch((error: any) => {
-    //       if (popup) {
-    //         window.Kakao.Auth.login({
-    //           success: (authObj: AuthResult) => {
-    //             window.Kakao.Auth.setAccessToken(authObj.access_token)
-    //             autoLogin()
-    //           },
-    //           fail: (reason: any) => console.error(reason)
-    //         })
-    //       }
-    //     })
-    // }
-
-    // autoLogin()
   }, [toggleUser, popup])
 
   return null
