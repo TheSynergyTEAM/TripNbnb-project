@@ -3,8 +3,8 @@ import { purple } from '@ant-design/colors'
 import styled from 'styled-components'
 import { useContext } from 'react'
 import MapContext from 'context/Map'
-import { MouseOver, MouseOut, Register, MouseClick } from 'event/Marker'
 import Marker from 'context/Marker'
+import { categorySearch } from './Function'
 
 interface ListComponentProps {
   keyword: string
@@ -49,50 +49,10 @@ const List: React.FC<ListComponentProps> = ({
     // 마커 초기화
     MarkerContext.displayMarkers.forEach((marker) => marker.setMap(null))
     MarkerContext.setDisplayMarkers([])
-    map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
-    places?.categorySearch(
-      // @ts-ignore
-      'AT4',
-      (result, status, pagenation) => {
-        if (status === daum.maps.services.Status.OK) {
-          if (pagenation.hasNextPage) {
-            // 모든 검색 결과에 대해서 마커 찍기
-            pagenation.nextPage()
-          }
-          if (result.length) {
-            result.forEach((item) => {
-              // 마커 생성
-              const marker = new daum.maps.Marker({
-                position: new daum.maps.LatLng(
-                  parseFloat(item.y),
-                  parseFloat(item.x)
-                )
-              })
-              // 이벤트 등록 (MouseOver)
-              Register(
-                marker,
-                'mouseover',
-                MouseOver(marker, MarkerContext, item)
-              )
-              // 이벤트 등록 (MouseOut)
-              Register(marker, 'mouseout', MouseOut(MarkerContext))
-              // 이벤트 등록 (MouseClick)
-              Register(marker, 'click', MouseClick(MarkerContext, item))
-              // 맵에 마커를 찍음
-              marker.setMap(map as daum.maps.Map)
 
-              MarkerContext.setDisplayMarkers((state: any) => [
-                ...state,
-                marker
-              ])
-            })
-          }
-        }
-      },
-      // 현재 위치 기준
-      { x: parseFloat(item.x), y: parseFloat(item.y) }
-    )
-
+    // 카테고리 검색, 마커 찍기, 이벤트 등록
+    categorySearch(item, MarkerContext, places, map)
+    // 리스트 아이템 초기화
     onMove()
   }
 
