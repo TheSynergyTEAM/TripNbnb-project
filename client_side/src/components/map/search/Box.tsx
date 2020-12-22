@@ -2,9 +2,8 @@ import { Input } from 'antd'
 import MapContext from 'context/Map'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { placeSearch } from './Function'
 import List from './List'
-
-type Status = daum.maps.services.Status
 
 const { Search } = Input
 
@@ -43,28 +42,20 @@ const SearchBox: React.FC = () => {
   const { places } = useContext(MapContext)
 
   const handleSearch = (value: string) => {
-    const cb = (result: Array<ResultItem>, status: Status): void => {
-      if (status === daum.maps.services.Status.OK) {
+    placeSearch(
+      places,
+      value,
+      'AT4',
+      (
+        codeResults: Array<ResultItem>,
+        withoutCodeResults: Array<ResultItem>
+      ) => {
         setIsSearch(true)
-        setSearchResult([])
-        setAllSearchResult([])
         setKeyword(value)
-        if (result.length) {
-          // 여행지, 관광 명소
-          const attraction = result.filter(
-            (item) => item.category_group_code === 'AT4'
-          )
-          const noAttraction = result.filter(
-            (item) => item.category_group_code !== 'AT4'
-          )
-
-          setSearchResult(attraction)
-          setAllSearchResult(noAttraction)
-        }
+        setSearchResult(codeResults)
+        setAllSearchResult(withoutCodeResults)
       }
-    }
-
-    places?.keywordSearch(value, cb)
+    )
   }
 
   const initState = () => {
