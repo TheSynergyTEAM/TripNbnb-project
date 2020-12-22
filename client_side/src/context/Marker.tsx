@@ -1,6 +1,6 @@
 import { Context, createContext } from 'react'
 
-interface MarkerContext {
+interface MarkerContextType {
   marker: any
   markerPlace: ResultItem | null
   visibleDetail: boolean
@@ -11,7 +11,7 @@ interface MarkerContext {
   setDetailItem: (item: ResultItem | any) => void
 }
 
-const initialMarker: MarkerContext = {
+const initialMarker: MarkerContextType = {
   marker: null,
   markerPlace: null,
   visibleDetail: false,
@@ -22,7 +22,7 @@ const initialMarker: MarkerContext = {
   setDetailItem: (item: ResultItem | null) => {}
 }
 
-const Marker: Context<MarkerContext> = createContext(initialMarker)
+const MarkerContext: Context<MarkerContextType> = createContext(initialMarker)
 
-export type { MarkerContext }
-export default Marker
+export type { MarkerContextType }
+export default MarkerContext

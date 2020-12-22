@@ -1,36 +1,29 @@
 import MapContext from 'context/Map'
+import MarkerContext from 'context/Marker'
 import { useContext, useEffect } from 'react'
 
-const IdleEvent: React.FC = () => {
-  const { map, places } = useContext(MapContext)
+const TileLoadedEvent: React.FC = () => {
+  const { map } = useContext(MapContext)
+  const { visibleDetail, setVisibleDetail, setDetailItem } = useContext(
+    MarkerContext
+  )
 
   useEffect(() => {
-    // daum.maps.event.addListener(map as daum.maps.Map, 'tilesloaded', () => {
-    //   places?.categorySearch(
-    //     // @ts-ignore
-    //     'AT4',
-    //     (result, status) => {
-    //       if (status === daum.maps.services.Status.OK) {
-    //         result.forEach((item) => {
-    //           const marker = new daum.maps.Marker({
-    //             map: map as daum.maps.Map,
-    //             position: new daum.maps.LatLng(
-    //               parseFloat(item.y),
-    //               parseFloat(item.x)
-    //             )
-    //           })
-    //           marker.setMap(map as daum.maps.Map)
-    //         })
-    //       }
-    //     },
-    //     {
-    //       location: map?.getCenter()
-    //     }
-    //   )
-    // })
+    daum.maps.event.addListener(
+      map as daum.maps.Map,
+      'dragend',
+      handleTileLoadEvent
+    )
+
+    function handleTileLoadEvent() {
+      if (visibleDetail) {
+        setVisibleDetail(false)
+        setDetailItem(null)
+      }
+    }
   })
 
-  return <div />
+  return null
 }
 
-export default IdleEvent
+export default TileLoadedEvent

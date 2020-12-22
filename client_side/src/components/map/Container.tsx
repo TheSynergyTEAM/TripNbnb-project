@@ -4,6 +4,7 @@ import OverlayContainer from 'components/map/overlay/Container'
 import DetailContainer from 'components/map/detail/Container'
 import Marker from 'context/Marker'
 import { useCallback, useState } from 'react'
+import TileLoadedEvent from 'event/TileLoaded'
 
 const StyledMap = styled.div`
   width: 100vw;
@@ -38,7 +39,12 @@ const Container: React.FC = () => {
       >
         <SearchBox />
         {onChangeMarker() && <OverlayContainer />}
-        {getVisible() && <DetailContainer />}
+        {getVisible() && (
+          <>
+            <DetailContainer />
+            <TileLoadedEvent />
+          </>
+        )}
       </Marker.Provider>
     </StyledMap>
   )
