@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 const IntroWrapper = styled.div`
   padding: 0 1rem;
-  margin-bottom: 0.5rem;
+  margin: 0.5rem 0;
 `
 
 const Intro: React.FC = () => {

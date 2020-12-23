@@ -1,52 +1,44 @@
-import { Carousel, Space, Image } from 'antd'
-import MarkerContext from 'context/Marker'
-import { useContext, useEffect } from 'react'
+import { Space } from 'antd'
+import { useState } from 'react'
 import styled from 'styled-components'
+import { FullLoading } from './common/Loading'
+import { useFetchPlaceData } from './hooks/FetchPlace'
 import Intro from './Intro'
+import Photos from './Photos'
+import Reviews from './Reviews'
+import Thumbnails from './Thumbnails'
 
 const StyledDetailWrapper = styled(Space)`
   background-color: white;
-  height: 100%;
+  height: calc(100% - 65px);
   width: 350px;
   overflow-y: auto;
   position: fixed;
   right: 0;
   top: 65px;
   z-index: 150;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
-const ImageWrapper = () => {
-  return (
-    <Carousel
-      effect="fade"
-      autoplay
-      style={{ height: '200px', width: '350px' }}
-    >
-      {[1, 2, 3, 4, 5].map((item, index, _) => (
-        <Image
-          placeholder={<Image src="https://via.placeholder.com/350x200" />}
-          preview={false}
-          key={index}
-          src={'https://picsum.photos/350/200?random=' + index}
-        />
-      ))}
-    </Carousel>
-  )
-}
-
 const Container: React.FC<any> = () => {
-  const { detailItem } = useContext(MarkerContext)
-
-  useEffect(() => {
-    if (detailItem !== null) {
-      console.log(detailItem)
-    }
-  }, [detailItem])
+  const [placeData, setPlaceData] = useState<any>(null)
+  useFetchPlaceData(setPlaceData)
 
   return (
     <StyledDetailWrapper direction="vertical">
-      <ImageWrapper />
-      <Intro />
+      {placeData ? (
+        <>
+          <Thumbnails thumbnails={placeData.thumbnailImages} />
+          <Intro />
+          <Photos images={placeData.images} />
+          <Reviews reviews={placeData.reviews} />
+        </>
+      ) : (
+        <FullLoading />
+      )}
     </StyledDetailWrapper>
   )
 }
