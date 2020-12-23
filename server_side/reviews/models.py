@@ -18,4 +18,4 @@ class Review(core_models.TimeStampedModel):
     )
 
     def __str__(self):
-        return f"{self.review}-{self.name}"
+        return f"{self.review}-{self.user}"

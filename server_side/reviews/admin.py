@@ -7,5 +7,11 @@ class CustomReviewAdmin(admin.ModelAdmin):
     """Custom Review Admin"""
 
     list_display = (
+        "place",
         "rating",
+        "user",
+    )
+    list_filter = (
+        "rating",
+        "place",
     )
