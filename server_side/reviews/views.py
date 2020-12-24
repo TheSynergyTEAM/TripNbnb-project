@@ -10,7 +10,6 @@ from .serializers import ReviewSerializer
 
 # Create your views here.
 
-
 class ReviewView(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     queryset = models.Review.objects.all()
