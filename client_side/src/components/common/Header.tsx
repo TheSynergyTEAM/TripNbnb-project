@@ -4,9 +4,9 @@ import { purple } from '@ant-design/colors'
 import { useContext, useState } from 'react'
 import UserContext from 'context/User'
 import Login from 'event/Login'
-import Avatar from 'antd/lib/avatar/avatar'
 import { NavLink } from 'react-router-dom'
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint'
+import PopoverAvatar from './user/PopoverAvatar'
 
 const Title = styled.div`
   font-size: 1.2rem;
@@ -65,7 +65,7 @@ const NavItem: React.FC<{ to: string; name?: string }> = (props) => {
 
 const Header: React.FC = () => {
   const [openPopup, setOpenPopup] = useState(false)
-  const { isLoggedIn, user } = useContext(UserContext)
+  const { isLoggedIn } = useContext(UserContext)
 
   const handleLogin = () => {
     if (isLoggedIn) {
@@ -88,16 +88,7 @@ const Header: React.FC = () => {
       <Col {...columns.inner} style={{ textAlign: 'right' }}>
         {isLoggedIn ? (
           <div>
-            <Avatar
-              {...(user?.properties.thumbnail_image
-                ? { src: user?.properties.thumbnail_image }
-                : {})}
-              size={30}
-            >
-              {user?.properties.thumbnail_image
-                ? ''
-                : user?.properties.nickname[0]}
-            </Avatar>
+            <PopoverAvatar />
           </div>
         ) : (
           <div className="login">
