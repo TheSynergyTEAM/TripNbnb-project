@@ -3,6 +3,7 @@ import UserContext from 'context/User'
 import { useContext } from 'react'
 import styled from 'styled-components'
 import { PrimaryText, Title } from '../typography'
+import axios from 'axios'
 
 const menuItem = [
   {
@@ -24,13 +25,27 @@ const StyledListItem = styled(List.Item)`
 `
 
 const PopoverContent: React.FC<any> = () => {
+  const { toggleUser, isLoggedIn } = useContext(UserContext)
+
   const handleItemClick = (type: string) => {
+    const loginCheck = !window.Kakao.Auth.getAccessToken() || !isLoggedIn
+
+    if (loginCheck) return
+
     switch (type) {
       case 'logout':
-        console.log('로그아웃')
+        window.Kakao.Auth.logout(() => toggleUser(null))
         return
       case 'unlink':
-        console.log('회원탈퇴')
+        window.Kakao.API.request({
+          url: '/v1/user/unlink',
+          success: (response: any) => {
+            window.Kakao.Auth.setAccessToken('')
+            axios.post('/users/unlink', response)
+            toggleUser(null)
+          },
+          fail: (reason: any) => console.error(reason)
+        })
         return
       default:
         return

@@ -4,6 +4,7 @@ import axios from 'axios'
 
 interface LoginComponentProps {
   popup: boolean
+  onPopup: Function
 }
 
 interface AuthResult {
@@ -15,7 +16,7 @@ interface AuthResult {
   token_type: string
 }
 
-const Login: React.FC<LoginComponentProps> = ({ popup }) => {
+const Login: React.FC<LoginComponentProps> = ({ popup, onPopup }) => {
   const { toggleUser } = useContext(User)
 
   useEffect(() => {
@@ -29,8 +30,12 @@ const Login: React.FC<LoginComponentProps> = ({ popup }) => {
         const user = await window.Kakao.API.request({ url: '/v2/user/me' })
         toggleUser(user)
         return user
-      } catch (error) {
-        throw error
+      } catch (err) {
+        const error = JSON.parse(JSON.parse(err))
+
+        if (error.code === -401) {
+          window.Kakao.Auth.setAccessToken('')
+        }
       }
     }
 
@@ -48,9 +53,10 @@ const Login: React.FC<LoginComponentProps> = ({ popup }) => {
           },
           fail: (reason: any) => console.error(reason)
         })
+        onPopup(false)
       }
     }
-  }, [toggleUser, popup])
+  }, [toggleUser, popup, onPopup])
 
   return null
 }

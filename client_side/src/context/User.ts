@@ -20,13 +20,13 @@ interface User {
 interface UserContextType {
   user: User | null
   isLoggedIn: boolean
-  toggleUser: (user: User) => void
+  toggleUser: (user: User | null) => void
 }
 
 const initialUserContextValue: UserContextType = {
   user: null,
   isLoggedIn: false,
-  toggleUser(user: User) {
+  toggleUser(user: User | null) {
     this.user = user
     this.isLoggedIn = true
   }
