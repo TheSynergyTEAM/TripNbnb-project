@@ -28,7 +28,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
+    "test": "craco test --testPathIgnorePatterns=__tests__/server",
     "eject": "react-scripts eject",
     "test:server": "node src/__tests__/server/index.js"
   },
@@ -55,5 +55,6 @@
     "daum.maps.d.ts": "Musma/daum.maps.d.ts",
     "express": "^4.17.1"
   },
-  "proxy": "http://localhost:8000"
+  "proxy": "http://localhost:8000",
+  "jest": {}
 }
