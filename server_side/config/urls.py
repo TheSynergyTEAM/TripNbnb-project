@@ -35,6 +35,7 @@ urlpatterns = [
     path("reviews/", include("reviews.urls", namespace="reviews")),
     path("users/", include("users.urls", namespace="users")),
     path("lists/", include("lists.urls", namespace="lists")),
+    path("", include("core.urls", namespace="core")),
     path("admin/", admin.site.urls),
 ]
 
