@@ -25,6 +25,11 @@ app.post('/users/login', (req, res) => {
   res.status(200).end()
 })
 
+app.post('/users/unlink', (req, res) => {
+  console.log(req.body)
+  res.status(200).end()
+})
+
 app.get('/places/:id', (req, res) => {
   const { id } = req.params
 

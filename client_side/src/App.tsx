@@ -7,9 +7,14 @@ const { Provider: UserProvider } = User
 const App: React.FC = () => {
   const [user, setUser] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const toggleUser = (user: any) => {
-    setUser(user)
-    setIsLoggedIn(true)
+  const toggleUser = (user: any | null) => {
+    if (user == null) {
+      setUser(null)
+      setIsLoggedIn(false)
+    } else {
+      setUser(user)
+      setIsLoggedIn(true)
+    }
   }
 
   return (
