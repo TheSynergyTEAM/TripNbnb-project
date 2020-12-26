@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
 interface Properties {
-  nickname: string
+  nickname?: string
   thumbnail_image?: string
   profile_image?: string
 }
@@ -11,10 +11,10 @@ interface KakaoAccount {
 }
 
 interface User {
-  id: number
-  connected_at: string
-  properties: Properties
-  kakao_account: KakaoAccount
+  id?: number
+  connected_at?: string
+  properties?: Properties
+  kakao_account?: KakaoAccount
 }
 
 interface UserContextType {
@@ -33,5 +33,7 @@ const initialUserContextValue: UserContextType = {
 }
 
 const UserContext = createContext(initialUserContextValue)
+
+export type { UserContextType }
 
 export default UserContext
