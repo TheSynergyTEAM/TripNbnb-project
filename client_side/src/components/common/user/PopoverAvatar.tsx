@@ -73,17 +73,21 @@ const PopoverAvatar: React.FC = () => {
   const { user } = useContext(UserContext)
 
   return (
-    <Popover trigger="click" content={<PopoverContent />}>
-      <Avatar
-        {...(user?.properties.thumbnail_image
-          ? { src: user?.properties.thumbnail_image }
-          : {})}
-        size={30}
-        style={{ cursor: 'pointer' }}
-      >
-        {user?.properties.thumbnail_image ? '' : user?.properties.nickname[0]}
-      </Avatar>
-    </Popover>
+    user && (
+      <Popover trigger="click" content={<PopoverContent />}>
+        <Avatar
+          {...(user?.properties?.thumbnail_image
+            ? { src: user?.properties.thumbnail_image }
+            : {})}
+          size={30}
+          style={{ cursor: 'pointer' }}
+        >
+          {user?.properties?.thumbnail_image
+            ? ''
+            : user?.properties?.nickname![0]}
+        </Avatar>
+      </Popover>
+    )
   )
 }
 
