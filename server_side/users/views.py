@@ -46,6 +46,3 @@ def kakao_login(request):
     return redirect("http://localhost:3000")
 
 
-def log_out(request):
-    logout(request)
-    return redirect("https://localhost:3000")

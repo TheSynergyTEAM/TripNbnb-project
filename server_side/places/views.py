@@ -1,6 +1,7 @@
 import os
 import json
 import urllib.request
+from django.http import JsonResponse
 from rest_framework import viewsets  # add this
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -51,5 +52,5 @@ def tourist_destination_view(request):
             print(city_json)
     else:
             print("Error Code:" +str(rescode))
-
-    return render(request, "")
+    return JsonResponse(city_json)
+    
