@@ -3,10 +3,11 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Section from './common/Section'
 import { SecondaryText, Title } from 'components/common/typography'
 import { List, Rate, Space, Typography } from 'antd'
-import { purple, grey } from '@ant-design/colors'
 import Avatar from 'antd/lib/avatar/avatar'
 import styled from 'styled-components'
 import { dayjs } from 'api'
+import ReviewsTabs from './ReviewsTab'
+import ReviewsInput from './ReviewsInput'
 
 interface ReviewsComponentProps {
   reviews: {
@@ -21,66 +22,7 @@ const StyledListItemMeta = styled(List.Item.Meta)`
   }
 `
 
-const StyledTabWrapper = styled.ul`
-  display: inline-block;
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1rem 0;
-  text-align: right;
-`
-
-const StyledTabItem = styled.li`
-  cursor: pointer;
-  display: inline-block;
-
-  &.active {
-    color: ${purple.primary};
-  }
-
-  &:not(:last-child)::after {
-    content: '|';
-    display: inline-block;
-    margin: 0 3px;
-    font-size: 13px;
-    vertical-align: top;
-    color: ${grey[0]};
-  }
-`
-
-const TabItems = [
-  {
-    name: '최신순',
-    value: 0
-  },
-  {
-    name: '평점높은순',
-    value: 1
-  },
-  {
-    name: '평점낮은순',
-    value: 2
-  }
-]
-
-const Tabs: React.FC<any> = ({ active, onChange }) => {
-  return (
-    <StyledTabWrapper>
-      {TabItems.map((item, idx, _) => (
-        <StyledTabItem
-          key={idx}
-          className={idx === active ? 'active' : ''}
-          style={{ cursor: 'pointer' }}
-          onClick={() => onChange(item.value)}
-        >
-          {item.name}
-        </StyledTabItem>
-      ))}
-    </StyledTabWrapper>
-  )
-}
-
 const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
-  // const { detailItem } = useContext(MarkerContext)
   const [isSpread, setIsSpread] = useState(false)
   const [tabActive, setTabActive] = useState(0)
   const slicedReviews = useCallback(() => {
@@ -118,7 +60,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
     <Section title={<Title level={5}>리뷰</Title>}>
       {reviews.data.length ? (
         <>
-          <Tabs active={tabActive} onChange={handleTabChange} />
+          <ReviewsTabs active={tabActive} onChange={handleTabChange} />
           <List
             dataSource={slicedReviews()}
             itemLayout="vertical"
@@ -158,6 +100,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
               </Typography.Link>
             </Space>
           )}
+          <ReviewsInput />
         </>
       ) : (
         <SecondaryText>등록된 리뷰가 없습니다.</SecondaryText>

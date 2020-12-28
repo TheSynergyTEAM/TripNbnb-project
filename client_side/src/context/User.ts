@@ -34,6 +34,6 @@ const initialUserContextValue: UserContextType = {
 
 const UserContext = createContext(initialUserContextValue)
 
-export type { UserContextType }
+export type { UserContextType, User }
 
 export default UserContext
