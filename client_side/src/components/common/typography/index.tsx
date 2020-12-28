@@ -27,7 +27,10 @@ const PrimaryText: React.FC<any> = (props) => {
 
 const SecondaryText: React.FC<any> = (props) => {
   return (
-    <Typography.Text type="secondary" style={{ ...defaultStyle }}>
+    <Typography.Text
+      type="secondary"
+      style={{ ...defaultStyle, ...props.style }}
+    >
       {props.children}
     </Typography.Text>
   )

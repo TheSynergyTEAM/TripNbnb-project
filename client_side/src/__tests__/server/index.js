@@ -55,12 +55,16 @@ app.get('/places/:id', (req, res) => {
     // 리뷰 내용
     const content = lorem[randRange(0, lorem.length)]
     const rating = ratings[randRange(0, ratings.length)]
+    const createdAt = randRange(
+      new Date(Date.now() - 86400000).getTime(),
+      Date.now()
+    )
     const user = {
       avatar: `https://picsum.photos/30/30?random=${i}`,
       name: 'blah blah'
     }
 
-    reviews.data.push({ content, rating, user })
+    reviews.data.push({ content, createdAt, rating, user })
   }
 
   reviews.meta.review_average =
