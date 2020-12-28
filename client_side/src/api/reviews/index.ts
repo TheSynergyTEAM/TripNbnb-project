@@ -9,4 +9,8 @@ export async function writeReview(user: User, content: any) {
   }
 }
 
+export async function updateReview(user: User, content: any) {}
+
+export async function deleteReivew(user: User, review: any) {}
+
 export async function getReviews(placeId: number | string) {}

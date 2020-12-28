@@ -7,7 +7,9 @@ export const useFetchPlaceData = (setStateFn: Function) => {
 
   useEffect(() => {
     const fetchPlace = async () => {
-      const placeData = await axios.get(`/places/${detailItem?.id}`)
+      const placeData = await axios.get(
+        `http://localhost:7999/places/${detailItem?.id}`
+      )
       setStateFn(placeData.data)
     }
 
