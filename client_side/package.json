@@ -15,7 +15,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/styled-components": "^5.1.5",
     "antd": "^4.9.2",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "craco-less": "^1.17.1",
     "dayjs": "^1.9.8",
     "react": "^17.0.1",
@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
+    "cors": "^2.8.5",
     "daum.maps.d.ts": "Musma/daum.maps.d.ts",
     "express": "^4.17.1"
   },

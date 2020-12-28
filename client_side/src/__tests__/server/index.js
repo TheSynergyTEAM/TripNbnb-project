@@ -1,6 +1,7 @@
 const express = require('express')
 const config = require('./config/env')
 const app = express()
+const cors = require('cors')
 const { port } = config
 
 const randRange = (min, max) => Math.floor(Math.random() * (max - min)) + min
@@ -18,6 +19,7 @@ const lorem = [
   '선거에 관한 경비는 법률이 정하는 경우를 제외하고는 정당 또는 후보자에게 부담시킬 수 없다.'
 ]
 
+app.use(cors())
 app.use(express.json())
 
 app.post('/users/login', (req, res) => {

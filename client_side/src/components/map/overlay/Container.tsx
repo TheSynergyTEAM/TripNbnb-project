@@ -26,7 +26,7 @@ const Container: React.FC = (props) => {
         const fakeNumber = () => Math.floor(Math.random() * (100 - 1 + 1)) + 1
 
         axios
-          .get(`/places/${fakeNumber()}`)
+          .get(`http://localhost:7999/places/${fakeNumber()}`)
           .then((result) => resolve(result.data))
           .catch((error) => reject(error))
       })
