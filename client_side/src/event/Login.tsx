@@ -48,7 +48,7 @@ const Login: React.FC<LoginComponentProps> = ({ popup, onPopup }) => {
             window.Kakao.Auth.setAccessToken(authObj.access_token)
             ;(async function () {
               const user = await autoLogin()
-              axios.post('/users/login', user)
+              axios.post('/users/login/', user)
             })()
           },
           fail: (reason: any) => console.error(reason)

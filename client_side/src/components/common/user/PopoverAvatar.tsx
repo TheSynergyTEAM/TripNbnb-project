@@ -41,7 +41,7 @@ const PopoverContent: React.FC<any> = () => {
           url: '/v1/user/unlink',
           success: (response: any) => {
             window.Kakao.Auth.setAccessToken('')
-            axios.post('/users/unlink', response)
+            axios.post('/users/unlink/', response)
             toggleUser(null)
           },
           fail: (reason: any) => console.error(reason)
