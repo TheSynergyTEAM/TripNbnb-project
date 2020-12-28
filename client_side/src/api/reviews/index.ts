@@ -3,7 +3,7 @@ import type { User } from 'context/User'
 
 export async function writeReview(user: User, content: any) {
   try {
-    await axios.post('/reviews', { user, content })
+    await axios.post('/reviews/', { user, content })
   } catch (error) {
     throw new Error(error)
   }

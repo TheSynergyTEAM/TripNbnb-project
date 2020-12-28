@@ -17,7 +17,7 @@ class ReviewView(viewsets.ModelViewSet):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-def write_review(request, pk):
+def write_review(request):
     # receive json data from clinet
     received_json_data = json.loads(request.body.decode("utf-8"))
     # required data
