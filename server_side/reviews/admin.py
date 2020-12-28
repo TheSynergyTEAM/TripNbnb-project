@@ -7,6 +7,7 @@ class CustomReviewAdmin(admin.ModelAdmin):
     """Custom Review Admin"""
 
     list_display = (
+        "title",
         "place",
         "rating",
         "user",

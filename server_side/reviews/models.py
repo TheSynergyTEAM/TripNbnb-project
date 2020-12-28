@@ -8,6 +8,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Review(core_models.TimeStampedModel):
     """Review Model Definition"""
 
+    title = models.TextField(null=True)
     review = models.TextField()
     rating = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(5)]
