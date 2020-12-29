@@ -4,8 +4,13 @@ import { useContext } from 'react'
 import styled from 'styled-components'
 import { PrimaryText, Title } from '../typography'
 import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 const menuItem = [
+  {
+    name: '내 정보 보기',
+    type: 'myinfo'
+  },
   {
     name: '로그아웃',
     type: 'logout'
@@ -26,6 +31,7 @@ const StyledListItem = styled(List.Item)`
 
 const PopoverContent: React.FC<any> = () => {
   const { toggleUser, isLoggedIn } = useContext(UserContext)
+  const history = useHistory()
 
   const handleItemClick = (type: string) => {
     const loginCheck = !window.Kakao.Auth.getAccessToken() || !isLoggedIn
@@ -33,6 +39,9 @@ const PopoverContent: React.FC<any> = () => {
     if (loginCheck) return
 
     switch (type) {
+      case 'myinfo':
+        history.push('/info')
+        return
       case 'logout':
         window.Kakao.Auth.logout(() => toggleUser(null))
         return

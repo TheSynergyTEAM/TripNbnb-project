@@ -15,7 +15,7 @@ const StyledDetailWrapper = styled(Space)`
   overflow-y: auto;
   position: fixed;
   right: 0;
-  top: 65px;
+  top: 63px;
   z-index: 150;
 
   &::-webkit-scrollbar {

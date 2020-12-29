@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Main from './Main'
 import Map from './Map'
+import Info from './Info'
 import Header from 'components/common/Header'
 
 const RouteWrapper: React.FC = () => {
@@ -11,6 +12,7 @@ const RouteWrapper: React.FC = () => {
       <Switch>
         <Route exact path="/" component={Main} />
         <Route path="/map" component={Map} />
+        <Route exact path="/info" component={Info} />
       </Switch>
     </Router>
   )
