@@ -45,4 +45,10 @@ def kakao_login(request):
     login(request, user)
     return redirect("http://localhost:3000")
 
-
+@method_decorator(csrf_exempt, name="dispatch")
+def kakao_unlink(request):
+    user_data = json.loads(request.body.decode("utf-8"))
+    pk = user_data.get("id")
+    user = models.User.objects.get(pk=pk)
+    user.delete()
+    return redirect("http://localhost:3000")
