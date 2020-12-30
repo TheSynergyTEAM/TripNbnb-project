@@ -4,6 +4,6 @@ from . import views
 app_name = "places"
 
 urlpatterns = [
-    path("<int:pk>", views.placeview, name="placeview"),
-    path("destination", views.tourist_destination_view, name="destinationview"),
+    path("<int:id>/", views.place_view, name="place"),
+    path("destination", views.place_photos_view, name="photos"),
 ]

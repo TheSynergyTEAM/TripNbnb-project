@@ -35,15 +35,16 @@ def write_review(request):
     place_address = content.get("addressName")
     place_mapx = content.get("mapx")
     place_mapy = content.get("mapy")
-    place_writer = user
-    place = place_models.Place.objects.create(
-        name= place_name,
-        contentid= place_contentid,
-        address= place_address,
-        mapx= place_mapx,
-        mapy= place_mapy,
-        writer= place_writer,
-    )
+    try:
+        place = place_models.Place.objects.get(contentid=place_contentid)
+    except place_models.Place.DoesNotExist:
+        place = place_models.Place.objects.create(
+            name= place_name,
+            contentid= place_contentid,
+            address= place_address,
+            mapx= place_mapx,
+            mapy= place_mapy,
+        )
     review = models.Review.objects.create(
         title=f"{user}-{place_name}",
         review=review_text,

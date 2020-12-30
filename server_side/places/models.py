@@ -41,9 +41,6 @@ class Place(core_models.TimeStampedModel):
     address = models.CharField(max_length=100)
     mapx = models.CharField(max_length=50)
     mapy = models.CharField(max_length=50)
-    writer = models.ForeignKey(
-        "users.User", related_name="place", on_delete=models.CASCADE
-    )
     place_img = models.ImageField(upload_to="place_imgs", blank=True)
 
     def __str__(self):

@@ -13,5 +13,4 @@ class CustomPlaceAdmin(admin.ModelAdmin):
         "name",
         "city",
         "address",
-        "writer",
     )
