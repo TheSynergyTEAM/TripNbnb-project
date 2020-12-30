@@ -2,6 +2,10 @@ import UserContext from 'context/User'
 import React from 'react'
 import styled from 'styled-components'
 
+interface RequiredLoginProps {
+  pass: boolean
+}
+
 const StyledWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -12,11 +16,13 @@ const StyledWrapper = styled.div`
   font-weight: bold;
 `
 
-class RequiredLogin extends React.Component {
+class RequiredLogin extends React.Component<RequiredLoginProps> {
   static contextType = UserContext
 
   render() {
-    return (
+    return this.props.pass ? (
+      this.props.children
+    ) : (
       <UserContext.Consumer>
         {(user) =>
           user.isLoggedIn ? (

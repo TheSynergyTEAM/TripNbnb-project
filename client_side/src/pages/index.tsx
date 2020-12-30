@@ -13,6 +13,7 @@ const RouteWrapper: React.FC = () => {
         <Route exact path="/" component={Main} />
         <Route path="/map" component={Map} />
         <Route exact path="/info" component={Info} />
+        <Route exact path="/info/:id" component={Info} />
       </Switch>
     </Router>
   )

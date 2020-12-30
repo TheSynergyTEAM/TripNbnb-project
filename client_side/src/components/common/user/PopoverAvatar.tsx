@@ -1,10 +1,11 @@
-import { Avatar, List, Popover } from 'antd'
-import UserContext from 'context/User'
-import { useContext } from 'react'
+import { List, Popover } from 'antd'
 import styled from 'styled-components'
 import { PrimaryText, Title } from '../typography'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import Avatar from './Avatar'
+import UserContext from 'context/User'
+import { useContext } from 'react'
 
 const menuItem = [
   {
@@ -84,17 +85,8 @@ const PopoverAvatar: React.FC = () => {
   return (
     user && (
       <Popover trigger="click" content={<PopoverContent />}>
-        <Avatar
-          {...(user?.properties?.thumbnail_image
-            ? { src: user?.properties.thumbnail_image }
-            : {})}
-          size={30}
-          style={{ cursor: 'pointer' }}
-        >
-          {user?.properties?.thumbnail_image
-            ? ''
-            : user?.properties?.nickname![0]}
-        </Avatar>
+        <Avatar user={user} />
+        <></>
       </Popover>
     )
   )
