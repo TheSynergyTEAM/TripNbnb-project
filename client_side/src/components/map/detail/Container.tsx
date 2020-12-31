@@ -31,10 +31,10 @@ const Container: React.FC<any> = () => {
     <StyledDetailWrapper direction="vertical">
       {placeData ? (
         <>
-          <Thumbnails thumbnails={placeData.thumbnailImages} />
+          <Thumbnails thumbnails={placeData.place_img} />
           <Intro />
-          <Photos images={placeData.images} />
-          <Reviews reviews={placeData.reviews} />
+          <Photos images={placeData.place_img} />
+          <Reviews reviews={placeData.all_reviews} />
         </>
       ) : (
         <FullLoading />

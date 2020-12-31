@@ -83,8 +83,8 @@ app.get('/places/:id', (req, res) => {
       rating: fakeRating(),
       review_count: fakeReviewCount(),
       images,
-      thumbnailImages,
-      reviews
+      place_img: thumbnailImages,
+      all_reviews: reviews
     })
   }, 1000)
 })

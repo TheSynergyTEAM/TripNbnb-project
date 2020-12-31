@@ -6,14 +6,20 @@ export const useFetchPlaceData = (setStateFn: Function) => {
   const { detailItem } = useContext(MarkerContext)
 
   useEffect(() => {
-    const fetchPlace = async () => {
-      const placeData = await axios.get(
-        `http://localhost:7999/places/${detailItem?.id}`
-      )
-      setStateFn(placeData.data)
-    }
+    if (detailItem?.id) {
+      console.log(detailItem.id)
+      const fetchPlace = async () => {
+        const placeData = await axios.get(
+          // `/places/${detailItem?.id}`
+          // `/places/1`
+          `http://localhost:7999/places/${detailItem?.id}/`
+        )
+        console.log(placeData)
+        setStateFn(placeData.data)
+      }
 
-    fetchPlace()
+      fetchPlace()
+    }
 
     return () => {
       setStateFn(null)

@@ -1,8 +1,10 @@
 import { useContext, useState } from 'react'
 import UserContext from 'context/User'
-import { Input, Button, notification } from 'antd'
+import { Input, Button, notification, Rate } from 'antd'
 import { reviews } from 'api'
 import MarkerContext from 'context/Marker'
+import styled from 'styled-components'
+import { purple } from '@ant-design/colors'
 
 const placeholder = (isLoggedIn: boolean) =>
   isLoggedIn
@@ -12,11 +14,24 @@ const placeholder = (isLoggedIn: boolean) =>
 const openNotification = (content: string) =>
   notification.error({ message: content, placement: 'bottomRight' })
 
+const StyledRate = styled(Rate)`
+  position: absolute;
+  bottom: 25px;
+  left: 12px;
+  font-size: 16px;
+  color: ${purple[4]};
+`
+
 const ReviewsInput: React.FC = () => {
   const { detailItem } = useContext(MarkerContext)
   const { isLoggedIn, user } = useContext(UserContext)
   const [value, setValue] = useState('')
+  const [rateValue, setRateValue] = useState(5)
   const [loading, setLoading] = useState(false)
+
+  const handleChangeRate = (_rateValue: number) => {
+    setRateValue(_rateValue)
+  }
 
   const handleWriteReview = async () => {
     if (!isLoggedIn) {
@@ -39,26 +54,36 @@ const ReviewsInput: React.FC = () => {
           placeName: detailItem?.place_name,
           addressName: detailItem?.address_name,
           mapx: detailItem?.x,
-          mapy: detailItem?.y
+          mapy: detailItem?.y,
+          rating: rateValue
         })
       }
     } catch (error) {
       openNotification(error.message)
     } finally {
       setLoading(false)
+      setRateValue(5)
+      setValue('')
     }
   }
 
   return (
     <>
-      <Input.TextArea
-        value={value}
-        style={{ margin: '1rem 0' }}
-        autoSize={{ minRows: 3, maxRows: 7 }}
-        onChange={(e) => setValue(e.target.value)}
-        disabled={!isLoggedIn || loading}
-        placeholder={placeholder(isLoggedIn)}
-      />
+      <div style={{ position: 'relative' }}>
+        <Input.TextArea
+          value={value}
+          style={{
+            margin: '1rem 0',
+            paddingBottom: '2rem',
+            position: 'relative'
+          }}
+          autoSize={{ minRows: 3, maxRows: 6 }}
+          onChange={(e) => setValue(e.target.value)}
+          disabled={!isLoggedIn || loading}
+          placeholder={placeholder(isLoggedIn)}
+        ></Input.TextArea>
+        <StyledRate value={rateValue} onChange={handleChangeRate} allowHalf />
+      </div>
       <Button
         block
         disabled={!value}

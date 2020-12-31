@@ -25,7 +25,7 @@ const PhotoRow: React.FC<PhotosComponentProps> = ({ images }) => {
   const isOverflow = images.length > 9
 
   return (
-    <Row wrap gutter={6} justify="center">
+    <Row wrap gutter={6} justify="start">
       {photos.map((image) => (
         <PhotoCol image={image} key={image} />
       ))}
