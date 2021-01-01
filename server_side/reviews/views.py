@@ -22,12 +22,12 @@ class ReviewView(viewsets.ModelViewSet):
 def write_review(request):
     # receive json data from clinet
     received_json_data = json.loads(request.body.decode("utf-8"))
-    # required data
-    # name, contentid, city ,address ,mapx ,mapy ,writer ,place_img
+    print(received_json_data)
     user_pk = received_json_data.get("user").get("id")
     user = user_models.User.objects.get(pk=user_pk)
     content = received_json_data.get("content")
     review_text = content.get("review")
+    rating = content.get("rating")
     
     place_name = content.get("placeName")
     place_contentid = content.get("placeId")
@@ -48,7 +48,7 @@ def write_review(request):
     review = models.Review.objects.create(
         title=f"{user}-{place_name}",
         review=review_text,
-        rating=0,
+        rating=rating,
         user=user,
         place=place,
     )

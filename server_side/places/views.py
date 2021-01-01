@@ -21,21 +21,28 @@ class PlaceView(viewsets.ModelViewSet):
 
 @method_decorator(csrf_exempt, name="dispatch")
 def place_view(request, id):
-    place = models.Place.objects.get(pk=id)
-    reviews = place.reviews_p.all()
     place_json = {
-        "place_name" : str(place),
-        "place_img" : [],
-        "all_reviews" : [],
-        # Ratings
+        "data" : [],
+        "images" : [],
     }
-    for review in reviews:
-        place_json["all_reviews"].append(
-            {str(review.user) : str(review.review)}
-        )
-    images = get_images(str(place))
+    place_name = request.GET.get("name")
+    try:
+        place = models.Place.objects.get(contentid=id)
+        reviews = place.reviews_p.all()
+        for review in reviews:
+            place_json["data"].append(
+                {
+                    "username" : str(review.user),
+                    "review" : str(review.review),
+                    "rating" : str(review.rating),
+                    "created" : str(review.created),
+                }
+            )
+    except models.Place.DoesNotExist:
+        pass
+    images = get_images(str(place_name))
     for img in images:
-        place_json["place_img"].append(img["link"])
+        place_json["images"].append(img["link"])
 
     return JsonResponse(place_json)
 
