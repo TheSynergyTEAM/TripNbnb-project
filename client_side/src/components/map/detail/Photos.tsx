@@ -14,6 +14,7 @@ const PhotoCol: React.FC<any> = ({ image }) => {
         src={image}
         preview={false}
         width="100%"
+        height={100}
         style={{ borderRadius: '5px' }}
       />
     </Col>
