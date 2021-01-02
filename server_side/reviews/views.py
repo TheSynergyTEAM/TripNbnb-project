@@ -52,4 +52,4 @@ def write_review(request):
         user=user,
         place=place,
     )
-    return redirect("https://localhost:3000/review")
+    return redirect("http://localhost:3000")

@@ -9,6 +9,7 @@ from django.views.generic import ListView, DetailView, View
 from django.shortcuts import render, redirect, reverse
 from . import models
 from reviews import models as review_models
+from users import models as user_models
 from .serializers import PlaceSerializer
 from django.views.decorators.csrf import csrf_exempt
 
@@ -33,9 +34,12 @@ def place_view(request, id):
     for place in places:
       reviews = place.reviews_p.all()
       for review in reviews:
+        review_user = user_models.User.objects.get(username=review.user)
         place_json["data"].append(
             {
                 "username": str(review.user),
+                "user_id" : str(review_user.id),
+                "user_profile": (review_user.profile_img.url),
                 "review": str(review.review),
                 "rating": str(review.rating),
                 "created": str(review.created),
