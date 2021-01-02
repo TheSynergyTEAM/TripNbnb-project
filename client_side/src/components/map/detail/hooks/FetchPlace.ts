@@ -24,7 +24,7 @@ export const useFetchPlaceData = (setStateFn: Function) => {
       console.log(detailItem.id)
       const fetchPlace = async () => {
         const placeData: AxiosResponse<PlaceData> = await axios.get(
-          `/places/${detailItem?.id}`
+          `/places/${detailItem?.id}/?name=${detailItem?.place_name}`
           // `/places/1`
           // `http://localhost:7999/places/${detailItem?.id}/`
         )
