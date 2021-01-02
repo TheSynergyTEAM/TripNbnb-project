@@ -2,7 +2,7 @@ import { Space } from 'antd'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { FullLoading } from './common/Loading'
-import { useFetchPlaceData } from './hooks/FetchPlace'
+import { PlaceData, useFetchPlaceData } from './hooks/FetchPlace'
 import Intro from './Intro'
 import Photos from './Photos'
 import Reviews from './Reviews'
@@ -24,17 +24,21 @@ const StyledDetailWrapper = styled(Space)`
 `
 
 const Container: React.FC<any> = () => {
-  const [placeData, setPlaceData] = useState<any>(null)
+  const [placeData, setPlaceData] = useState<PlaceData | null>(null)
   useFetchPlaceData(setPlaceData)
 
   return (
     <StyledDetailWrapper direction="vertical">
       {placeData ? (
         <>
-          <Thumbnails thumbnails={placeData.place_img} />
+          {placeData.images.length && (
+            <Thumbnails thumbnails={placeData.images.slice(0, 5)} />
+          )}
           <Intro />
-          <Photos images={placeData.place_img} />
-          <Reviews reviews={placeData.all_reviews} />
+          {placeData.images.length >= 5 && (
+            <Photos images={placeData.images.slice(5)} />
+          )}
+          <Reviews reviews={placeData.data} />
         </>
       ) : (
         <FullLoading />

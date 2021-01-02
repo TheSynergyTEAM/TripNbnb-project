@@ -8,12 +8,14 @@ import styled from 'styled-components'
 import { dayjs } from 'api'
 import ReviewsTabs from './ReviewsTab'
 import ReviewsInput from './ReviewsInput'
+import { ReviewData } from './hooks/FetchPlace'
 
 interface ReviewsComponentProps {
-  reviews: {
-    data: any[]
-    meta?: any
-  }
+  // reviews: {
+  //   data: any[]
+  //   meta?: any
+  // }
+  reviews: Array<ReviewData>
 }
 
 const StyledListItemMeta = styled(List.Item.Meta)`
@@ -28,21 +30,21 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
   const slicedReviews = useCallback(() => {
     switch (tabActive) {
       case 0:
-        reviews.data.sort((a, b) => b.createdAt - a.createdAt)
+        reviews.sort((a, b) => b.date - a.date)
         break
       case 1:
-        reviews.data.sort((a, b) => (a.rating > b.rating ? -1 : 1))
+        reviews.sort((a, b) => (a.rating > b.rating ? -1 : 1))
         break
       case 2:
-        reviews.data.sort((a, b) => (a.rating > b.rating ? 1 : -1))
+        reviews.sort((a, b) => (a.rating > b.rating ? 1 : -1))
         break
     }
     if (!isSpread) {
-      return reviews.data.slice(0, 5)
+      return reviews.slice(0, 5)
     }
-    return reviews.data
-  }, [isSpread, reviews.data, tabActive])
-  const isOverflow = reviews.data.length > 5
+    return reviews
+  }, [isSpread, reviews, tabActive])
+  const isOverflow = reviews.length > 5
   const handleTabChange = (value: number) => {
     if (tabActive === value) {
       return
@@ -58,7 +60,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
 
   return (
     <Section title={<Title level={5}>리뷰</Title>}>
-      {reviews.data.length ? (
+      {reviews.length ? (
         <>
           <ReviewsTabs active={tabActive} onChange={handleTabChange} />
           <List
@@ -67,14 +69,14 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
             renderItem={(review) => (
               <List.Item>
                 <StyledListItemMeta
-                  avatar={<Avatar src={review.user.avatar} size="default" />}
+                  // avatar={<Avatar src={review.user.avatar} size="default" />}
                   title={
                     <>
-                      <span>{review.user.name}</span>
+                      {/* <span>{review.user.name}</span> */}
                       <SecondaryText
                         style={{ marginLeft: '0.5rem', fontSize: '14px' }}
                       >
-                        {dayjs(new Date(review.createdAt)).fromNow()}
+                        {dayjs(new Date(review.date)).fromNow()}
                       </SecondaryText>
                     </>
                   }
@@ -96,7 +98,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
               <Typography.Link onClick={() => setIsSpread(!isSpread)}>
                 {isSpread
                   ? '리뷰 접기'
-                  : `${reviews.data.length - 5}개 리뷰 모두 보기`}
+                  : `${reviews.length - 5}개 리뷰 모두 보기`}
               </Typography.Link>
             </Space>
           )}
