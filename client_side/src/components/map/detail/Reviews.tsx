@@ -11,10 +11,6 @@ import ReviewsInput from './ReviewsInput'
 import { ReviewData } from './hooks/FetchPlace'
 
 interface ReviewsComponentProps {
-  // reviews: {
-  //   data: any[]
-  //   meta?: any
-  // }
   reviews: Array<ReviewData>
 }
 

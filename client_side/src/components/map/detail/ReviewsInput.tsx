@@ -14,6 +14,11 @@ const placeholder = (isLoggedIn: boolean) =>
 const openNotification = (content: string) =>
   notification.error({ message: content, placement: 'bottomRight' })
 
+const StyledInputWrapper = styled.div`
+  position: relative;
+  margin-top: 2rem;
+`
+
 const StyledRate = styled(Rate)`
   position: absolute;
   bottom: 25px;
@@ -69,7 +74,7 @@ const ReviewsInput: React.FC = () => {
 
   return (
     <>
-      <div style={{ position: 'relative' }}>
+      <StyledInputWrapper>
         <Input.TextArea
           value={value}
           style={{
@@ -83,7 +88,7 @@ const ReviewsInput: React.FC = () => {
           placeholder={placeholder(isLoggedIn)}
         ></Input.TextArea>
         <StyledRate value={rateValue} onChange={handleChangeRate} allowHalf />
-      </div>
+      </StyledInputWrapper>
       <Button
         block
         disabled={!value}
