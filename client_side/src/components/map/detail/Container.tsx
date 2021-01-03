@@ -31,9 +31,9 @@ const Container: React.FC<any> = () => {
     <StyledDetailWrapper direction="vertical">
       {placeData ? (
         <>
-          {placeData.images.length && (
+          {placeData.images.length ? (
             <Thumbnails thumbnails={placeData.images.slice(0, 5)} />
-          )}
+          ) : null}
           <Intro />
           {placeData.images.length >= 5 && (
             <Photos images={placeData.images.slice(5)} />

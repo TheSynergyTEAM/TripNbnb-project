@@ -5,7 +5,7 @@ interface ThumbnailsComponentProps {
 }
 
 const Thumbnails: React.FC<ThumbnailsComponentProps> = ({ thumbnails }) => {
-  return thumbnails.length ? (
+  return (
     <Carousel effect="fade" autoplay style={{ height: '200px' }}>
       {thumbnails.map((item, index, _) => (
         <Image
@@ -18,7 +18,7 @@ const Thumbnails: React.FC<ThumbnailsComponentProps> = ({ thumbnails }) => {
         />
       ))}
     </Carousel>
-  ) : null
+  )
 }
 
 export default Thumbnails
