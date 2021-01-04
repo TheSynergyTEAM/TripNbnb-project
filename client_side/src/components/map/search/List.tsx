@@ -47,7 +47,9 @@ const List: React.FC<ListComponentProps> = ({
 
   const moveToTarget = (item: ResultItem) => {
     // 마커 초기화
-    MarkerContext.displayMarkers.forEach((marker) => marker.setMap(null))
+    MarkerContext.displayMarkers.forEach((display) =>
+      display.marker.setMap(null)
+    )
     MarkerContext.setDisplayMarkers([])
 
     // 카테고리 검색, 마커 찍기, 이벤트 등록
