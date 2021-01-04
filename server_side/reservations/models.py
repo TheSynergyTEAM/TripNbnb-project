@@ -11,7 +11,7 @@ class Reservation(models.Model):
     guest = models.ForeignKey(
         "users.User", related_name="reservation", on_delete=models.CASCADE)
     price = models.IntegerField()
-    check_in = models.DateField(auto_now=True)
+    check_in = models.DateField()
     check_out = models.DateField()
     is_reserved = models.BooleanField(default=False)
     number_of_people = models.PositiveIntegerField()

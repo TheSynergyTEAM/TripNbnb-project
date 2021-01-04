@@ -22,14 +22,14 @@ from users import views as users_views
 from places import views as places_views
 from reviews import views as reviews_views
 from lists import views as lists_views
-#from reservations import views as reservations_views
+from reservations import views as reservations_views
 
 router = routers.DefaultRouter()
 router.register(r"users", users_views.UserView, "users")
 router.register(r"places", places_views.PlaceView, "places")
 router.register(r"reviews", reviews_views.ReviewView, "reviews")
 router.register(r"lists", lists_views.ListView, "lists")
-#router.register(r"reservations", lists_views.ListView, "reservations")
+router.register(r"reservations", reservations_views.ReservationView, "reservations")
 
 urlpatterns = [
     path("api/", include(router.urls)),
@@ -37,7 +37,7 @@ urlpatterns = [
     path("reviews/", include("reviews.urls", namespace="reviews")),
     path("users/", include("users.urls", namespace="users")),
     path("lists/", include("lists.urls", namespace="lists")),
- #   path("reservations/", include("reservations.urls", namespace="reservations")),
+    path("reservations/", include("reservations.urls", namespace="reservations")),
     path("", include("core.urls", namespace="core")),
     path("admin/", admin.site.urls),
 ]
