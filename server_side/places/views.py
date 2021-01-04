@@ -56,7 +56,6 @@ def place_view(request, id):
 
 def place_photos_view(request):
   city = request.GET.get("city")
-
   items = get_images(city)
   city_json = {str(city): []}
   for item in items:

@@ -55,20 +55,22 @@ def write_review(request):
     )
     
     all_review = models.Review.objects.all()
+    
     all_review_json = {
         "data" : [],
     }
     for created_review in all_review:
-        review_user = user_models.User.objects.get(username=created_review.user)
-        all_review_json["data"].append(
-            {
-                "username": str(created_review.user),
-                "user_id" : str(review_user.id),
-                "user_profile": (review_user.profile_img.url),
-                "review": str(created_review.review),
-                "rating": str(created_review.rating),
-                "created": str(created_review.created),
-            }
-        )
+        if created_review.place_id == place.id:
+            review_user = user_models.User.objects.get(username=created_review.user)
+            all_review_json["data"].append(
+                {
+                    "username": str(created_review.user),
+                    "user_id" : str(review_user.id),
+                    "user_profile": (review_user.profile_img.url),
+                    "review": str(created_review.review),
+                    "rating": str(created_review.rating),
+                    "created": str(created_review.created),
+                }
+            )
     
     return JsonResponse(all_review_json)
