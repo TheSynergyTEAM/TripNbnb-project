@@ -9,6 +9,8 @@ interface ReviewData {
   username: string
   date: number
   content: string
+  user_id: string
+  user_profile?: string
 }
 
 interface PlaceData {

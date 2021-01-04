@@ -65,10 +65,10 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
             renderItem={(review) => (
               <List.Item>
                 <StyledListItemMeta
-                  // avatar={<Avatar src={review.user.avatar} size="default" />}
+                  avatar={<Avatar src={review.user_profile} size="default" />}
                   title={
                     <>
-                      {/* <span>{review.user.name}</span> */}
+                      <span>{review.username}</span>
                       <SecondaryText
                         style={{ marginLeft: '0.5rem', fontSize: '14px' }}
                       >
