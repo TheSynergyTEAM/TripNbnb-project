@@ -1,8 +1,7 @@
 import { Space } from 'antd'
-import { useState } from 'react'
 import styled from 'styled-components'
 import { FullLoading } from './common/Loading'
-import { PlaceData, useFetchPlaceData } from './hooks/FetchPlace'
+import { useFetchPlaceData } from 'components/map/hooks/FetchPlace'
 import Intro from './Intro'
 import Photos from './Photos'
 import Reviews from './Reviews'
@@ -24,8 +23,7 @@ const StyledDetailWrapper = styled(Space)`
 `
 
 const Container: React.FC<any> = () => {
-  const [placeData, setPlaceData] = useState<PlaceData | null>(null)
-  useFetchPlaceData(setPlaceData)
+  const placeData = useFetchPlaceData()
 
   return (
     <StyledDetailWrapper direction="vertical">

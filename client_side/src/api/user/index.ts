@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { User } from 'context/User'
 
 function fetchUserById(id: string | number): Promise<User> {

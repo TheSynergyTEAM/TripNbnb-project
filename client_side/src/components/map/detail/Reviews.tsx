@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { dayjs } from 'api'
 import ReviewsTabs from './ReviewsTab'
 import ReviewsInput from './ReviewsInput'
-import { ReviewData } from './hooks/FetchPlace'
+import { ReviewData } from 'components/map/hooks/FetchPlace'
 
 interface ReviewsComponentProps {
   reviews: Array<ReviewData>

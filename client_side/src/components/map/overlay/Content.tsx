@@ -1,33 +1,34 @@
-import { Card, Skeleton, Typography, Rate } from 'antd'
+import { Card, Skeleton, Typography, Rate, Image } from 'antd'
 import { Title } from 'components/common/typography'
 
 interface ContentProps {
   loading: boolean
   style?: React.CSSProperties
-  rating?: number
+  rating?: number | string
   reviewCount?: number
   markerPlace?: ResultItem | any
+  image?: string
 }
 
-const CoverImage = () => (
-  <img src="https://picsum.photos/200/150" alt="placeholder" />
-)
+const CoverImage: React.FC<{ src: string }> = ({ src }) => {
+  return src ? <Image src={src} width={200} height={150} /> : null
+}
 
-const Description: React.FC<{ rating?: number; reviewCount?: number }> = ({
-  rating,
-  reviewCount
-}) => {
-  return (
+const Description: React.FC<{
+  rating?: number | string
+  reviewCount?: number
+}> = ({ rating, reviewCount }) => {
+  return rating ? (
     <>
       <Rate
         allowHalf
         disabled
-        defaultValue={rating}
+        defaultValue={parseFloat(rating.toString())}
         style={{ display: 'block' }}
       />
       <Typography.Link underline>리뷰 {reviewCount}개</Typography.Link>
     </>
-  )
+  ) : null
 }
 
 const Content: React.FC<ContentProps> = ({
@@ -35,7 +36,8 @@ const Content: React.FC<ContentProps> = ({
   reviewCount,
   loading = false,
   style,
-  markerPlace
+  markerPlace,
+  image = ''
 }) =>
   loading ? (
     <Card style={{ width: '200px' }}>
@@ -44,7 +46,7 @@ const Content: React.FC<ContentProps> = ({
   ) : (
     <Card
       style={{ ...style, width: '200px' }}
-      cover={<CoverImage />}
+      cover={<CoverImage src={image} />}
       size="small"
     >
       <Card.Meta
