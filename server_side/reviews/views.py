@@ -1,6 +1,7 @@
 import os
 import json
-from rest_framework import viewsets  # add this
+from rest_framework import viewsets
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, View
@@ -52,4 +53,22 @@ def write_review(request):
         user=user,
         place=place,
     )
-    return redirect("http://localhost:3000")
+    
+    all_review = models.Review.objects.all()
+    all_review_json = {
+        "data" : [],
+    }
+    for created_review in all_review:
+        review_user = user_models.User.objects.get(username=created_review.user)
+        all_review_json["data"].append(
+            {
+                "username": str(created_review.user),
+                "user_id" : str(review_user.id),
+                "user_profile": (review_user.profile_img.url),
+                "review": str(created_review.review),
+                "rating": str(created_review.rating),
+                "created": str(created_review.created),
+            }
+        )
+    
+    return JsonResponse(all_review_json)
