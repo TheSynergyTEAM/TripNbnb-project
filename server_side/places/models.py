@@ -14,7 +14,7 @@ class AbstractItem(core_models.TimeStampedModel):
         return self.name
 
 
-class PlaceType(AbstractItem):
+class PlaceType(AbstractItem): #장소 정보(숙박, 관광지...)
     """ PlaceType Model Definition """
 
     class Meta:
