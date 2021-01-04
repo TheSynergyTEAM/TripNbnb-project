@@ -55,34 +55,49 @@ export const fetchPlaceThumbnailData = async (
   }
 }
 
-export const useFetchPlaceData = (): PlaceData | null => {
+export function addMetaReviews(placeData: PlaceData | ReviewData[]) {
+  let target = null
+  // ReviewData[]
+  if (Array.isArray(placeData)) {
+    target = placeData
+  } else {
+    target = placeData.data
+  }
+  return target.map((r) => ({
+    ...r,
+    date: new Date(r.created).getTime(),
+    content: r.review
+  }))
+}
+
+export const useFetchPlaceData = (): [
+  PlaceData | null,
+  ReviewData[],
+  Function
+] => {
   const [placeData, setPlaceData] = useState<PlaceData | null>(null)
+  const [reviews, setReviews] = useState<Array<ReviewData>>([])
   const { detailItem } = useContext(MarkerContext)
+  const setReviewsWrapper = (_reviews: Array<ReviewData>) => {
+    setReviews(addMetaReviews(_reviews))
+  }
 
   useEffect(() => {
     if (detailItem?.id) {
       const fetchPlace = async () => {
-        const placeData: AxiosResponse<PlaceData> = await axios.get(
+        const receivedPlaceData: AxiosResponse<PlaceData> = await axios.get(
           `/places/${detailItem?.id}/?name=${detailItem?.place_name}`
         )
-        // add meta properties
-        placeData.data.data = placeData.data.data.map((d) => ({
-          ...d,
-          date: new Date(d.created).getTime(),
-          content: d.review
-        }))
-        setPlaceData(placeData.data)
+        receivedPlaceData.data.data = addMetaReviews(receivedPlaceData.data)
+        setPlaceData(receivedPlaceData.data)
+        setReviews(receivedPlaceData.data.data)
       }
 
       fetchPlace()
     }
-
-    return () => {
-      setPlaceData(null)
-    }
   }, [detailItem])
 
-  return placeData
+  return [placeData, reviews, setReviewsWrapper]
 }
 
 export type { ReviewData, PlaceData }

@@ -6,6 +6,7 @@ import Intro from './Intro'
 import Photos from './Photos'
 import Reviews from './Reviews'
 import Thumbnails from './Thumbnails'
+import { PlaceDataProvider } from 'context/PlaceDataHandler'
 
 const StyledDetailWrapper = styled(Space)`
   background-color: white;
@@ -23,12 +24,16 @@ const StyledDetailWrapper = styled(Space)`
 `
 
 const Container: React.FC<any> = () => {
-  const placeData = useFetchPlaceData()
+  const [placeData, reviews, setReveiws] = useFetchPlaceData()
+
+  const updateCallback = (receivedPlaceData: any) => {
+    setReveiws(receivedPlaceData)
+  }
 
   return (
     <StyledDetailWrapper direction="vertical">
       {placeData ? (
-        <>
+        <PlaceDataProvider updateCallback={updateCallback}>
           {placeData.images.length ? (
             <Thumbnails thumbnails={placeData.images.slice(0, 5)} />
           ) : null}
@@ -36,8 +41,8 @@ const Container: React.FC<any> = () => {
           {placeData.images.length >= 5 && (
             <Photos images={placeData.images.slice(5)} />
           )}
-          <Reviews reviews={placeData.data} />
-        </>
+          <Reviews reviews={reviews} />
+        </PlaceDataProvider>
       ) : (
         <FullLoading />
       )}

@@ -1,10 +1,11 @@
 import { useContext, useState } from 'react'
 import UserContext from 'context/User'
 import { Input, Button, notification, Rate } from 'antd'
-import { reviews } from 'api'
+import { writeReview } from 'api/reviews'
 import MarkerContext from 'context/Marker'
 import styled from 'styled-components'
 import { purple } from '@ant-design/colors'
+import PlaceDataHandler from 'context/PlaceDataHandler'
 
 const placeholder = (isLoggedIn: boolean) =>
   isLoggedIn
@@ -30,6 +31,7 @@ const StyledRate = styled(Rate)`
 const ReviewsInput: React.FC = () => {
   const { detailItem } = useContext(MarkerContext)
   const { isLoggedIn, user } = useContext(UserContext)
+  const placeDataHandler = useContext(PlaceDataHandler)
   const [value, setValue] = useState('')
   const [rateValue, setRateValue] = useState(5)
   const [loading, setLoading] = useState(false)
@@ -53,7 +55,7 @@ const ReviewsInput: React.FC = () => {
 
     try {
       if (user) {
-        await reviews.writeReview(user, {
+        const updatedPlaceData = await writeReview(user, {
           review: value,
           placeId: detailItem?.id,
           placeName: detailItem?.place_name,
@@ -62,6 +64,7 @@ const ReviewsInput: React.FC = () => {
           mapy: detailItem?.y,
           rating: rateValue
         })
+        placeDataHandler.updateCallback(updatedPlaceData.data)
       }
     } catch (error) {
       openNotification(error.message)

@@ -5,7 +5,7 @@ import { SecondaryText, Title } from 'components/common/typography'
 import { List, Rate, Space, Typography } from 'antd'
 import Avatar from 'antd/lib/avatar/avatar'
 import styled from 'styled-components'
-import { dayjs } from 'api'
+import dayjs from 'api/date'
 import ReviewsTabs from './ReviewsTab'
 import ReviewsInput from './ReviewsInput'
 import { ReviewData } from 'components/map/hooks/FetchPlace'
@@ -79,7 +79,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
                   description={
                     <Rate
                       disabled
-                      value={review.rating}
+                      value={parseFloat(review.rating.toString())}
                       allowHalf
                       style={{ fontSize: '16px' }}
                     />
