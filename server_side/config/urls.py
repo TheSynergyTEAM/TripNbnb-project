@@ -38,7 +38,6 @@ urlpatterns = [
     path("users/", include("users.urls", namespace="users")),
     path("lists/", include("lists.urls", namespace="lists")),
     path("reservations/", include("reservations.urls", namespace="reservations")),
-    path("", include("core.urls", namespace="core")),
     path("admin/", admin.site.urls),
 ]
 

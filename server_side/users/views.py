@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
-from . import forms, models
+from . import models
 from rest_framework import viewsets  # add this
 from .serializers import UserSerializer  # add this
 
