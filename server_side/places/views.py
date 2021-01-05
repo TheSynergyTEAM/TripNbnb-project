@@ -54,17 +54,6 @@ def place_view(request, id):
   return JsonResponse(place_json)
 
 
-def place_photos_view(request):
-  city = request.GET.get("city")
-  items = get_images(city)
-  city_json = {str(city): []}
-  for item in items:
-    img_link = item.get("link")
-    city_json.get(str(city)).append(img_link)
-
-  return JsonResponse(city_json)
-
-
 def get_images(keyword):
   client_id = os.environ.get("NAVER_CLIENT_ID")
   client_secret = os.environ.get("NAVER_CLIENT_SECRET")
