@@ -40,7 +40,7 @@ const PhotoRow: React.FC<PhotosComponentProps> = ({ images }) => {
 }
 
 const Photos: React.FC<PhotosComponentProps> = ({ images }) => {
-  return (
+  return images.length ? (
     <Section
       title={<Title level={5}>사진</Title>}
       extra={images.length && <a href="##">모두 보기</a>}
@@ -50,9 +50,8 @@ const Photos: React.FC<PhotosComponentProps> = ({ images }) => {
       ) : (
         <SecondaryText>등록된 사진이 없습니다.</SecondaryText>
       )}
-      {/* <PhotoRow images={images} /> */}
     </Section>
-  )
+  ) : null
 }
 
 export default Photos
