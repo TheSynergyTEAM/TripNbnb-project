@@ -12,13 +12,22 @@ interface PriceInformation {
 
 interface PriceTextProps extends PriceInformation {
   distance?: Moment[]
+  roomOption: {
+    name: string
+    price: number
+  }
+  peopleCount: number
 }
 
-const StyledPriceText = styled.div`
-  margin-top: 1rem;
-`
+const StyledPriceText = styled.div``
 
-const PriceText: React.FC<PriceTextProps> = ({ stay, pay, distance }) => {
+const PriceText: React.FC<PriceTextProps> = ({
+  stay,
+  pay,
+  distance,
+  roomOption,
+  peopleCount
+}) => {
   const { detailItem } = useContext(MarkerContext)
 
   return (
@@ -30,7 +39,7 @@ const PriceText: React.FC<PriceTextProps> = ({ stay, pay, distance }) => {
           value={pay}
           style={{ display: 'inline-block', fontWeight: 'bolder' }}
         />
-        에 예약하기
+        에 {roomOption.name} {peopleCount}명 예약하기
         {distance && (
           <PrimaryText>
             ({distance[0].format('YYYY-MM-DD')}) ~ (
