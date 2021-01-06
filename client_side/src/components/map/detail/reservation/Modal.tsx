@@ -142,7 +142,14 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
       visible={active}
       onCancel={handleClose}
       title={<ModalTitle name={detailItem?.place_name} />}
-      footer={<Footer disabled={!price} />}
+      footer={
+        <Footer
+          disabled={!settledDates}
+          date={{ checkIn: value?.[0], checkOut: value?.[1] }}
+          peopleCount={peopleCount}
+          room={selectValue}
+        />
+      }
     >
       <Space direction="vertical" style={{ width: '100%' }}>
         <SecondaryText>원하는 날짜 선택하기</SecondaryText>
@@ -179,5 +186,7 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
     </StyledModal>
   )
 }
+
+export type { Room }
 
 export default ReservationModal
