@@ -9,7 +9,7 @@ import Thumbnails from './Thumbnails'
 import { PlaceDataProvider } from 'context/PlaceDataHandler'
 import { useContext } from 'react'
 import MarkerContext from 'context/Marker'
-import Reservation from './Reservation'
+import Reservation from './reservation/Container'
 
 const StyledDetailWrapper = styled(Space)`
   background-color: white;

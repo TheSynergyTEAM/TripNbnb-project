@@ -3,7 +3,7 @@ import UserContext from 'context/User'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
 import SendOutlined from '@ant-design/icons/SendOutlined'
-import ReservationModal from './ReservationModal'
+import ReservationModal from './Modal'
 
 const StyledButton = styled(Button)`
   margin: 0.5rem 1rem;

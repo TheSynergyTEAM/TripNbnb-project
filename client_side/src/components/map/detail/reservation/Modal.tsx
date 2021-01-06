@@ -4,82 +4,37 @@ import {
   DatePicker,
   ConfigProvider,
   notification,
-  Statistic
+  InputNumber
 } from 'antd'
 import locale from 'antd/lib/locale/ko_KR'
-import { PrimaryText, SecondaryText, Title } from 'components/common/typography'
+import { SecondaryText, Title } from 'components/common/typography'
 import MarkerContext from 'context/Marker'
-// import UserContext from 'context/User'
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
-import './style/picker_panel.css'
+import '../style/picker_panel.css'
 import moment, { Moment } from 'moment'
-import { RButton } from './Reservation'
+import PriceText, { PriceInformation } from './Price'
+import Footer from './Footer'
 
 interface ReservationModalProps {
   active: boolean
   handle: Function
 }
 
-interface PriceInformation {
-  stay: number
-  pay: number
-}
-
-interface PriceTextProps extends PriceInformation {
-  distance?: Moment[]
-}
-
 const StyledModal = styled(Modal)`
   //
-`
-
-const StyledPriceText = styled.div`
-  margin-top: 1rem;
 `
 
 const ModalTitle = (props: any) => {
   return <Title level={4}>{props.name}에 예약하기</Title>
 }
 
-const PriceText: React.FC<PriceTextProps> = ({ stay, pay, distance }) => {
-  const { detailItem } = useContext(MarkerContext)
-
-  return (
-    <StyledPriceText>
-      <Title level={3}>
-        <PrimaryText>{detailItem?.place_name}</PrimaryText>
-        에서 {stay}박 {stay + 1}일 &#8361;
-        <Statistic
-          value={pay}
-          style={{ display: 'inline-block', fontWeight: 'bolder' }}
-        />
-        에 예약하기
-        {distance && (
-          <PrimaryText>
-            ({distance[0].format('YYYY-MM-DD')}) ~ (
-            {distance[1].format('YYYY-MM-DD')})
-          </PrimaryText>
-        )}
-      </Title>
-    </StyledPriceText>
-  )
-}
-
-const Footer: React.FC<any> = ({ disabled }) => {
-  return (
-    <>
-      <RButton disabled={disabled}>예약하기</RButton>
-    </>
-  )
-}
-
 const ReservationModal: React.FC<ReservationModalProps> = (props) => {
   const { active, handle } = props
   const { detailItem } = useContext(MarkerContext)
-  // const { user } = useContext(UserContext)
   const [price, setPrice] = useState<PriceInformation | null>(null)
   const [value, setValue] = useState<[Moment, Moment] | undefined>(undefined)
+  const [peopleCount, setPeopleCount] = useState<number>(2)
 
   const disabledDate = (current: Moment) => {
     return current && current < moment().startOf('day')
@@ -113,6 +68,14 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
     }
   }
 
+  const settledDates = useCallback(() => {
+    if (!value || !value?.length) {
+      return false
+    } else {
+      return !(value.length < 2)
+    }
+  }, [value])
+
   const handleClose = () => {
     setPrice(null)
     setValue(undefined)
@@ -140,6 +103,11 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
             }
           />
         </ConfigProvider>
+        {settledDates && (
+          <div>
+            <InputNumber />
+          </div>
+        )}
         {price && (
           <PriceText stay={price.stay} pay={price.pay} distance={value} />
         )}
