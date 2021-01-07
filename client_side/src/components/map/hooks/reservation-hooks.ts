@@ -16,6 +16,12 @@ interface Reservation extends ReservationInformation {
   user: User
 }
 
-export async function postReservation(reservation: Reservation) {}
+export async function postReservation(reservation: Reservation) {
+  try {
+    await axios.post('/reservation/', reservation)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 
 export type { Reservation, ReservationInformation }

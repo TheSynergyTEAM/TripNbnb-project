@@ -148,6 +148,7 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
           date={{ checkIn: value?.[0], checkOut: value?.[1] }}
           peopleCount={peopleCount}
           room={selectValue}
+          onReservation={handleClose}
         />
       }
     >
