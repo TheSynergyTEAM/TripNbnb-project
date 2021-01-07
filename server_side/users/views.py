@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+from django.http import JsonResponse
 from django.shortcuts import reverse, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
@@ -52,3 +53,28 @@ def kakao_unlink(request):
     user = models.User.objects.get(pk=pk)
     user.delete()
     return redirect("http://localhost:3000")
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+def get_profile(request, pk):
+    user = models.User.objects.get(pk=pk)
+    user_json = {
+        "data":[],
+    }
+    user_reviews = user.reviews_u.all()
+    user_json["data"].append(
+        {
+            "username": str(user.username),
+            "user_profile": (user.profile_img.url),
+            "user_reviews": [],
+            "user_biography": str(user.biography),
+        }
+    )
+    for user_review in user_reviews:
+        user_json["data"][0].get("user_reviews").append(
+            {
+                "place": str(user_review.place.name),
+                "review": str(user_review.review),
+            }
+        )
+    return JsonResponse(user_json)

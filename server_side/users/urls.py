@@ -8,4 +8,5 @@ app_name = "users"
 urlpatterns = [
     path("login/", views.kakao_login, name="login"),
     path("unlink/", views.kakao_unlink, name="unlink"),
+    path("<int:pk>", views.get_profile, name="proflile"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
