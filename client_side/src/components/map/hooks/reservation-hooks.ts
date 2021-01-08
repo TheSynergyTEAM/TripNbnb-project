@@ -10,6 +10,7 @@ interface ReservationInformation {
   }
   peopleCount: number
   room: Room
+  place: daum.maps.services.PlacesSearchResultItem | null
 }
 
 interface Reservation extends ReservationInformation {

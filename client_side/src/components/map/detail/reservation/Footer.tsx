@@ -9,6 +9,7 @@ import { useContext, useState } from 'react'
 import UserContext from 'context/User'
 import { notification } from 'antd'
 import moment from 'moment'
+import MarkerContext from 'context/Marker'
 
 interface FooterProps extends ReservationInformation {
   readonly disabled: boolean
@@ -24,6 +25,7 @@ const Footer: React.FC<FooterProps> = ({
 }) => {
   const [loading, setLoading] = useState(false)
   const { user, isLoggedIn } = useContext(UserContext)
+  const { detailItem } = useContext(MarkerContext)
 
   const handleReservation = async () => {
     setLoading(true)
@@ -40,6 +42,7 @@ const Footer: React.FC<FooterProps> = ({
         },
         peopleCount,
         room,
+        place: detailItem,
         user
       }
       try {
