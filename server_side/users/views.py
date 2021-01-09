@@ -15,66 +15,62 @@ from .serializers import UserSerializer  # add this
 
 # Create your views here.
 class UserView(viewsets.ModelViewSet):  # add this
-    serializer_class = UserSerializer  # add this
-    queryset = models.User.objects.all()
-    print()
+  serializer_class = UserSerializer  # add this
+  queryset = models.User.objects.all()
+  print()
 
 
 @method_decorator(csrf_exempt, name="dispatch")
 def kakao_login(request):
-    received_json_data = json.loads(request.body.decode("utf-8"))
-    pk = received_json_data.get("id")
-    properties = received_json_data.get("properties")
-    nickname = properties.get("nickname")
-    profile_image = properties.get("profile_image")
-    try:
-        user = models.User.objects.get(pk=pk)
-    except models.User.DoesNotExist:
-        print("Not found")
-        user = models.User.objects.create(
-            pk=pk,
-            username=nickname,
-            first_name=nickname,
-        )
-        user.set_unusable_password()
-        user.save()
-        if profile_image is not None:
-            photo_request = requests.get(profile_image)
-            user.profile_img.save(
-                f"{nickname}-profile image", ContentFile(photo_request.content)
-            )
-    login(request, user)
-    return redirect("http://localhost:3000")
+  received_json_data = json.loads(request.body.decode("utf-8"))
+  pk = received_json_data.get("id")
+  properties = received_json_data.get("properties")
+  nickname = properties.get("nickname")
+  profile_image = properties.get("profile_image")
+  try:
+    user = models.User.objects.get(pk=pk)
+  except models.User.DoesNotExist:
+    print("Not found")
+    user = models.User.objects.create(
+        pk=pk,
+        username=nickname,
+        first_name=nickname,
+    )
+    user.set_unusable_password()
+    user.save()
+    if profile_image is not None:
+      photo_request = requests.get(profile_image)
+      user.profile_img.save(
+          f"{nickname}-profile image", ContentFile(photo_request.content)
+      )
+  login(request, user)
+  return redirect("http://localhost:3000")
+
 
 @method_decorator(csrf_exempt, name="dispatch")
 def kakao_unlink(request):
-    user_data = json.loads(request.body.decode("utf-8"))
-    pk = user_data.get("id")
-    user = models.User.objects.get(pk=pk)
-    user.delete()
-    return redirect("http://localhost:3000")
+  user_data = json.loads(request.body.decode("utf-8"))
+  pk = user_data.get("id")
+  user = models.User.objects.get(pk=pk)
+  user.delete()
+  return redirect("http://localhost:3000")
 
 
 @method_decorator(csrf_exempt, name="dispatch")
 def get_profile(request, pk):
-    user = models.User.objects.get(pk=pk)
-    user_json = {
-        "data":[],
-    }
-    user_reviews = user.reviews_u.all()
-    user_json["data"].append(
+  user = models.User.objects.get(pk=pk)
+  user_reviews = user.reviews_u.all()
+  user_json = {
+      "username": str(user.username),
+      "user_profile": (user.profile_img.url),
+      "user_reviews": [],
+      "user_biography": str(user.biography),
+  }
+  for user_review in user_reviews:
+    user_json["user_reviews"].append(
         {
-            "username": str(user.username),
-            "user_profile": (user.profile_img.url),
-            "user_reviews": [],
-            "user_biography": str(user.biography),
+            "place": str(user_review.place.name),
+            "review": str(user_review.review),
         }
     )
-    for user_review in user_reviews:
-        user_json["data"][0].get("user_reviews").append(
-            {
-                "place": str(user_review.place.name),
-                "review": str(user_review.review),
-            }
-        )
-    return JsonResponse(user_json)
+  return JsonResponse(user_json)
