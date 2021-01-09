@@ -10,11 +10,11 @@ interface ReservationInformation {
   }
   peopleCount: number
   room: Room
-  place: daum.maps.services.PlacesSearchResultItem | null
 }
 
 interface Reservation extends ReservationInformation {
   user: User
+  place: daum.maps.services.PlacesSearchResultItem | null
 }
 
 export async function postReservation(reservation: Reservation) {

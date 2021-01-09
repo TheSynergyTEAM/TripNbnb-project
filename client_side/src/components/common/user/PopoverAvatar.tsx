@@ -31,7 +31,7 @@ const StyledListItem = styled(List.Item)`
 `
 
 const PopoverContent: React.FC<any> = () => {
-  const { toggleUser, isLoggedIn } = useContext(UserContext)
+  const { toggleUser, isLoggedIn, user } = useContext(UserContext)
   const history = useHistory()
 
   const handleItemClick = (type: string) => {
@@ -41,7 +41,7 @@ const PopoverContent: React.FC<any> = () => {
 
     switch (type) {
       case 'myinfo':
-        history.push('/info')
+        history.push(`/info/${user?.id}`)
         return
       case 'logout':
         window.Kakao.Auth.logout(() => toggleUser(null))

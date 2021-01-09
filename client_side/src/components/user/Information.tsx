@@ -1,7 +1,10 @@
 import Avatar from 'components/common/user/Avatar'
-import UserContext from 'context/User'
-import { useContext } from 'react'
+import { User } from 'context/User'
 import styled from 'styled-components'
+
+interface UserInformationProps {
+  user?: User | null
+}
 
 const StyledInformationWrapper = styled.div`
   display: flex;
@@ -9,18 +12,17 @@ const StyledInformationWrapper = styled.div`
   margin: 0 auto;
 `
 
-const MyInformation: React.FC = () => {
-  const { user } = useContext(UserContext)
-
-  return (
+const UserInformation: React.FC<UserInformationProps> = ({ user }) => {
+  return user ? (
     <StyledInformationWrapper>
-      {user && (
+      {user.id && (
         <>
           <Avatar user={user} size={50} cursor={false} />
+          render test
         </>
       )}
     </StyledInformationWrapper>
-  )
+  ) : null
 }
 
-export default MyInformation
+export default UserInformation

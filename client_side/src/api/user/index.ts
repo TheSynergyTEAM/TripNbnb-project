@@ -1,10 +1,12 @@
+import axios from 'axios'
 import { User } from 'context/User'
 
-function fetchUserById(id: string | number): Promise<User> {
-  // test
-  return new Promise((resolve, reject) => {
-    window.setTimeout(() => resolve({ id: parseInt(id.toString()) }), 1000)
-  })
+export async function fetchUserById(id: string | number): Promise<User> {
+  try {
+    const { data: user } = await axios.get(`/users/${id}`)
+    console.log(user)
+    return user
+  } catch (error) {
+    throw error
+  }
 }
-
-export { fetchUserById }
