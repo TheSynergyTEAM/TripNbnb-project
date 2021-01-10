@@ -8,14 +8,16 @@ class CustomReviewAdmin(admin.ModelAdmin):
     """Custom Review Admin"""
 
     list_display = (
-        "room",
+        "hotel",
         "guest",
+        "room_type",
         "check_in",
         "check_out",
         "number_of_people",
     )
     list_filter = (
-        "room",
+        "hotel",
+        "room_type",
         "check_in",
         "number_of_people",
     )
