@@ -73,4 +73,5 @@ def get_profile(request, pk):
             "review": str(user_review.review),
         }
     )
+  print(user_json)
   return JsonResponse(user_json)
