@@ -5,6 +5,8 @@ import DetailContainer from 'components/map/detail/Container'
 import Marker from 'context/Marker'
 import { useCallback, useState } from 'react'
 import TileLoadedEvent from 'event/TileLoaded'
+import SearchButton from './menu/SearchButton'
+import Filter from './menu/Filter'
 
 const StyledMap = styled.div`
   width: 100vw;
@@ -41,6 +43,8 @@ const Container: React.FC = () => {
         }}
       >
         <SearchBox />
+        <SearchButton />
+        <Filter />
         {onChangeMarker() && <OverlayContainer />}
         {getVisible() && (
           <>

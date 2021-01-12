@@ -5,6 +5,7 @@ import { useContext } from 'react'
 import MapContext from 'context/Map'
 import Marker from 'context/Marker'
 import { categorySearch } from './Function'
+import { PrimaryText } from 'components/common/typography'
 
 interface ListComponentProps {
   keyword: string
@@ -73,7 +74,12 @@ const List: React.FC<ListComponentProps> = ({
         >
           <AntdList.Item.Meta
             title={item.place_name}
-            description={item.address_name}
+            description={
+              <>
+                <div>{item.address_name}</div>
+                <PrimaryText>{item.category_group_name}</PrimaryText>
+              </>
+            }
           />
         </AntdList.Item>
       )}

@@ -1,9 +1,10 @@
-import Avatar from 'components/common/user/Avatar'
-import { User } from 'context/User'
+import { Avatar } from 'antd'
+import { PrimaryText } from 'components/common/typography'
 import styled from 'styled-components'
+import { FetchUser } from './hooks/user-hooks'
 
 interface UserInformationProps {
-  user?: User | null
+  user?: FetchUser | null
 }
 
 const StyledInformationWrapper = styled.div`
@@ -12,15 +13,23 @@ const StyledInformationWrapper = styled.div`
   margin: 0 auto;
 `
 
+const StyledTitle = styled.div`
+  font-size: 1.2rem;
+  margin-left: 0.8rem;
+`
+
 const UserInformation: React.FC<UserInformationProps> = ({ user }) => {
   return user ? (
     <StyledInformationWrapper>
-      {user.id && (
-        <>
-          <Avatar user={user} size={50} cursor={false} />
-          render test
-        </>
-      )}
+      <>
+        <Avatar src={user.user_profile} size={50} />
+        <StyledTitle>
+          <PrimaryText style={{ fontWeight: 'bold' }}>
+            {user.username}
+          </PrimaryText>
+          님의 프로필 정보
+        </StyledTitle>
+      </>
     </StyledInformationWrapper>
   ) : null
 }
