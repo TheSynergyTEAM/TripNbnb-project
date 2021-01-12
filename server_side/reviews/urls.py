@@ -4,5 +4,6 @@ from . import views
 app_name = "reviews"
 
 urlpatterns = [
-    path("", views.write_review),
+    path("create/", views.write_review),
+    path("update/", views.update_review),
 ]
