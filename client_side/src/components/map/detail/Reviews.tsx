@@ -1,17 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react'
-// import MarkerContext from 'context/Marker'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import Section from './common/Section'
 import { SecondaryText, Title } from 'components/common/typography'
-import { List, Rate, Space, Typography } from 'antd'
+import { Divider, List, Rate, Space, Typography } from 'antd'
 import Avatar from 'antd/lib/avatar/avatar'
 import styled from 'styled-components'
 import dayjs from 'api/date'
 import ReviewsTabs from './ReviewsTab'
 import ReviewsInput from './ReviewsInput'
 import { ReviewData } from 'components/map/hooks/FetchPlace'
+import UserContext from 'context/User'
 
 interface ReviewsComponentProps {
   reviews: Array<ReviewData>
+}
+
+function useReviewOwner(review: ReviewData) {
+  const { user } = useContext(UserContext)
+
+  if (!user) {
+    return false
+  } else {
+    return user.id === parseInt(review.user_id)
+  }
 }
 
 const StyledListItemMeta = styled(List.Item.Meta)`
@@ -19,6 +29,18 @@ const StyledListItemMeta = styled(List.Item.Meta)`
     margin-bottom: 0;
   }
 `
+
+const ReviewAction: React.FC<{ review: ReviewData }> = ({ review }) => {
+  const isOwner = useReviewOwner(review)
+
+  return isOwner ? (
+    <>
+      <Typography.Link>삭제</Typography.Link>
+      <Divider type="vertical" />
+      <Typography.Link>수정</Typography.Link>
+    </>
+  ) : null
+}
 
 const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
   const [isSpread, setIsSpread] = useState(false)
@@ -63,7 +85,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
             dataSource={slicedReviews()}
             itemLayout="vertical"
             renderItem={(review) => (
-              <List.Item>
+              <List.Item actions={[<ReviewAction review={review} />]}>
                 <StyledListItemMeta
                   avatar={<Avatar src={review.user_profile} size="default" />}
                   title={

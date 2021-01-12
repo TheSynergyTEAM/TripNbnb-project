@@ -7,7 +7,7 @@ export async function writeReview(
   content: any
 ): Promise<PlaceData> {
   try {
-    const { data: updatedPlaceData } = await axios.post('/reviews/', {
+    const { data: updatedPlaceData } = await axios.post('/reviews/create/', {
       user,
       content
     })

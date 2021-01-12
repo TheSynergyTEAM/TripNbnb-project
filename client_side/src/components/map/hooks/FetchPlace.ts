@@ -3,14 +3,15 @@ import MarkerContext from 'context/Marker'
 import { useEffect, useContext, useState } from 'react'
 
 interface ReviewData {
-  created: string
-  rating: number
-  review: string
-  username: string
-  date: number
   content: string
+  created: string
+  date: number
+  rating: number
+  review_id: number
+  review: string
   user_id: string
   user_profile?: string
+  username: string
 }
 
 interface PlaceMeta {
