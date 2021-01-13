@@ -16,6 +16,7 @@ const PhotoCol: React.FC<any> = ({ image }) => {
         width="100%"
         height={100}
         style={{ borderRadius: '5px' }}
+        onError={(e) => (e.currentTarget.style.display = 'none')}
       />
     </Col>
   )
