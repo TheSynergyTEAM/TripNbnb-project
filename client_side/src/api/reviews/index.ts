@@ -40,7 +40,10 @@ export async function deleteReivew(user: User, review: ReviewData) {
   if (!user) return
 
   try {
-    await axios.delete(`/reviews/delete/${review.review_id}`)
+    await axios.post(`/reviews/delete/`, {
+      review_id: review.review_id,
+      user
+    })
   } catch (error) {
     throw new Error(error)
   }
