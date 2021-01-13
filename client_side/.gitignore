@@ -24,3 +24,5 @@ yarn-error.log*
 
 # cache
 .eslintcache
+
+package-lock.json
