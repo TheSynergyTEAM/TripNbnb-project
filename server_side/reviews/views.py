@@ -79,7 +79,7 @@ def write_review(request):
 def update_review(request):
     received_json_data = json.loads(request.body.decode("utf-8"))
     review_id = received_json_data.get("review_id")
-    review = models.Review.objects.get(contentid=review_id)
+    review = models.Review.objects.get(id=review_id)
     content = received_json_data.get("content")
     review.review = content
     review.save()
@@ -93,7 +93,6 @@ def update_review(request):
 @method_decorator(csrf_exempt, name="dispatch")
 def delete_review(request):
     received_json_data = json.loads(request.body.decode("utf-8"))
-    print(received_json_data)
     review_id = received_json_data.get("review_id")
     review = models.Review.objects.get(id=review_id)
     review.delete()
