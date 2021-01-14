@@ -89,3 +89,12 @@ def update_review(request):
     }
 
     return JsonResponse(updated_review_json)
+
+@method_decorator(csrf_exempt, name="dispatch")
+def delete_review(request):
+    received_json_data = json.loads(request.body.decode("utf-8"))
+    print(received_json_data)
+    review_id = received_json_data.get("review_id")
+    review = models.Review.objects.get(id=review_id)
+    review.delete()
+    return redirect("http://localhost:3000")
