@@ -12,10 +12,6 @@ interface PhotoRowProps extends PhotosComponentProps {
   openModal: any
 }
 
-const StyledModal = styled(Modal)`
-  top: 20px;
-`
-
 const StyledDetailImage = styled.img`
   max-width: 100%;
   margin: 0 auto 2.5rem auto;
@@ -84,15 +80,15 @@ const Photos: React.FC<PhotosComponentProps> = ({ images }) => {
         images.length && (
           <>
             <Typography.Link onClick={openModal}>모두 보기</Typography.Link>
-            <StyledModal
+            <Modal
               title="사진 자세히 보기"
               visible={modal}
               onCancel={closeModal}
               footer={null}
-              width={600}
+              style={{ top: 20 }}
             >
               <DetailPhotos images={images} />
-            </StyledModal>
+            </Modal>
           </>
         )
       }
