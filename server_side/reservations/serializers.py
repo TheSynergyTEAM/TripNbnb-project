@@ -5,7 +5,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Reservation
         fields = (
-            "room",
+            "hotel",
             "guest",
             "price",
             "check_in",

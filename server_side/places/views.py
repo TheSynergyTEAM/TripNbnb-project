@@ -32,9 +32,9 @@ def place_view(request, id):
   try:
     places = models.Place.objects.filter(contentid=id)
     for place in places:
-      reviews = place.reviews_p.all()
+      reviews = place.reviews_p.all() # 전달되어 온 id와 일치하는 place model을 불러오고 그 place model의 데이터를 모두 가져오기
       for review in reviews:
-        review_user = user_models.User.objects.get(username=review.user)
+        review_user = user_models.User.objects.get(username=review.user) #review를 작성한 user와 일치하는 user의 정보를 가져오기
         place_json["data"].append(
             {
                 "username": str(review.user),
@@ -55,8 +55,8 @@ def place_view(request, id):
 
 
 def get_images(keyword):
-  client_id = os.environ.get("NAVER_CLIENT_ID")
-  client_secret = os.environ.get("NAVER_CLIENT_SECRET")
+  client_id = os.environ.get("NAVER_CLIENT_ID", "1w4UBQhhzX6BV8IMhq7t")
+  client_secret = os.environ.get("NAVER_CLIENT_SECRET", "8_b5DV1kMO")
   encText = urllib.request.quote(keyword)
   url = "https://openapi.naver.com/v1/search/image?query=" + encText + "&display=20"
   url_request = urllib.request.Request(url)
