@@ -38,7 +38,7 @@ const Placeholder = (props: any) => (
 )
 
 class Information extends Component<InformationProps> {
-  handleChange = (value?: string | number) => {
+  handleChange = (value?: string | number | null) => {
     this.props.onChangePeopleCount(value)
   }
 

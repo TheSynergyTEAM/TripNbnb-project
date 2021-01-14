@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { PlaceData } from 'components/map/hooks/FetchPlace'
+import { PlaceData, ReviewData } from 'components/map/hooks/FetchPlace'
 import type { User } from 'context/User'
 
 export async function writeReview(
@@ -7,7 +7,7 @@ export async function writeReview(
   content: any
 ): Promise<PlaceData> {
   try {
-    const { data: updatedPlaceData } = await axios.post('/reviews/', {
+    const { data: updatedPlaceData } = await axios.post('/reviews/create/', {
       user,
       content
     })
@@ -17,8 +17,36 @@ export async function writeReview(
   }
 }
 
-export async function updateReview(user: User, content: any) {}
+export async function updateReview(
+  user: User,
+  content: string,
+  review: ReviewData
+) {
+  if (!user) {
+    throw new Error('Not logged in')
+  }
 
-export async function deleteReivew(user: User, review: any) {}
+  try {
+    await axios.post('/reviews/update/', {
+      review_id: review.review_id,
+      content
+    })
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export async function deleteReivew(user: User, review: ReviewData) {
+  if (!user) return
+
+  try {
+    await axios.post(`/reviews/delete/`, {
+      review_id: review.review_id,
+      user
+    })
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 
 export async function getReviews(placeId: number | string) {}

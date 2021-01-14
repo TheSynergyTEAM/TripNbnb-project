@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import Avatar from './Avatar'
 import UserContext from 'context/User'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 
 const menuItem = [
   {
@@ -30,7 +30,7 @@ const StyledListItem = styled(List.Item)`
   }
 `
 
-const PopoverContent: React.FC<any> = () => {
+const PopoverContent: React.FC<any> = (props) => {
   const { toggleUser, isLoggedIn, user } = useContext(UserContext)
   const history = useHistory()
 
@@ -42,6 +42,7 @@ const PopoverContent: React.FC<any> = () => {
     switch (type) {
       case 'myinfo':
         history.push(`/info/${user?.id}`)
+        props.onClickInfo()
         return
       case 'logout':
         window.Kakao.Auth.logout(() => toggleUser(null))
@@ -81,10 +82,20 @@ const PopoverContent: React.FC<any> = () => {
 
 const PopoverAvatar: React.FC = () => {
   const { user } = useContext(UserContext)
+  const [visible, setVisible] = useState(false)
+
+  const hide = () => {
+    setVisible(false)
+  }
 
   return (
     user && (
-      <Popover trigger="click" content={<PopoverContent />}>
+      <Popover
+        trigger="click"
+        content={<PopoverContent onClickInfo={hide} />}
+        visible={visible}
+        onVisibleChange={(visible: boolean) => setVisible(visible)}
+      >
         <Avatar user={user} />
         <></>
       </Popover>

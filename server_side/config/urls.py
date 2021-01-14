@@ -39,7 +39,7 @@ urlpatterns = [
     path("lists/", include("lists.urls", namespace="lists")),
     path("reservations/", include("reservations.urls", namespace="reservations")),
     path("admin/", admin.site.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

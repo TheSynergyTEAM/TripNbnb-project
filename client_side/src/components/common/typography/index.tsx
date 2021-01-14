@@ -19,7 +19,9 @@ const Title: React.FC<any> = (props) => {
 
 const PrimaryText: React.FC<any> = (props) => {
   return (
-    <Typography.Text style={{ ...defaultStyle, color: purple.primary }}>
+    <Typography.Text
+      style={{ ...defaultStyle, color: purple.primary, ...props.style }}
+    >
       {props.children}
     </Typography.Text>
   )

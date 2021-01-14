@@ -27,7 +27,7 @@ const StyledDetailWrapper = styled(Space)`
 `
 
 const Container: React.FC<any> = () => {
-  const [placeData, reviews, setReveiws] = useFetchPlaceData()
+  const [placeData, reviews, setReveiws, images] = useFetchPlaceData()
   const { detailItem } = useContext(MarkerContext)
 
   const updateCallback = (receivedPlaceData: any) => {
@@ -38,14 +38,12 @@ const Container: React.FC<any> = () => {
     <StyledDetailWrapper direction="vertical">
       {placeData ? (
         <PlaceDataProvider updateCallback={updateCallback}>
-          {placeData.images.length ? (
-            <Thumbnails thumbnails={placeData.images.slice(0, 5)} />
+          {images.length ? (
+            <Thumbnails thumbnails={images.slice(0, 5)} />
           ) : null}
           <Intro />
           {detailItem?.category_group_code === 'AD5' && <Reservation />}
-          {placeData.images.length >= 5 && (
-            <Photos images={placeData.images.slice(5)} />
-          )}
+          {images.length >= 5 && <Photos images={images.slice(5)} />}
           <Reviews reviews={reviews} />
         </PlaceDataProvider>
       ) : (

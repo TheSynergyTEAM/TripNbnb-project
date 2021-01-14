@@ -1,11 +1,22 @@
 import { fetchUserById } from 'api/user'
-import { User } from 'context/User'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+interface FetchReview {
+  place: string
+  review: string
+}
+
+interface FetchUser {
+  user_biography: string
+  user_profile: string
+  user_reviews: FetchReview[]
+  username: string
+}
+
 export function useFetchUser() {
   const { id } = useParams<{ id: string }>()
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<FetchUser | null>(null)
 
   useEffect(() => {
     if (!id) {
@@ -23,3 +34,5 @@ export function useFetchUser() {
 
   return [user]
 }
+
+export type { FetchReview, FetchUser }

@@ -74,3 +74,26 @@ def write_review(request):
             )
     
     return JsonResponse(all_review_json)
+
+@method_decorator(csrf_exempt, name="dispatch")
+def update_review(request):
+    received_json_data = json.loads(request.body.decode("utf-8"))
+    review_id = received_json_data.get("review_id")
+    review = models.Review.objects.get(id=review_id)
+    content = received_json_data.get("content")
+    review.review = content
+    review.save()
+    updated_review_json = {
+        "review_id": review_id,
+        "review": str(review.review),
+    }
+
+    return JsonResponse(updated_review_json)
+
+@method_decorator(csrf_exempt, name="dispatch")
+def delete_review(request):
+    received_json_data = json.loads(request.body.decode("utf-8"))
+    review_id = received_json_data.get("review_id")
+    review = models.Review.objects.get(id=review_id)
+    review.delete()
+    return redirect("http://localhost:3000")

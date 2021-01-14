@@ -40,6 +40,7 @@ def place_view(request, id):
                 "username": str(review.user),
                 "user_id" : str(review_user.id),
                 "user_profile": (review_user.profile_img.url),
+                "review_id": review.id,
                 "review": str(review.review),
                 "rating": str(review.rating),
                 "created": str(review.created),

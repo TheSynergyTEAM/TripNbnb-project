@@ -3,14 +3,15 @@ import MarkerContext from 'context/Marker'
 import { useEffect, useContext, useState } from 'react'
 
 interface ReviewData {
-  created: string
-  rating: number
-  review: string
-  username: string
-  date: number
   content: string
+  created: string
+  date: number
+  rating: number
+  review_id: number
+  review: string
   user_id: string
   user_profile?: string
+  username: string
 }
 
 interface PlaceMeta {
@@ -57,7 +58,7 @@ export const fetchPlaceThumbnailData = async (
 
 export function addMetaReviews(placeData: PlaceData | ReviewData[]) {
   let target = null
-  // ReviewData[]
+
   if (Array.isArray(placeData)) {
     target = placeData
   } else {
@@ -73,13 +74,19 @@ export function addMetaReviews(placeData: PlaceData | ReviewData[]) {
 export const useFetchPlaceData = (): [
   PlaceData | null,
   ReviewData[],
-  Function
+  Function,
+  Array<string> | []
 ] => {
   const [placeData, setPlaceData] = useState<PlaceData | null>(null)
   const [reviews, setReviews] = useState<Array<ReviewData>>([])
+  const [images, setImages] = useState<Array<string>>([])
   const { detailItem } = useContext(MarkerContext)
   const setReviewsWrapper = (_reviews: Array<ReviewData>) => {
     setReviews(addMetaReviews(_reviews))
+  }
+
+  const addImage = (i: string) => {
+    setImages((im) => [...im, i])
   }
 
   useEffect(() => {
@@ -89,15 +96,29 @@ export const useFetchPlaceData = (): [
           `/places/${detailItem?.id}/?name=${detailItem?.place_name}`
         )
         receivedPlaceData.data.data = addMetaReviews(receivedPlaceData.data)
+        receivedPlaceData.data.images.forEach((img) => {
+          const el = new Image()
+
+          el.onload = function () {
+            addImage(img)
+          }
+
+          el.src = img
+        })
         setPlaceData(receivedPlaceData.data)
         setReviews(receivedPlaceData.data.data)
       }
 
       fetchPlace()
     }
+
+    return () => {
+      setPlaceData(null)
+      setReviews([])
+    }
   }, [detailItem])
 
-  return [placeData, reviews, setReviewsWrapper]
+  return [placeData, reviews, setReviewsWrapper, images]
 }
 
 export type { ReviewData, PlaceData }
