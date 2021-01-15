@@ -53,7 +53,7 @@ def write_review(request):
         user=user,
         place=place,
     )
-    
+    review.save()
     all_review = models.Review.objects.all()
     
     all_review_json = {
@@ -67,6 +67,7 @@ def write_review(request):
                     "username": str(created_review.user),
                     "user_id" : str(review_user.id),
                     "user_profile": (review_user.profile_img.url),
+                    "review_id" : str(created_review.id),
                     "review": str(created_review.review),
                     "rating": str(created_review.rating),
                     "created": str(created_review.created),
@@ -78,6 +79,7 @@ def write_review(request):
 @method_decorator(csrf_exempt, name="dispatch")
 def update_review(request):
     received_json_data = json.loads(request.body.decode("utf-8"))
+    print(f"update call : {received_json_data}")
     review_id = received_json_data.get("review_id")
     review = models.Review.objects.get(id=review_id)
     content = received_json_data.get("content")
