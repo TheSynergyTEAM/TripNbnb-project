@@ -2,7 +2,7 @@ import { Checkbox } from 'antd'
 import { PrimaryText } from 'components/common/typography'
 import MapContext from 'context/Map'
 import MarkerContext from 'context/Marker'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 const StyledFilterBox = styled.div`
@@ -64,7 +64,7 @@ const CheckBox: React.FC<any> = ({ title, type }) => {
   return (
     <Checkbox
       defaultChecked
-      value={value}
+      checked={value}
       onChange={(e) => onToggle(e.target.checked)}
     >
       {title}

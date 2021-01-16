@@ -93,15 +93,23 @@ export const placeSearch = (
 }
 
 export const categorySearch = (
-  item: ResultItem,
+  item: ResultItem | null,
   ctx: MarkerContextType,
   places?: daum.maps.services.Places | null,
   map?: daum.maps.Map | null
 ) => {
-  // 맵 이동
-  map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
+  // 리스트 아이템에서 클릭한 이벤트일 시
+  // 해당 아이템의 위치로 맵을 옮김
+  if (item) {
+    map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
+  }
 
-  // 리스트 클릭한 장소 하이라이트
+  // 리스트 아이템 클릭 이벤트면 아이템의 좌표 값으로 바인딩
+  // 현재 위치 재검색 이벤트면 현재 맵 좌표 값으로 바인딩
+  const x = item ? item.x : map?.getCenter().getLng()
+  const y = item ? item.y : map?.getCenter().getLat()
+
+  // 리스트 클릭한 장소 하이라이트 (TODO)
 
   shouldSearchCategories.forEach((cat) => {
     places?.categorySearch(
@@ -122,8 +130,7 @@ export const categorySearch = (
           }
         }
       },
-      // 현재 위치 기준
-      { x: parseFloat(item.x), y: parseFloat(item.y) }
+      { x, y }
     )
   })
 }
