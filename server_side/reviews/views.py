@@ -32,7 +32,6 @@ def write_review(request):
     
     place_name = content.get("placeName")
     place_contentid = content.get("placeId")
-    place_city = content.get("")
     place_address = content.get("addressName")
     place_mapx = content.get("mapx")
     place_mapy = content.get("mapy")
