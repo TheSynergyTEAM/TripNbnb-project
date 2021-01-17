@@ -23,7 +23,7 @@ class ListView(viewsets.ModelViewSet):
 @method_decorator(csrf_exempt, name="dispatch")
 def create_list(request):
     received_json_data = json.loads(request.body.decode("utf-8"))
-    user_pk = received_json_data.get("user").get("id")
+    user_pk = received_json_data.get("userid")
     user = users_models.User.objects.get(pk=user_pk)
     content = received_json_data.get("content")
     place_pk = content.get("placeId")
