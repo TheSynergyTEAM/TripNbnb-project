@@ -2,7 +2,7 @@ import { Checkbox } from 'antd'
 import { PrimaryText } from 'components/common/typography'
 import MapContext from 'context/Map'
 import MarkerContext from 'context/Marker'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const StyledFilterBox = styled.div`
@@ -26,6 +26,10 @@ const CheckBox: React.FC<any> = ({ title, type }) => {
   const { displayMarkers } = useContext(MarkerContext)
   const { map } = useContext(MapContext)
   const [value, setValue] = useState(true)
+
+  useEffect(() => {
+    onToggle(value)
+  }, [displayMarkers])
 
   const onToggle = (checked: boolean) => {
     setValue(checked)

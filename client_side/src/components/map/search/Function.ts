@@ -26,8 +26,7 @@ const shouldSearchCategories: Array<SearchCategory> = [
 function initMarker(
   item: ResultItem,
   cat: SearchCategory,
-  ctx: MarkerContextType,
-  map: daum.maps.Map
+  ctx: MarkerContextType
 ): void {
   const markerImageObj = {
     src: `http://localhost:3000/images/${cat.marker}`,
@@ -50,8 +49,6 @@ function initMarker(
   Register(marker, 'mouseout', MouseOut(ctx))
   // 이벤트 등록 (MouseClick)
   Register(marker, 'click', MouseClick(ctx, item))
-  // 맵에 마커를 찍음
-  marker.setMap(map as daum.maps.Map)
 
   ctx.setDisplayMarkers((state: any) => [...state, { marker, item }])
 }
@@ -124,7 +121,7 @@ export const categorySearch = (
           if (result.length) {
             result.forEach((item) => {
               if (map) {
-                initMarker(item, cat, ctx, map)
+                initMarker(item, cat, ctx)
               }
             })
           }
