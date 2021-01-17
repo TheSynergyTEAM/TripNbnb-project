@@ -29,6 +29,7 @@ const CheckBox: React.FC<any> = ({ title, type }) => {
 
   useEffect(() => {
     onToggle(value)
+    // eslint-disable-next-line
   }, [displayMarkers])
 
   const onToggle = (checked: boolean) => {
