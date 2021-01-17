@@ -23,24 +23,25 @@ class ReservationView(viewsets.ModelViewSet):
 @method_decorator(csrf_exempt, name="dispatch")
 def reservation_check(request, id):
     """예약상황을 확인하기 위한 함수"""
-    reservation_json = {
+
+    reservation_json = {    # client로 전송할 예약정보 형태
       "data": [],
     }
 
-    place = place_models.Place.objects.get(contentid=id)   # 전달되어온 장소 id와 일치하는 place 모델에 저장된 장소 id 검색 후 일치하는 객체 얻어오기
-
-    places = request.GET.get("place") # 전달되어 온 데이터 사용 위한 저장
-    date = request.GET.get("date")
-    room = request.GET.get("room")
-    user = request.GET.get("user")
+    places_data = request.GET.get("place") # get json data from client
+    date_data = request.GET.get("date")
+    room_data = request.GET.get("room")
+    user_data = request.GET.get("user")
+    properties = user_data.get("properties")
+    nickname = properties.get("nickname")
     
-    try:
+    place = place_models.Place.objects.get(contentid=id)   # <place id from client = place id from place model> 객체 얻어오기
 
-        hotel = place.reservation.get()  # place 객체의 reservation 내역 불러오기
-        reservation = models.Reservation.objects.filter(hotel)   # 얻어온 place 객체 정보와 일치하는 reservation 객체(예약내역) 얻어오기
+    try:
+        reservation = place.reservation.filter(contentid=id)  # 전달되어온 장소 id와 일치하는 reservation 정보 얻어오기
         
         # 예약상황을 프론트쪽에 전달하기 위한 json 데이터 생성
-        guest = user_models.User.objects.get(username=reservation.guest) # 유저 정보 얻어오기
+        guest = user_models.User.objects.get(username=nickname) # 유저 정보
         reservation_json["data"].append( 
                     {
                         "date": {   # 날짜 정보
@@ -59,14 +60,14 @@ def reservation_check(request, id):
                     }
                 )
     except models.Place.DoesNotExist:   # 장소 정보가 존재하지 않을 경우
-        print("장소 정보가 존재하지 않습니다.")
+        #------------json data 얻어오기------------
+        place_name = places_data.get("place_name")
+        place_contentid = places_data.get("id")
+        place_address = places_data.get("address_name")
+        place_mapx = places_data.get("x")
+        place_mapy = places_data.get("y")
 
-        place_name = places.get("place_name")
-        place_contentid = places.get("id")
-        place_address = places.get("address_name")
-        place_mapx = places.get("x")
-        place_mapy = places.get("y")
-
+        # 장소정보 저장하기
         place = place_models.Place.objects.create(
             name= place_name,
             contentid= place_contentid,
@@ -81,9 +82,13 @@ def reservation_check(request, id):
 
 @method_decorator(csrf_exempt, name="dispatch")
 def reservation_confirm(request):
-    """예약을 진행하기 위한 함수"""
+    """예약을 진행하기 위한 함수(전제 : 장소 정보 존재)"""
+
+    # get json data from client
     received_json_data = json.loads(request.body.decode("utf-8"))
     print(received_json_data)
+
+    # place 정보
     hotel = received_json_data.get("place")
     hotel_name = hotel.get("place_name")
     hotel_contentid = hotel.get("id")
@@ -92,30 +97,30 @@ def reservation_confirm(request):
     hotel_mapx = hotel.get("mapx")
     hotel_mapy = hotel.get("mapy")
 
+    # user 정보
     guest_pk = received_json_data.get("user")
     guest = user_models.User.objects.get(pk=guest_pk)
 
+    # room 정보
     room = received_json_data.get("room")
     room_type = room.get("name")
     price = room.get("price")
     number_of_people = received_json_data.get("peopleCount")
 
+    # 날짜 정보
     date = received_json_data.get("date")
     check_in = date.get("checkIn")
     check_out = date.get("checkeOut")
 
-    if case_1 or case_2 or case_3: # 이미 예약된 경우
-        print("예약이 불가능합니다.")
-        #return redirect("http://localhost:3000/map") //맵으로 돌아가기
-    else:  # 예약 가능
-        reservation = models.Reservation.objects.create(
-            hotel=f"{hotel}",   # 숙박업소명
-            guest=f"{guest}",   # 예약자명
-            price=price,    # 가격
-            room_type=room_type,    # 방 종류
-            check_in=check_in,  # 체크인 날짜
-            check_out=check_out,    # 체크아웃 날짜
-            number_of_people=number_of_people,  # 예약 인원
-        )
+    # 예약내역 저장
+    reservation = models.Reservation.objects.create(
+        hotel=f"{hotel}",   # 숙박업소명
+        guest=f"{guest}",   # 예약자명
+        price=price,    # 가격
+        room_type=room_type,    # 방 종류
+        check_in=check_in,  # 체크인 날짜
+        check_out=check_out,    # 체크아웃 날짜
+        number_of_people=number_of_people,  # 예약 인원
+    )
 
   #  return JsonResponse(request) #확실히 정하지 x

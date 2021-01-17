@@ -14,8 +14,9 @@ interface FetchUser {
   username: string
 }
 
-export function useFetchUser() {
+export function useFetchUser(): [FetchUser | null, boolean] {
   const { id } = useParams<{ id: string }>()
+  const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<FetchUser | null>(null)
 
   useEffect(() => {
@@ -25,14 +26,16 @@ export function useFetchUser() {
 
     ;(async function () {
       setUser(await fetchUserById(id))
+      setLoading(false)
     })()
 
     return () => {
       setUser(null)
+      setLoading(true)
     }
   }, [id])
 
-  return [user]
+  return [user, loading]
 }
 
 export type { FetchReview, FetchUser }
