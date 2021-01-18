@@ -1,9 +1,8 @@
-import { Button } from 'antd'
 import { PrimaryText, SecondaryText, Title } from 'components/common/typography'
 import MarkerContext from 'context/Marker'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
-import { HeartFilled, HeartOutlined } from '@ant-design/icons'
+import LikesPlace from './LikesPlace'
 
 const IntroWrapper = styled.div`
   flex: 0 0 90%;
@@ -22,7 +21,6 @@ const Container = styled.div`
 
 const Intro: React.FC = () => {
   const { detailItem } = useContext(MarkerContext)
-  const [heart, setHeart] = useState(false)
 
   return (
     <Container>
@@ -32,18 +30,7 @@ const Intro: React.FC = () => {
         <SecondaryText>{detailItem?.address_name}</SecondaryText>
       </IntroWrapper>
       <IntroRightWrapper>
-        <Button
-          shape="circle"
-          type={heart ? 'primary' : 'default'}
-          icon={
-            heart ? (
-              <HeartFilled style={{ color: 'white' }} />
-            ) : (
-              <HeartOutlined />
-            )
-          }
-          onClick={(e) => setHeart(!heart)}
-        />
+        <LikesPlace />
       </IntroRightWrapper>
     </Container>
   )

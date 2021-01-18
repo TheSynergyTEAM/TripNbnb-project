@@ -9,6 +9,7 @@ import moment, { Moment } from 'moment'
 import PriceText, { PriceInformation } from './Price'
 import Footer from './Footer'
 import Information from './Information'
+import { checkReservation } from 'components/map/hooks/reservation-hooks'
 
 interface ReservationModalProps {
   active: boolean
@@ -90,6 +91,22 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
       })
     }
   }, [value, peopleCount, selectValue])
+
+  useEffect(() => {
+    if (!detailItem || !value || !value[0] || !value[1]) return
+
+    checkReservation(
+      detailItem?.id,
+      selectValue.name,
+      value[0].format('YYYY-MM-DD'),
+      value[1].format('YYYY-MM-DD')
+    )
+      .then((reservationData) => {
+        console.log(reservationData)
+      })
+      .catch((error) => console.error(error))
+    // eslint-disable-next-line
+  }, [selectValue])
 
   const disabledDate = (current: Moment) => {
     return current && current < moment().startOf('day')

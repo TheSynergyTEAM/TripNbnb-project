@@ -19,7 +19,30 @@ interface Reservation extends ReservationInformation {
 
 export async function postReservation(reservation: Reservation) {
   try {
-    await axios.post('/reservation/', reservation)
+    await axios.post('/reservations/place/create/', reservation)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export async function checkReservation(
+  placeId: number | string,
+  room: string,
+  checkIn: string,
+  checkOut: string
+) {
+  try {
+    const { data: reservationData } = await axios.get(
+      `/reservations/place/${placeId}`,
+      {
+        params: {
+          room,
+          checkIn,
+          checkOut
+        }
+      }
+    )
+    return reservationData
   } catch (error) {
     throw new Error(error)
   }
