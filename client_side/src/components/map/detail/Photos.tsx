@@ -27,7 +27,7 @@ const DetailPhotos: React.FC<{ images: Array<string> }> = ({ images }) => {
   return (
     <>
       {images.map((image) => (
-        <StyledDetailImage src={image} />
+        <StyledDetailImage src={image} key={image} />
       ))}
     </>
   )

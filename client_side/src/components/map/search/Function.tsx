@@ -1,5 +1,7 @@
 import { MarkerContextType } from 'context/Marker'
 import { MouseClick, MouseOut, MouseOver, Register } from 'event/Marker'
+import { renderToString } from 'react-dom/server'
+import HighlightOverlay from './HighlightOverlay'
 
 type Status = daum.maps.services.Status
 
@@ -22,6 +24,28 @@ const shouldSearchCategories: Array<SearchCategory> = [
     marker: 'marker-r.png'
   }
 ]
+
+// 현재 오버레이를 교체하기 위한 클로져
+function highlightOverlayState() {
+  let overlay: daum.maps.CustomOverlay | null = null
+
+  return {
+    setOverlay(_overlay: daum.maps.CustomOverlay, map?: daum.maps.Map) {
+      if (overlay) {
+        overlay.setMap(null)
+      }
+      if (map) {
+        overlay = _overlay
+        overlay.setMap(map)
+      }
+    },
+    getOverlay() {
+      return overlay
+    }
+  }
+}
+
+const hOverlayState = highlightOverlayState()
 
 function initMarker(
   item: ResultItem,
@@ -97,16 +121,35 @@ export const categorySearch = (
 ) => {
   // 리스트 아이템에서 클릭한 이벤트일 시
   // 해당 아이템의 위치로 맵을 옮김
-  if (item) {
-    map?.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
+  if (item && map) {
+    map.setCenter(new daum.maps.LatLng(parseFloat(item.y), parseFloat(item.x)))
+    // 오버레이 생성
+    if (
+      shouldSearchCategories.filter(
+        (sc) => sc.category === item.category_group_code
+      ).length
+    ) {
+      const content = renderToString(
+        <HighlightOverlay title={item.place_name} />
+      )
+
+      // @ts-ignore
+      const overlay = new daum.maps.CustomOverlay({
+        position: map.getCenter(),
+        content,
+        zIndex: 50,
+        xAnchor: 0.55,
+        yAnchor: 2
+      })
+
+      hOverlayState.setOverlay(overlay, map)
+    }
   }
 
   // 리스트 아이템 클릭 이벤트면 아이템의 좌표 값으로 바인딩
   // 현재 위치 재검색 이벤트면 현재 맵 좌표 값으로 바인딩
   const x = item ? item.x : map?.getCenter().getLng()
   const y = item ? item.y : map?.getCenter().getLat()
-
-  // 리스트 클릭한 장소 하이라이트 (TODO)
 
   shouldSearchCategories.forEach((cat) => {
     places?.categorySearch(

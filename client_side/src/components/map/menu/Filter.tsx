@@ -1,5 +1,4 @@
 import { Checkbox } from 'antd'
-import { PrimaryText } from 'components/common/typography'
 import MapContext from 'context/Map'
 import MarkerContext from 'context/Marker'
 import { useContext, useEffect, useState } from 'react'
@@ -12,9 +11,9 @@ const StyledFilterBox = styled.div`
   height: auto;
   left: 2rem;
   overflow: hidden;
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
   position: fixed;
-  width: 200px;
+  width: 150px;
   z-index: 15;
 
   & .ant-checkbox-wrapper + .ant-checkbox-wrapper {
@@ -95,12 +94,10 @@ const checkBoxes = [
 const Filter: React.FC = () => {
   return (
     <StyledFilterBox className="shadow-box">
-      <PrimaryText style={{ fontWeight: 'bold' }}>필터 박스 미구현</PrimaryText>
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
-          marginTop: '0.5rem'
+          flexDirection: 'column'
         }}
       >
         {checkBoxes.map((place) => (
