@@ -9,6 +9,7 @@ from users import models as users_models
 from django.http import JsonResponse
 from . import models
 from places import models as place_models
+from places import views as place_views
 
 
 # Create your views here.
@@ -18,6 +19,25 @@ class ListView(viewsets.ModelViewSet):
     serializer_class = ListSerializer
     queryset = models.List.objects.all()
     print()
+
+@method_decorator(csrf_exempt, name="dispatch")
+def list_view(request, pk):
+    
+    user = users_models.User.objects.get(pk=pk)
+    user_list_json = {
+        "user" : str(user.username),
+        "places" : []
+    }
+    places = user.list.all()[0].places.all()
+    for place in places:
+        user_list_json.get("places").append(
+            {
+                "name" : str(place.name),
+                "address" : str(place.address),
+                "photos" : [image["link"] for image in place_views.get_images(str(place.name))]
+            }
+        )
+    return JsonResponse(user_list_json)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
