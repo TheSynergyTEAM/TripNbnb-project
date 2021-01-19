@@ -29,14 +29,16 @@ def list_view(request, pk):
         "places" : []
     }
     places = user.list.all()[0].places.all()
-    for place in places:
-        user_list_json.get("places").append(
-            {
-                "name" : str(place.name),
-                "address" : str(place.address),
-                "photos" : [image["link"] for image in place_views.get_images(str(place.name))]
-            }
-        )
+    if len(places) > 0: 
+        for place in places:
+            user_list_json.get("places").append(
+                {
+                    "name" : str(place.name),
+                    "address" : str(place.address),
+                    "photos" : [image["link"] for image in place_views.get_images(str(place.name))]
+                }
+            )
+    
     return JsonResponse(user_list_json)
 
 
