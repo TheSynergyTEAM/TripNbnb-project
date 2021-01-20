@@ -23,7 +23,7 @@ const Info: React.FC<RouteComponentProps> = () => {
           <>
             <Information profile={user.user_profile} name={user.username} />
             <Reviews review={user.user_reviews} />
-            <Places place={[{ a: '1', b: ' 2' }]} />
+            <Places />
           </>
         ) : (
           <Title level={4} style={{ textAlign: 'center' }}>

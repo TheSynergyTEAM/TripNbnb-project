@@ -19,7 +19,7 @@ export async function fetchPlaceLists(
   if (!id) return []
 
   try {
-    const { data: placeLists } = await axios.get(`/lists/${id}`)
+    const { data: placeLists } = await axios.get(`/lists/${id}/`)
     return placeLists.places
   } catch (error) {
     console.error(error)

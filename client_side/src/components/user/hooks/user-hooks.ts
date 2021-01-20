@@ -1,4 +1,5 @@
-import { fetchUserById } from 'api/user'
+import { fetchUserById, fetchPlaceLists } from 'api/user'
+import { PlaceList } from 'context/User'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -36,6 +37,30 @@ export function useFetchUser(): [FetchUser | null, boolean] {
   }, [id])
 
   return [user, loading]
+}
+
+export function usePlaceList(): [boolean, Array<PlaceList>] {
+  const [loading, setLoading] = useState(true)
+  const [placeList, setPlaceList] = useState<Array<PlaceList>>([])
+  const { id } = useParams<{ id: string }>()
+
+  useEffect(() => {
+    if (!id) {
+      return
+    }
+
+    ;(async function () {
+      setPlaceList(await fetchPlaceLists(id))
+      setLoading(false)
+    })()
+
+    return () => {
+      setPlaceList([])
+      setLoading(true)
+    }
+  }, [id])
+
+  return [loading, placeList]
 }
 
 export type { FetchReview, FetchUser }

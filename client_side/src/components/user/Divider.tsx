@@ -2,7 +2,7 @@ import { Divider as AntDivider } from 'antd'
 import styled from 'styled-components'
 
 interface DividerProps {
-  title: string
+  title: string | React.ReactNode
 }
 
 const StyledDivider = styled.div`
