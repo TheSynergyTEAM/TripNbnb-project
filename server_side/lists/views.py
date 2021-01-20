@@ -29,6 +29,8 @@ def list_view(request, pk):
     if len(places) > 0:
         for place in places[0].places.all():
             user_list_json.get("places").append({
+                "id":
+                place.contentid,
                 "name":
                 str(place.name),
                 "address":
@@ -45,7 +47,7 @@ def list_view(request, pk):
 @method_decorator(csrf_exempt, name = "dispatch")
 def create_list(request):
     received_json_data = json.loads(request.body.decode("utf-8"))
-    user_pk = received_json_data.get("userid")
+    user_pk = received_json_data.get("user_id")
     user = users_models.User.objects.get(pk = user_pk)
     content = received_json_data.get("content")
     place_pk = content.get("placeId")
@@ -56,25 +58,22 @@ def create_list(request):
 
     try:
         user_list = models.List.objects.get(user_id = user)
+        place = place_models.Place.objects.get(contentid = place_pk)
 
     except models.List.DoesNotExist:
-        try:
-            place = place_models.Place.objects.get(contentid = place_pk)
-
-        except place_models.Place.DoesNotExist:
-            place = place_models.Place.objects.create(
-                name = place_name,
-                contentid = place_pk,
-                address = place_address,
-                mapx = place_mapx,
-                mapy = place_mapy,
-            )
         user_list = models.List.objects.create(
             name = f"{user.username}'s List",
             user = user,
         )
+    except place_models.Place.DoesNotExist:
+        place = place_models.Place.objects.create(
+            name = place_name,
+            contentid = place_pk,
+            address = place_address,
+            mapx = place_mapx,
+            mapy = place_mapy,
+        )
     finally:
-        place = place_models.Place.objects.get(contentid = place_pk)
         user_list.places.add(place)
         user_list.save()
 
