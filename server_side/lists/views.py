@@ -27,7 +27,8 @@ def list_view(request, pk):
     user_list_json = {"user": str(user.username), "places": []}
     places = user.list.all()
     if len(places) > 0:
-        for place in places[0].places.all():
+        for _place in places:
+            place = _place.places.get()
             user_list_json.get("places").append({
                 "name":
                 str(place.name),
