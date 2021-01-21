@@ -7,6 +7,7 @@ import { useCallback, useState } from 'react'
 import TileLoadedEvent from 'event/TileLoaded'
 import SearchButton from './menu/SearchButton'
 import Filter from './menu/Filter'
+import MapCenter from 'event/MapCenter'
 
 const StyledMap = styled.div`
   width: 100vw;
@@ -45,6 +46,7 @@ const Container: React.FC = () => {
         <SearchBox />
         <SearchButton />
         <Filter />
+        <MapCenter />
         {onChangeMarker() && <OverlayContainer />}
         {getVisible() && (
           <>

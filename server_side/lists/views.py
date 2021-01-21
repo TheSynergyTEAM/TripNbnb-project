@@ -35,6 +35,10 @@ def list_view(request, pk):
                 str(place.name),
                 "address":
                 str(place.address),
+                "x":
+                float(place.mapx),
+                "y":
+                float(place.mapy),
                 "photos": [
                     image["link"]
                     for image in place_views.get_images(str(place.name))

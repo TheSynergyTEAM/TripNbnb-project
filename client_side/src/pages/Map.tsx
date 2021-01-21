@@ -3,7 +3,6 @@ import MapContainer from 'components/map/Container'
 import { useEffect, useState } from 'react'
 import MapContext from 'context/Map'
 import styled from 'styled-components'
-import useGeoLocation from 'event/GeoLocation'
 
 const StyledMap = styled.div`
   overflow: hidden;
@@ -13,15 +12,13 @@ const Map: React.FC<RouteComponentProps> = () => {
   const [map, setMap] = useState<daum.maps.Map | null>(null)
   const [places, setPlaces] = useState<daum.maps.services.Places | null>(null)
 
-  useGeoLocation(map)
-
   useEffect(() => {
     // fixed body height
     document.body.classList.add('body-fixed-height')
 
     const mapContainer = document.getElementById('map')
     const options = {
-      center: new daum.maps.LatLng(33.234567, 126.232323),
+      center: new daum.maps.LatLng(37.5326, 127.024612),
       level: 5
     }
     const __places__ = new daum.maps.services.Places()

@@ -15,6 +15,8 @@ interface PlaceList {
   name: string
   address: string
   photos: Array<string>
+  x: number
+  y: number
 }
 
 interface User {

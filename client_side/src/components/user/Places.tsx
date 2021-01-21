@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Divider from './Divider'
 import { usePlaceList } from './hooks/user-hooks'
 import HeartOutlined from '@ant-design/icons/HeartOutlined'
+import { Link } from 'react-router-dom'
 
 interface PlacesListsContainerProps {
   places: Array<PlaceList>
@@ -62,24 +63,26 @@ const PlacesListsRow: React.FC = ({ children }) => {
 const PlacesListsItem: React.FC<PlacesListsItemProps> = ({ place }) => {
   return (
     <Col sm={12} md={8} xl={6}>
-      <Image
-        src={place.photos[0]}
-        fallback="."
-        preview={false}
-        style={{ height: '100%' }}
-        wrapperStyle={{
-          height: '150px',
-          overflow: 'hidden',
-          borderRadius: '7px'
-        }}
-      />
-      <div
-        className="text-line"
-        style={{ marginTop: '0.5rem', marginBottom: '1rem' }}
-      >
-        <Title level={5}>{place.name}</Title>
-        <SecondaryText>{place.address}</SecondaryText>
-      </div>
+      <Link to={`/map?x=${place.x}&y=${place.y}`}>
+        <Image
+          src={place.photos[0]}
+          fallback="."
+          preview={false}
+          style={{ height: '100%' }}
+          wrapperStyle={{
+            height: '150px',
+            overflow: 'hidden',
+            borderRadius: '7px'
+          }}
+        />
+        <div
+          className="text-line"
+          style={{ marginTop: '0.5rem', marginBottom: '1rem' }}
+        >
+          <Title level={5}>{place.name}</Title>
+          <SecondaryText>{place.address}</SecondaryText>
+        </div>
+      </Link>
     </Col>
   )
 }
