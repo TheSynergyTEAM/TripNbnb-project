@@ -39,7 +39,7 @@ export function useFetchUser(): [FetchUser | null, boolean] {
   return [user, loading]
 }
 
-export function usePlaceList(): [boolean, Array<PlaceList>] {
+export function usePlaceList(): [boolean, Array<PlaceList>, Function] {
   const [loading, setLoading] = useState(true)
   const [placeList, setPlaceList] = useState<Array<PlaceList>>([])
   const { id } = useParams<{ id: string }>()
@@ -60,7 +60,7 @@ export function usePlaceList(): [boolean, Array<PlaceList>] {
     }
   }, [id])
 
-  return [loading, placeList]
+  return [loading, placeList, setPlaceList]
 }
 
 export type { FetchReview, FetchUser }

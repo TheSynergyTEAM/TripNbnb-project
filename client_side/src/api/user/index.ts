@@ -52,3 +52,21 @@ export async function pushPlaceLists(
     return false
   }
 }
+
+export async function deletePlaceLists(
+  placeId: number | string,
+  userId: number | string
+) {
+  if (!placeId || !userId) {
+    return
+  }
+
+  try {
+    await axios.post('/lists/delete/', {
+      place_id: placeId,
+      user_id: userId
+    })
+  } catch (error) {
+    throw new Error(error)
+  }
+}

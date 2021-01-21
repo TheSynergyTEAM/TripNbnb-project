@@ -1,18 +1,23 @@
-import { Button, Col, Image, Row, Skeleton } from 'antd'
+import { Button, Col, Image, notification, Row, Skeleton } from 'antd'
 import { SecondaryText, Title } from 'components/common/typography'
-import { PlaceList } from 'context/User'
+import UserContext, { PlaceList } from 'context/User'
 import styled from 'styled-components'
 import Divider from './Divider'
 import { usePlaceList } from './hooks/user-hooks'
 import HeartOutlined from '@ant-design/icons/HeartOutlined'
 import { Link } from 'react-router-dom'
+import DeleteOutlined from '@ant-design/icons/DeleteOutlined'
+import { useContext, useEffect, useState } from 'react'
+import { deletePlaceLists } from 'api/user'
 
 interface PlacesListsContainerProps {
   places: Array<PlaceList>
+  catchDelete: Function
 }
 
 interface PlacesListsItemProps {
   place: PlaceList
+  catchDelete: Function
 }
 
 const StyledCol = styled(Col)`
@@ -22,6 +27,17 @@ const StyledCol = styled(Col)`
     display: block;
     width: 100%;
   }
+`
+
+const StyledImageWrapper = styled.div`
+  position: relative;
+`
+
+const StyledButtonWrapper = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 20;
 `
 
 const LoadingLists = () => {
@@ -60,21 +76,65 @@ const PlacesListsRow: React.FC = ({ children }) => {
   )
 }
 
-const PlacesListsItem: React.FC<PlacesListsItemProps> = ({ place }) => {
+const PlacesListsItem: React.FC<PlacesListsItemProps> = ({
+  place,
+  catchDelete
+}) => {
+  const { user, isLoggedIn } = useContext(UserContext)
+  const [loading, setLoading] = useState(false)
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    if (!isLoggedIn || !user) {
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      await deletePlaceLists(place.id, user.id as number)
+      catchDelete(place.id)
+    } catch (error) {
+      notification.error({
+        message: '삭제 실패',
+        placement: 'topLeft'
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      setLoading(false)
+    }
+  })
+
   return (
     <Col sm={12} md={8} xl={6}>
       <Link to={`/map?x=${place.x}&y=${place.y}`}>
-        <Image
-          src={place.photos[0]}
-          fallback="."
-          preview={false}
-          style={{ height: '100%' }}
-          wrapperStyle={{
-            height: '150px',
-            overflow: 'hidden',
-            borderRadius: '7px'
-          }}
-        />
+        <StyledImageWrapper>
+          <StyledButtonWrapper>
+            <Button
+              type="default"
+              shape="circle"
+              onClick={handleDelete}
+              icon={<DeleteOutlined />}
+              loading={loading}
+            />
+          </StyledButtonWrapper>
+          <Image
+            src={place.photos[0]}
+            preview={false}
+            style={{ height: '100%' }}
+            wrapperStyle={{
+              height: '150px',
+              overflow: 'hidden',
+              borderRadius: '7px'
+            }}
+          />
+        </StyledImageWrapper>
         <div
           className="text-line"
           style={{ marginTop: '0.5rem', marginBottom: '1rem' }}
@@ -87,18 +147,31 @@ const PlacesListsItem: React.FC<PlacesListsItemProps> = ({ place }) => {
   )
 }
 
-const PlacesLists: React.FC<PlacesListsContainerProps> = ({ places }) => {
+const PlacesLists: React.FC<PlacesListsContainerProps> = ({
+  places,
+  catchDelete
+}) => {
   return (
     <PlacesListsRow>
       {places.map((place) => (
-        <PlacesListsItem key={place.id} place={place} />
+        <PlacesListsItem
+          key={place.id}
+          place={place}
+          catchDelete={catchDelete}
+        />
       ))}
     </PlacesListsRow>
   )
 }
 
 const Places: React.FC = () => {
-  const [loading, placeList] = usePlaceList()
+  const [loading, placeList, setPlaceList] = usePlaceList()
+
+  const catchDelete = (placeId: number | string) => {
+    setPlaceList((state: PlaceList[]) =>
+      state.filter((place) => place.id !== placeId)
+    )
+  }
 
   return (
     <Divider
@@ -114,7 +187,7 @@ const Places: React.FC = () => {
       {loading ? (
         <LoadingLists />
       ) : placeList.length ? (
-        <PlacesLists places={placeList} />
+        <PlacesLists places={placeList} catchDelete={catchDelete} />
       ) : (
         <div>데이터 없음</div>
       )}
