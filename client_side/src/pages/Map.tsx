@@ -3,6 +3,7 @@ import MapContainer from 'components/map/Container'
 import { useEffect, useState } from 'react'
 import MapContext from 'context/Map'
 import styled from 'styled-components'
+import useGeoLocation from 'event/GeoLocation'
 
 const StyledMap = styled.div`
   overflow: hidden;
@@ -11,6 +12,8 @@ const StyledMap = styled.div`
 const Map: React.FC<RouteComponentProps> = () => {
   const [map, setMap] = useState<daum.maps.Map | null>(null)
   const [places, setPlaces] = useState<daum.maps.services.Places | null>(null)
+
+  useGeoLocation(map)
 
   useEffect(() => {
     // fixed body height
@@ -42,7 +45,6 @@ const Map: React.FC<RouteComponentProps> = () => {
     <StyledMap>
       <MapContext.Provider value={{ map, places }}>
         <MapContainer />
-        {/* {map && <TileLoadedEvent />} */}
       </MapContext.Provider>
     </StyledMap>
   )
