@@ -9,10 +9,13 @@ const LikesPlace: React.FC = () => {
   const { user, isLoggedIn, setPlaceLists } = useContext(UserContext)
   const { detailItem } = useContext(MarkerContext)
   const [loading, setLoading] = useState<boolean>(true)
+  const [disabled, setDisabled] = useState<boolean>(false)
   const [heart, setHeart] = useState<boolean>(false)
 
   const placeLists = async () => {
     if (!isLoggedIn || !user) {
+      setDisabled(true)
+      setLoading(false)
       return
     }
 
@@ -63,6 +66,7 @@ const LikesPlace: React.FC = () => {
 
   return (
     <Button
+      disabled={disabled}
       loading={loading}
       shape="circle"
       type={heart ? 'primary' : 'default'}
