@@ -21,7 +21,7 @@ const LikesPlace: React.FC = () => {
 
     setLoading(true)
 
-    const data = await fetchPlaceLists(user.id)
+    const data = await fetchPlaceLists(user.id, true)
 
     setPlaceLists(data)
 

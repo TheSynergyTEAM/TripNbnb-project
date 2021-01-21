@@ -22,29 +22,26 @@ class ListView(viewsets.ModelViewSet):
 
 @method_decorator(csrf_exempt, name = "dispatch")
 def list_view(request, pk):
-
+    o = request.GET.get('o', 0)
     user = users_models.User.objects.get(pk = pk)
     user_list_json = {"user": str(user.username), "places": []}
     places = user.list.all()
     if len(places) > 0:
         for place in places[0].places.all():
-            user_list_json.get("places").append({
-                "id":
-                place.contentid,
-                "name":
-                str(place.name),
-                "address":
-                str(place.address),
-                "x":
-                float(place.mapx),
-                "y":
-                float(place.mapy),
-                "photos": [
+            photos = []
+            if not o:
+                photos = [
                     image["link"]
-                    for image in place_views.get_images(str(place.name))
+                    for image in place_views.get_images(str(place.name), limit=1)
                 ]
+            user_list_json.get("places").append({
+                "id": place.contentid,
+                "name": str(place.name),
+                "address": str(place.address),
+                "x": float(place.mapx),
+                "y": float(place.mapy),
+                "photos": photos
             })
-
     return JsonResponse(user_list_json)
 
 
@@ -93,12 +90,13 @@ def create_list(request):
 
     return JsonResponse(user_list_json)
 
+
 @method_decorator(csrf_exempt, name = "dispatch")
 def delete_list(request):
     received_json_data = json.loads(request.body.decode("utf-8"))
     place_id = received_json_data.get("place_id")
     user_id = received_json_data.get("user_id")
-    user = users_models.User.objects.get(id=user_id)
+    user = users_models.User.objects.get(id = user_id)
     list_places = user.list.all()[0].places.all()
     for list_place in list_places:
         if list_place.id == place_id:

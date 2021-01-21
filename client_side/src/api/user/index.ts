@@ -14,12 +14,14 @@ export async function fetchUserById(
 }
 
 export async function fetchPlaceLists(
-  id: string | number | undefined
+  id: string | number | undefined,
+  exceptImage: boolean = false
 ): Promise<Array<PlaceList> | []> {
   if (!id) return []
 
   try {
-    const { data: placeLists } = await axios.get(`/lists/${id}/`)
+    const option = exceptImage ? { params: { o: 1 } } : {}
+    const { data: placeLists } = await axios.get(`/lists/${id}/`, option)
     return placeLists.places
   } catch (error) {
     console.error(error)
