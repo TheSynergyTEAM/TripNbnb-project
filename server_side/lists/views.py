@@ -92,3 +92,15 @@ def create_list(request):
             user_list_json.get("user_list").append(l.name)
 
     return JsonResponse(user_list_json)
+
+@method_decorator(csrf_exempt, name = "dispatch")
+def delete_list(request):
+    received_json_data = json.loads(request.body.decode("utf-8"))
+    place_id = received_json_data.get("place_id")
+    user_id = received_json_data.get("user_id")
+    user = users_models.User.objects.get(id=user_id)
+    list_places = user.list.all()[0].places.all()
+    for list_place in list_places:
+        if list_place.id == place_id:
+            list_place.delete()
+    return redirect("http://localhost:3000")
