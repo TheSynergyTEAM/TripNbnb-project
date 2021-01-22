@@ -20,6 +20,28 @@ class ReservationView(viewsets.ModelViewSet):
 
 
 @method_decorator(csrf_exempt, name = "dispatch")
+def reservation_check_test(request, id):
+    response = HttpResponse()
+
+    try:
+        place = place_models.Place.objects.get(contentid = id)
+        reservation_json = {"data": []}
+        reservation = models.Reservation.objects.filter(
+            hotel__id__exact = place.id)
+
+        for data in reservation.values():
+            print(data)
+
+        response.status_code = 200
+
+        return JsonResponse(reservation_json)
+    except place_models.Place.DoesNotExist:
+        print('플레이스 없음')
+        response.status_code = 401
+        return response
+
+
+@method_decorator(csrf_exempt, name = "dispatch")
 def reservation_check(request, id):
     """예약상황을 확인하기 위한 함수"""
 
