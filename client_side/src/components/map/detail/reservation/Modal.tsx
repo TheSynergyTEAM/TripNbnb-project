@@ -9,7 +9,6 @@ import moment, { Moment } from 'moment'
 import PriceText, { PriceInformation } from './Price'
 import Footer from './Footer'
 import Information from './Information'
-import { checkReservation } from 'components/map/hooks/reservation-hooks'
 
 interface ReservationModalProps {
   active: boolean
@@ -71,10 +70,14 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
   const [value, setValue] = useState<[Moment, Moment] | undefined>(undefined)
   const [peopleCount, setPeopleCount] = useState<number>(2)
   const selectOptions = defaultSelectOptions
-  const [selectValue, setSelectValue] = useState(selectOptions[0])
+  const [selectValue, setSelectValue] = useState<Room | null>(null)
+
+  // check
+  const [checkLoading, setCheckLoading] = useState(false)
+  const [disabled, setDisabled] = useState(true)
 
   useEffect(() => {
-    if (!value || !value?.length) {
+    if (!value || !value?.length || !selectValue) {
       setPrice(null)
     } else {
       const distanceDay = moment.duration(value[1].diff(value[0])).asDays()
@@ -96,22 +99,6 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
       })
     }
   }, [value, peopleCount, selectValue])
-
-  useEffect(() => {
-    if (!detailItem || !value || !value[0] || !value[1]) return
-
-    checkReservation(
-      detailItem?.id,
-      selectValue.name,
-      value[0].format('YYYY-MM-DD'),
-      value[1].format('YYYY-MM-DD')
-    )
-      .then((reservationData) => {
-        console.log(reservationData)
-      })
-      .catch((error) => console.error(error))
-    // eslint-disable-next-line
-  }, [selectValue])
 
   const disabledDate = (current: Moment) => {
     return current && current < moment().startOf('day')
@@ -145,6 +132,17 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
     }
   }
 
+  const handleChecking = () => {
+    if (checkLoading) {
+      return
+    }
+
+    setCheckLoading(true)
+
+    // setTimeout(() => setCheckLoading(false), 1500)
+    // TODO
+  }
+
   const settledDates = useCallback(() => {
     if (!value || !value?.length) {
       return false
@@ -156,6 +154,10 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
   const handleClose = () => {
     setPrice(null)
     setValue(undefined)
+    setCheckLoading(false)
+    setDisabled(true)
+    setPeopleCount(2)
+    setSelectValue(null)
     handle(false)
   }
 
@@ -166,12 +168,13 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
       title={<ModalTitle name={detailItem?.place_name} />}
       footer={
         <Footer
-          disabled={!settledDates}
+          disabled={!settledDates() && disabled}
           date={{ checkIn: value?.[0], checkOut: value?.[1] }}
           peopleCount={peopleCount}
           room={selectValue}
           onReservation={handleClose}
           price={price as PriceInformation}
+          checkLoading={checkLoading}
         />
       }
     >
@@ -179,7 +182,7 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
         <SecondaryText>원하는 날짜 선택하기</SecondaryText>
         <ConfigProvider locale={locale}>
           <DatePicker.RangePicker
-            separator="~"
+            disabled={checkLoading}
             size="large"
             style={{ width: '100%' }}
             disabledDate={disabledDate}
@@ -191,13 +194,16 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
         </ConfigProvider>
         {settledDates() && (
           <Information
+            disabled={checkLoading}
             peopleCount={peopleCount}
             onChangePeopleCount={setPeopleCount}
             selectOptions={selectOptions}
+            selectValue={selectValue}
             setSelectValue={setSelectValue}
+            checking={handleChecking}
           />
         )}
-        {price && (
+        {price && selectValue && (
           <PriceText
             stay={price.stay}
             pay={price.pay}

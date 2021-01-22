@@ -2,12 +2,16 @@ import { InputNumber, Select } from 'antd'
 import { SecondaryText } from 'components/common/typography'
 import { Component } from 'react'
 import styled from 'styled-components'
+import { Room } from './Modal'
 
 interface InformationProps {
   peopleCount: number
   onChangePeopleCount: Function
   selectOptions: Array<{ name: string; price: number }>
+  selectValue: Room | null
   setSelectValue: Function
+  checking: Function
+  disabled: boolean
 }
 
 const StyledWrapper = styled.ul`
@@ -42,6 +46,18 @@ class Information extends Component<InformationProps> {
     this.props.onChangePeopleCount(value)
   }
 
+  componentDidMount() {
+    // 최초 렌더링 때 기본 값으로 설정
+    this.props.setSelectValue(this.props.selectOptions[0])
+    this.props.checking()
+  }
+
+  componentDidUpdate(prevProps: InformationProps) {
+    if (prevProps.selectValue !== this.props.selectValue) {
+      this.props.checking()
+    }
+  }
+
   render() {
     return (
       <StyledWrapper>
@@ -52,12 +68,14 @@ class Information extends Component<InformationProps> {
             max={20}
             value={this.props.peopleCount}
             onChange={this.handleChange}
+            disabled={this.props.disabled}
           />
         </StyledItem>
         <StyledItem>
           <Placeholder>방 종류</Placeholder>
           <Select
-            defaultValue={this.props.selectOptions[0].name}
+            disabled={this.props.disabled}
+            defaultValue="싱글룸"
             onChange={(value: string) =>
               this.props.setSelectValue(
                 this.props.selectOptions.find((option) => option.name === value)

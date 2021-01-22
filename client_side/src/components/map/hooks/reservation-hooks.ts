@@ -10,7 +10,7 @@ interface ReservationInformation {
     checkOut: Moment | string | undefined
   }
   peopleCount: number
-  room: Room
+  room: Room | null
   price: PriceInformation
 }
 
@@ -34,17 +34,17 @@ export async function checkReservation(
   checkOut: string
 ) {
   try {
-    const { data: reservationData } = await axios.get(
-      `/reservations/place/${placeId}`,
-      {
-        params: {
-          room,
-          checkIn,
-          checkOut
-        }
-      }
-    )
-    return reservationData
+    // const { data: reservationData } = await axios.get(
+    //   `/reservations/place/${placeId}`,
+    //   {
+    //     params: {
+    //       room,
+    //       checkIn,
+    //       checkOut
+    //     }
+    //   }
+    // )
+    // return reservationData
   } catch (error) {
     throw new Error(error)
   }

@@ -14,6 +14,7 @@ import MarkerContext from 'context/Marker'
 interface FooterProps extends ReservationInformation {
   readonly disabled: boolean
   readonly onReservation: Function
+  readonly checkLoading: boolean
 }
 
 const Footer: React.FC<FooterProps> = ({
@@ -22,7 +23,8 @@ const Footer: React.FC<FooterProps> = ({
   peopleCount,
   room,
   onReservation,
-  price
+  price,
+  checkLoading
 }) => {
   const [loading, setLoading] = useState(false)
   const { user, isLoggedIn } = useContext(UserContext)
@@ -71,7 +73,7 @@ const Footer: React.FC<FooterProps> = ({
     <>
       <RButton
         disabled={disabled}
-        loading={loading}
+        loading={loading || checkLoading}
         onClick={handleReservation}
       >
         예약하기
