@@ -20,6 +20,7 @@ interface Room {
   name: string
   price: number
   limit: number
+  type: string
 }
 
 const StyledModal = styled(Modal)`
@@ -34,27 +35,32 @@ const defaultSelectOptions: Array<Room> = [
   {
     name: '싱글룸',
     price: 30000,
-    limit: 1
+    limit: 1,
+    type: 'ROOM_SINGLE'
   },
   {
     name: '더블룸',
     price: 40000,
-    limit: 2
+    limit: 2,
+    type: 'ROOM_DOUBLE'
   },
   {
     name: '트윈룸',
     price: 50000,
-    limit: 2
+    limit: 2,
+    type: 'ROOM_TWIN'
   },
   {
     name: '트리플룸',
     price: 60000,
-    limit: 3
+    limit: 3,
+    type: 'ROOM_TRIPLE'
   },
   {
     name: '스위트룸',
     price: 70000,
-    limit: 6
+    limit: 6,
+    type: 'ROOM_SUITE'
   }
 ]
 
@@ -64,8 +70,7 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
   const [price, setPrice] = useState<PriceInformation | null>(null)
   const [value, setValue] = useState<[Moment, Moment] | undefined>(undefined)
   const [peopleCount, setPeopleCount] = useState<number>(2)
-  // eslint-disable-next-line
-  const [selectOptions, setSelectOptions] = useState(defaultSelectOptions)
+  const selectOptions = defaultSelectOptions
   const [selectValue, setSelectValue] = useState(selectOptions[0])
 
   useEffect(() => {
@@ -166,6 +171,7 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
           peopleCount={peopleCount}
           room={selectValue}
           onReservation={handleClose}
+          price={price as PriceInformation}
         />
       }
     >

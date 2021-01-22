@@ -2,6 +2,7 @@ import axios from 'axios'
 import { User } from 'context/User'
 import { Moment } from 'moment'
 import { Room } from 'components/map/detail/reservation/Modal'
+import { PriceInformation } from '../detail/reservation/Price'
 
 interface ReservationInformation {
   date: {
@@ -10,6 +11,7 @@ interface ReservationInformation {
   }
   peopleCount: number
   room: Room
+  price: PriceInformation
 }
 
 interface Reservation extends ReservationInformation {

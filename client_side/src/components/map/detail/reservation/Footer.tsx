@@ -21,7 +21,8 @@ const Footer: React.FC<FooterProps> = ({
   date,
   peopleCount,
   room,
-  onReservation
+  onReservation,
+  price
 }) => {
   const [loading, setLoading] = useState(false)
   const { user, isLoggedIn } = useContext(UserContext)
@@ -33,8 +34,8 @@ const Footer: React.FC<FooterProps> = ({
     if (!user || !isLoggedIn) {
       return
     } else {
-      const checkIn = moment(date.checkIn).format('YYYY-MM-DD 14:00:00')
-      const checkOut = moment(date.checkOut).format('YYYY-MM-DD 11:00:00')
+      const checkIn = moment(date.checkIn).format('YYYY-MM-DD')
+      const checkOut = moment(date.checkOut).format('YYYY-MM-DD')
       const reservation: Reservation = {
         date: {
           checkIn,
@@ -43,7 +44,8 @@ const Footer: React.FC<FooterProps> = ({
         peopleCount,
         room,
         place: detailItem,
-        user
+        user,
+        price
       }
       try {
         await postReservation(reservation)
