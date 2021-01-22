@@ -99,6 +99,7 @@ def delete_list(request):
     user = users_models.User.objects.get(id = user_id)
     list_places = user.list.all()[0].places.all()
     for list_place in list_places:
-        if list_place.id == place_id:
+
+        if list_place.contentid == place_id:
             list_place.delete()
     return redirect("http://localhost:3000")
