@@ -1,5 +1,6 @@
 import os
 import json
+from datetime import datetime
 from django.http import JsonResponse, HttpResponse
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
@@ -19,15 +20,22 @@ class ReservationView(viewsets.ModelViewSet):
     print()
 
 
-@method_decorator(csrf_exempt, name = "dispatch")
+@method_decorator(csrf_exempt, name="dispatch")
 def reservation_check_test(request, id):
     response = HttpResponse()
 
+    body = json.loads(request.body.decode("utf-8"))
+
+    check_in = datetime.strptime(body.get("checkIn"), '%Y-%M-%d')
+    check_out = datetime.strptime(body.get("checkOut"), '%Y-%M-%d')
+
+    print(check_in, check_out)
+
     try:
-        place = place_models.Place.objects.get(contentid = id)
+        place = place_models.Place.objects.get(contentid=id)
         reservation_json = {"data": []}
         reservation = models.Reservation.objects.filter(
-            hotel__id__exact = place.id)
+            hotel__id__exact=place.id)
 
         for data in reservation.values():
             print(data)
@@ -41,7 +49,7 @@ def reservation_check_test(request, id):
         return response
 
 
-@method_decorator(csrf_exempt, name = "dispatch")
+@method_decorator(csrf_exempt, name="dispatch")
 def reservation_check(request, id):
     """예약상황을 확인하기 위한 함수"""
 
@@ -57,15 +65,15 @@ def reservation_check(request, id):
     nickname = properties.get("nickname")
 
     place = place_models.Place.objects.get(
-        contentid = id
+        contentid=id
     )  # <place id from client = place id from place model> 객체 얻어오기
 
     try:
         reservation = place.reservation.filter(
-            contentid = id)  # 전달되어온 장소 id와 일치하는 reservation 정보 얻어오기
+            contentid=id)  # 전달되어온 장소 id와 일치하는 reservation 정보 얻어오기
 
         # 예약상황을 프론트쪽에 전달하기 위한 json 데이터 생성
-        guest = user_models.User.objects.get(username = nickname)  # 유저 정보
+        guest = user_models.User.objects.get(username=nickname)  # 유저 정보
         reservation_json["data"].append(
                     {
                         "date": {   # 날짜 정보
@@ -93,18 +101,18 @@ def reservation_check(request, id):
 
         # 장소정보 저장하기
         place = place_models.Place.objects.create(
-            name = place_name,
-            contentid = place_contentid,
-            place_city = place.city,
-            address = place_address,
-            mapx = place_mapx,
-            mapy = place_mapy,
+            name=place_name,
+            contentid=place_contentid,
+            place_city=place.city,
+            address=place_address,
+            mapx=place_mapx,
+            mapy=place_mapy,
         )
 
     return JsonResponse(reservation_json)  # reservation 정보 return
 
 
-@method_decorator(csrf_exempt, name = "dispatch")
+@method_decorator(csrf_exempt, name="dispatch")
 def reservation_confirm(request):
     """예약을 진행하기 위한 함수(전제 : 장소 정보 존재)"""
 
@@ -121,19 +129,19 @@ def reservation_confirm(request):
     hotel_name = hotel.get("place_name")
 
     try:
-        place = place_models.Place.objects.get(contentid = hotel_id)
+        place = place_models.Place.objects.get(contentid=hotel_id)
     except place_models.Place.DoesNotExist:
         place = place_models.Place.objects.create(
-            name = hotel_name,
-            contentid = hotel_id,
-            address = hotel_address,
-            mapx = hotel_mapx,
-            mapy = hotel_mapy,
+            name=hotel_name,
+            contentid=hotel_id,
+            address=hotel_address,
+            mapx=hotel_mapx,
+            mapy=hotel_mapy,
         )
 
     # user 정보
     guest_pk = received_json_data.get("user").get("id")
-    guest = user_models.User.objects.get(pk = guest_pk)
+    guest = user_models.User.objects.get(pk=guest_pk)
 
     # room 정보
     room = received_json_data.get("room")
@@ -150,13 +158,13 @@ def reservation_confirm(request):
 
     # 예약내역 저장
     reservation = models.Reservation.objects.create(
-        hotel = place,  # 숙박업소명
-        guest = guest,  # 예약자명
-        price = totalPrice,  # 가격
-        room_type = room_type,  # 방 종류
-        check_in = check_in,  # 체크인 날짜
-        check_out = check_out,  # 체크아웃 날짜
-        number_of_people = number_of_people,  # 예약 인원
+        hotel=place,  # 숙박업소명
+        guest=guest,  # 예약자명
+        price=totalPrice,  # 가격
+        room_type=room_type,  # 방 종류
+        check_in=check_in,  # 체크인 날짜
+        check_out=check_out,  # 체크아웃 날짜
+        number_of_people=number_of_people,  # 예약 인원
     )
 
     response = HttpResponse()
