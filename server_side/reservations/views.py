@@ -56,60 +56,37 @@ def reservation_check(request, id):
     reservation_json = {  # client로 전송할 예약정보 형태
         "data": [],
     }
-
-    places_data = request.GET.get("place")  # get json data from client
-    date_data = request.GET.get("date")
-    room_data = request.GET.get("room")
-    user_data = request.GET.get("user")
-    properties = user_data.get("properties")
-    nickname = properties.get("nickname")
+ #   date_data = request.GET.get("date")
+ #   room_data = request.GET.get("room")
 
     place = place_models.Place.objects.get(
         contentid=id
     )  # <place id from client = place id from place model> 객체 얻어오기
 
     try:
-        reservation = place.reservation.filter(
+        reservation_db = place.reservation.filter(
             contentid=id)  # 전달되어온 장소 id와 일치하는 reservation 정보 얻어오기
 
         # 예약상황을 프론트쪽에 전달하기 위한 json 데이터 생성
-        guest = user_models.User.objects.get(username=nickname)  # 유저 정보
-        reservation_json["data"].append(
-                    {
-                        "date": {   # 날짜 정보
-                            "checkIn" : str(reservation.check_in),
-                            "checkOut": str(reservation.check_out),
-                        },
-                        "room": {   # 방 정보
-                            "name" : str(reservation.room_type),
-                            "price" : int(reservation.price),
-                        },
-                        "guest" : { # 예약자 정보
-                            "id" : str(guest.pk),
-                            "nickname" : str(guest.username),
-                        },
-                        "peopleCount" : int(reservation.number_of_people),  # 인원정보
-                    }
-                )
+        for reservation in reservation_db:
+            reservation_json["data"].append(
+                {
+                    "checkIn" : str(reservation.check_in),
+                    "checkOut": str(reservation.check_out),
+                    "room" : str(reservation.room_type),
+                }
+            )
+        
+        return JsonResponse(reservation_json)
     except models.Place.DoesNotExist:  # 장소 정보가 존재하지 않을 경우
-        #------------json data 얻어오기------------
-        place_name = places_data.get("place_name")
-        place_contentid = places_data.get("id")
-        place_address = places_data.get("address_name")
-        place_mapx = places_data.get("x")
-        place_mapy = places_data.get("y")
-
-        # 장소정보 저장하기
-        place = place_models.Place.objects.create(
-            name=place_name,
-            contentid=place_contentid,
-            place_city=place.city,
-            address=place_address,
-            mapx=place_mapx,
-            mapy=place_mapy,
-        )
-
-    return JsonResponse(reservation_json)  # reservation 정보 return
+    #    reservation_json["data"].append(
+    #        {
+    #            "message" : "예약 정보가 없습니다."
+    #        }
+    #    )
+        response = HttpResponse("예약 정보가 없습니다.");
+        response.status_code = 400
+        return response
 
 
 @method_decorator(csrf_exempt, name="dispatch")
