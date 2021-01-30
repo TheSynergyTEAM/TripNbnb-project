@@ -28,23 +28,19 @@ export async function postReservation(reservation: Reservation) {
 }
 
 export async function checkReservation(
-  placeId: number | string,
+  place: daum.maps.services.PlacesSearchResultItem,
   room: string,
   checkIn: string,
   checkOut: string
 ) {
   try {
-    // const { data: reservationData } = await axios.get(
-    //   `/reservations/place/${placeId}`,
-    //   {
-    //     params: {
-    //       room,
-    //       checkIn,
-    //       checkOut
-    //     }
-    //   }
-    // )
-    // return reservationData
+    const { data } = await axios.post(`/reservations/place/${place.id}/`, {
+      place,
+      roomType: room,
+      checkIn,
+      checkOut
+    })
+    return data
   } catch (error) {
     throw new Error(error)
   }

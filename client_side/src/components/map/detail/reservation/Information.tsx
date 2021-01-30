@@ -50,6 +50,7 @@ class Information extends Component<InformationProps> {
     // 최초 렌더링 때 기본 값으로 설정
     this.props.setSelectValue(this.props.selectOptions[0])
     this.props.checking()
+    console.log('check')
   }
 
   componentDidUpdate(prevProps: InformationProps) {

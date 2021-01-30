@@ -9,6 +9,7 @@ import moment, { Moment } from 'moment'
 import PriceText, { PriceInformation } from './Price'
 import Footer from './Footer'
 import Information from './Information'
+import { checkReservation } from 'components/map/hooks/reservation-hooks'
 
 interface ReservationModalProps {
   active: boolean
@@ -139,8 +140,27 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
 
     setCheckLoading(true)
 
-    // setTimeout(() => setCheckLoading(false), 1500)
-    // TODO
+    if (detailItem && value && value[0] && value[1]) {
+      if (!selectValue) {
+        setSelectValue(selectOptions[0])
+      }
+      checkReservation(
+        detailItem,
+        // @ts-ignore
+        selectValue.type,
+        value[0].format('YYYY-MM-DD'),
+        value[1].format('YYYY-MM-DD')
+      )
+        .then((result) => {
+          console.log(result)
+        })
+        .catch((error) => console.log(error))
+    } else {
+      console.log(detailItem, selectValue, value)
+      setDisabled(true)
+    }
+
+    setCheckLoading(false)
   }
 
   const settledDates = useCallback(() => {
