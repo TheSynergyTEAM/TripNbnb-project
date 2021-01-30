@@ -57,7 +57,7 @@ def place_view(request, id):
         pass
     images = get_images(str(place_name))
     for img in images:
-        place_json["images"].append(img["link"])
+        place_json["images"].append(img["link"])  
 
     return JsonResponse(place_json)
 
@@ -65,7 +65,7 @@ def place_view(request, id):
 def get_images(keyword, limit = 20):
     client_id = os.environ.get("NAVER_CLIENT_ID", "1w4UBQhhzX6BV8IMhq7t")
     client_secret = os.environ.get("NAVER_CLIENT_SECRET", "8_b5DV1kMO")
-    encText = urllib.request.quote(keyword)
+    encText = urllib.parse.quote(keyword.encode())
     url = "https://openapi.naver.com/v1/search/image?query=" + encText + "&display=" + str(
         limit)
     url_request = urllib.request.Request(url)
