@@ -115,6 +115,7 @@ export const useFetchPlaceData = (): [
     return () => {
       setPlaceData(null)
       setReviews([])
+      setImages([])
     }
   }, [detailItem])
 
