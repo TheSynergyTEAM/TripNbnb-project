@@ -21,8 +21,8 @@ const columns = {
   },
   inner: {
     xs: 12,
-    md: 9,
-    lg: 4
+    md: 10,
+    lg: 8
   }
 }
 
@@ -57,7 +57,7 @@ const NavWrapper: React.FC = ({ children }) => {
 
 const NavItem: React.FC<{ to: string; name?: string }> = (props) => {
   return (
-    <li style={{ display: 'inline-block' }}>
+    <li style={{ display: 'inline-block', marginRight: '10px' }}>
       <NavLink to={props.to}>{props.name || props.children}</NavLink>
     </li>
   )
@@ -83,6 +83,7 @@ const Header: React.FC = () => {
         </NavItem>
         <NavWrapper>
           <NavItem to="/map" name="Map" />
+          <NavItem to="/search" name="Search" />
         </NavWrapper>
       </Col>
       <Col {...columns.inner} style={{ textAlign: 'right' }}>
