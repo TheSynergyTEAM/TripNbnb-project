@@ -20,63 +20,62 @@ class ReservationView(viewsets.ModelViewSet):
     print()
 
 
+#@method_decorator(csrf_exempt, name="dispatch")
+#def reservation_check_test(request, id):
+#    response = HttpResponse()
+
+#    body = json.loads(request.body.decode("utf-8"))
+
+#    check_in = datetime.strptime(body.get("checkIn"), '%Y-%M-%d')
+#    check_out = datetime.strptime(body.get("checkOut"), '%Y-%M-%d')
+
+#    print(check_in, check_out)
+
+#    try:
+#        place = place_models.Place.objects.get(contentid=id)
+#        reservation_json = {"data": []}
+#        reservation = models.Reservation.objects.filter(
+#            hotel__id__exact=place.id)
+
+#        for data in reservation.values():
+#            print(data)
+
+#        response.status_code = 200
+
+#        return JsonResponse(reservation_json)
+#    except place_models.Place.DoesNotExist:
+#        print('플레이스 없음')
+#        response.status_code = 401
+#        return response
+
+
 @method_decorator(csrf_exempt, name="dispatch")
-def reservation_check_test(request, id):
-    response = HttpResponse()
-
-    body = json.loads(request.body.decode("utf-8"))
-
-    check_in = datetime.strptime(body.get("checkIn"), '%Y-%M-%d')
-    check_out = datetime.strptime(body.get("checkOut"), '%Y-%M-%d')
-
-    print(check_in, check_out)
-
-    try:
-        place = place_models.Place.objects.get(contentid=id)
-        reservation_json = {"data": []}
-        reservation = models.Reservation.objects.filter(
-            hotel__id__exact=place.id)
-
-        for data in reservation.values():
-            print(data)
-
-        response.status_code = 200
-
-        return JsonResponse(reservation_json)
-    except place_models.Place.DoesNotExist:
-        print('플레이스 없음')
-        response.status_code = 401
-        return response
-
-
-@method_decorator(csrf_exempt, name="dispatch")
-def reservation_check(request, id):
+def reservation_check(request):
     """예약상황을 확인하기 위한 함수"""
 
     reservation_json = {  # client로 전송할 예약정보 형태
         "data": [],
     }
+    received_json_data = json.loads(request.body.decode("utf-8"))
  #   date_data = request.GET.get("date")
  #   room_data = request.GET.get("room")
-
-    place = place_models.Place.objects.get(
-        contentid=id
-    )  # <place id from client = place id from place model> 객체 얻어오기
+    print(received_json_data)
+    place = received_json_data.get("place")
+    place_id = place.get("id")
 
     try:
-        reservation_db = place.reservation.filter(
-            contentid=id)  # 전달되어온 장소 id와 일치하는 reservation 정보 얻어오기
+        place = place_models.Place.objects.get(contentid=place_id)  # <place id from client = place id from place model> 객체 얻어오기
+        reservation_db = place.reservation.all()  # 전달되어온 장소 id와 일치하는 reservation 정보 얻어오기
 
         # 예약상황을 프론트쪽에 전달하기 위한 json 데이터 생성
         for reservation in reservation_db:
             reservation_json["data"].append(
-                {
-                    "checkIn" : str(reservation.check_in),
-                    "checkOut": str(reservation.check_out),
-                    "room" : str(reservation.room_type),
-                }
-            )
-        
+            {
+                "checkIn" : str(reservation.ckeck_in),
+                "checkOut": str(reservation.check_out),
+                "roomType" : str(reservation.room_type),
+            }
+        )
         return JsonResponse(reservation_json)
     except models.Place.DoesNotExist:  # 장소 정보가 존재하지 않을 경우
     #    reservation_json["data"].append(
@@ -85,7 +84,8 @@ def reservation_check(request, id):
     #        }
     #    )
         response = HttpResponse("예약 정보가 없습니다.");
-        response.status_code = 400
+    #    response = HttpResponse();
+    #    response.status_code = 400
         return response
 
 
