@@ -64,6 +64,7 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
                           <SearchOutlined style={{ color: purple.primary }} />
                         }
                         onPressEnter={(e) => this.handleSearch(provide)}
+                        placeholder="장소를 입력하세요"
                       />
                     </Col>
                     <Col span={4}>
