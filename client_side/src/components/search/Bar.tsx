@@ -3,6 +3,7 @@ import SearchOutlined from '@ant-design/icons/SearchOutlined'
 import { purple } from '@ant-design/colors'
 import { Component } from 'react'
 import styled from 'styled-components'
+import SearchContext from 'context/Search'
 
 type SearchBarProps = {
   inputValue: string
@@ -23,6 +24,8 @@ export const Column = {
   xxl: 8
 }
 
+const { Consumer: SearchConsumer } = SearchContext
+
 export default class SearchBar extends Component<{}, SearchBarProps> {
   constructor(props: any) {
     super(props)
@@ -39,25 +42,42 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
     }))
   }
 
+  handleSearch = (provide: any) => {
+    console.log(this.state.inputValue, provide)
+  }
+
   render() {
     return (
       <StyledBar>
         <Row justify="center" align="middle">
           <Col {...Column}>
-            <Row align="middle" gutter={30}>
-              <Col span={20}>
-                <Input
-                  size="large"
-                  value={this.state.inputValue}
-                  onChange={(e) => this.handleInputChange(e.target.value)}
-                  prefix={<SearchOutlined style={{ color: purple.primary }} />}
-                />
-              </Col>
-              <Col span={4}>
-                <Button size="large" style={{ width: '100%' }}>
-                  검색
-                </Button>
-              </Col>
+            <Row align="middle" gutter={10}>
+              <SearchConsumer>
+                {(provide) => (
+                  <>
+                    <Col span={20}>
+                      <Input
+                        size="large"
+                        value={this.state.inputValue}
+                        onChange={(e) => this.handleInputChange(e.target.value)}
+                        prefix={
+                          <SearchOutlined style={{ color: purple.primary }} />
+                        }
+                        onPressEnter={(e) => this.handleSearch(provide)}
+                      />
+                    </Col>
+                    <Col span={4}>
+                      <Button
+                        size="large"
+                        style={{ width: '100%' }}
+                        onClick={(e) => this.handleSearch(provide)}
+                      >
+                        검색
+                      </Button>
+                    </Col>
+                  </>
+                )}
+              </SearchConsumer>
             </Row>
           </Col>
         </Row>
