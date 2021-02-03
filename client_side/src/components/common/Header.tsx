@@ -28,7 +28,6 @@ const columns = {
 
 const HeaderRow = styled(Row)`
   background-color: white;
-  position: absolute;
   padding: 1rem;
   border-bottom: 1px solid #ddd;
   top: 0;

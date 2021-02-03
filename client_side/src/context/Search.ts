@@ -3,5 +3,6 @@ import React from 'react'
 
 export default React.createContext<SearchState>({
   resultItem: [],
-  setSearchResult: (e: any) => {}
+  setSearchResult: (e, k) => {},
+  keyword: ''
 })

@@ -9,12 +9,13 @@ type ResultItem = daum.maps.services.PlacesSearchResultItem
 
 export type SearchState = {
   resultItem: ResultItem[] | []
-  setSearchResult: (t: ResultItem[] | []) => void
+  setSearchResult: (t: ResultItem[] | [], k: string) => void
+  keyword: string
 }
 
 const SearchContainer = styled.section`
   background-color: #eee;
-  min-height: 99vh;
+  min-height: 150vh; // test for search bar sticky
 `
 
 const { Provider: SearchProvider } = SearchContext
@@ -24,15 +25,16 @@ export default class Search extends Component<
   SearchState
 > {
   // 결과 값이 반드시 있다고 보장해야 함
-  setSearchResult = (searchResultItem: ResultItem[] | []) => {
+  setSearchResult = (searchResultItem: ResultItem[] | [], keyword: string) => {
     this.setState((state) => {
-      return { ...state, resultItem: searchResultItem }
+      return { ...state, resultItem: searchResultItem, keyword }
     })
   }
 
   state: SearchState = {
     resultItem: [],
-    setSearchResult: this.setSearchResult
+    setSearchResult: this.setSearchResult,
+    keyword: ''
   }
 
   render() {

@@ -19,15 +19,18 @@ const StyledBar = styled.section`
   padding: 1rem;
   background-color: white;
   border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 `
 
 export const Column = {
   xs: 24,
   sm: 18,
-  md: 14,
-  lg: 12,
-  xl: 10,
-  xxl: 8
+  md: 16,
+  lg: 14,
+  xl: 12,
+  xxl: 10
 }
 
 const { Consumer: SearchConsumer } = SearchContext
@@ -63,6 +66,27 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
 
   handleSearch = (provide: SearchState) => {
     this.setState({ isLoading: true })
+
+    provide.setSearchResult(
+      [
+        {
+          address_name: '경기 성남시 분당구 서현동 261-1',
+          // @ts-expect-error
+          category_group_code: 'AD5',
+          category_group_name: '숙박',
+          category_name: '여행 > 숙박 > 호텔',
+          distance: '1203',
+          id: '978338074',
+          phone: '1877-8006',
+          place_name: '서머셋센트럴분당',
+          place_url: 'http://place.map.kakao.com/978338074',
+          road_address_name: '경기 성남시 분당구 황새울로311번길 36',
+          x: '127.121207244573',
+          y: '37.3865566748732'
+        }
+      ],
+      this.state.inputValue
+    )
   }
 
   render() {

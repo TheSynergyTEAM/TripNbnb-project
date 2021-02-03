@@ -10,7 +10,6 @@ import styled from 'styled-components'
 
 const SwitchWrapper = styled.section`
   position: relative;
-  top: 65px;
 `
 
 const RouteWrapper: React.FC = () => {

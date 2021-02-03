@@ -7,7 +7,7 @@ describe('Basic rendering in Bar Components', () => {
   beforeEach(() =>
     render(
       <SearchContext.Provider
-        value={{ resultItem: [], setSearchResult: jest.fn() }}
+        value={{ resultItem: [], setSearchResult: jest.fn(), keyword: '' }}
       >
         <SearchBar />
       </SearchContext.Provider>
@@ -37,7 +37,7 @@ describe('Basic rendering in List Components', () => {
   beforeEach(() =>
     render(
       <SearchContext.Provider
-        value={{ resultItem: [], setSearchResult: jest.fn() }}
+        value={{ resultItem: [], setSearchResult: jest.fn(), keyword: '' }}
       >
         <SearchResult />
       </SearchContext.Provider>
