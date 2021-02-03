@@ -12,6 +12,7 @@ type SearchBarProps = {
   inputValue: string
   place: Place | null
   isPlace: boolean
+  isLoading: boolean
 }
 
 const StyledBar = styled.section`
@@ -38,16 +39,19 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
     this.state = {
       inputValue: '',
       place: null,
-      isPlace: false
+      isPlace: false,
+      isLoading: false
     }
   }
 
   componentDidMount() {
-    this.setState((state) => ({
-      ...state,
-      place: new daum.maps.services.Places(),
-      isPlace: true
-    }))
+    if (window.daum) {
+      this.setState((state) => ({
+        ...state,
+        place: new daum.maps.services.Places(),
+        isPlace: true
+      }))
+    }
   }
 
   handleInputChange = (v: string) => {
@@ -57,7 +61,9 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
     }))
   }
 
-  handleSearch = (provide: SearchState) => {}
+  handleSearch = (provide: SearchState) => {
+    this.setState({ isLoading: true })
+  }
 
   render() {
     return (
@@ -70,7 +76,7 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
                   <>
                     <Col span={20}>
                       <Input
-                        disabled={!this.state.isPlace}
+                        disabled={!this.state.isPlace || this.state.isLoading}
                         size="large"
                         value={this.state.inputValue}
                         onChange={(e) => this.handleInputChange(e.target.value)}
@@ -86,6 +92,7 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
                         size="large"
                         style={{ width: '100%' }}
                         onClick={(e) => this.handleSearch(provide)}
+                        disabled={!this.state.isPlace || this.state.isLoading}
                       >
                         검색
                       </Button>
