@@ -105,9 +105,8 @@ def reservation_confirm(request):
     hotel_mapy = hotel.get("y")
     hotel_name = hotel.get("place_name")
 
-    try:
-        place = place_models.Place.objects.get(contentid=hotel_id)
-    except place_models.Place.DoesNotExist:
+    place = place_models.Place.objects.get(contentid=hotel_id)
+    if place is None:
         place = place_models.Place.objects.create(
             name=hotel_name,
             contentid=hotel_id,
@@ -115,6 +114,16 @@ def reservation_confirm(request):
             mapx=hotel_mapx,
             mapy=hotel_mapy,
         )
+    # try:
+    #     place = place_models.Place.objects.get(contentid=hotel_id)
+    # except place_models.Place.DoesNotExist:
+    #     place = place_models.Place.objects.create(
+    #         name=hotel_name,
+    #         contentid=hotel_id,
+    #         address=hotel_address,
+    #         mapx=hotel_mapx,
+    #         mapy=hotel_mapy,
+    #     )
 
     # user 정보
     guest_pk = received_json_data.get("user").get("id")
