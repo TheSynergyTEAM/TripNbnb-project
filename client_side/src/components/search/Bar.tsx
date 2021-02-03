@@ -4,9 +4,14 @@ import { purple } from '@ant-design/colors'
 import { Component } from 'react'
 import styled from 'styled-components'
 import SearchContext from 'context/Search'
+import { SearchState } from 'pages/Search'
+
+type Place = daum.maps.services.Places
 
 type SearchBarProps = {
   inputValue: string
+  place: Place | null
+  isPlace: boolean
 }
 
 const StyledBar = styled.section`
@@ -31,8 +36,18 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
     super(props)
 
     this.state = {
-      inputValue: ''
+      inputValue: '',
+      place: null,
+      isPlace: false
     }
+  }
+
+  componentDidMount() {
+    this.setState((state) => ({
+      ...state,
+      place: new daum.maps.services.Places(),
+      isPlace: true
+    }))
   }
 
   handleInputChange = (v: string) => {
@@ -42,9 +57,7 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
     }))
   }
 
-  handleSearch = (provide: any) => {
-    console.log(this.state.inputValue, provide)
-  }
+  handleSearch = (provide: SearchState) => {}
 
   render() {
     return (
@@ -57,6 +70,7 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
                   <>
                     <Col span={20}>
                       <Input
+                        disabled={!this.state.isPlace}
                         size="large"
                         value={this.state.inputValue}
                         onChange={(e) => this.handleInputChange(e.target.value)}
