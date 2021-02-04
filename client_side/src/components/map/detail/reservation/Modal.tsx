@@ -141,13 +141,12 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
     setCheckLoading(true)
 
     if (detailItem && value && value[0] && value[1]) {
-      if (!selectValue) {
-        setSelectValue(selectOptions[0])
-      }
+      const room = selectValue || selectOptions[0]
+
       checkReservation(
         detailItem,
         // @ts-ignore
-        selectValue.type,
+        room.type,
         value[0].format('YYYY-MM-DD'),
         value[1].format('YYYY-MM-DD')
       )
