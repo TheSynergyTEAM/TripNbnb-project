@@ -20,52 +20,21 @@ class ReservationView(viewsets.ModelViewSet):
     print()
 
 
-#@method_decorator(csrf_exempt, name="dispatch")
-#def reservation_check_test(request, id):
-#    response = HttpResponse()
-
-#    body = json.loads(request.body.decode("utf-8"))
-
-#    check_in = datetime.strptime(body.get("checkIn"), '%Y-%M-%d')
-#    check_out = datetime.strptime(body.get("checkOut"), '%Y-%M-%d')
-
-#    print(check_in, check_out)
-
-#    try:
-#        place = place_models.Place.objects.get(contentid=id)
-#        reservation_json = {"data": []}
-#        reservation = models.Reservation.objects.filter(
-#            hotel__id__exact=place.id)
-
-#        for data in reservation.values():
-#            print(data)
-
-#        response.status_code = 200
-
-#        return JsonResponse(reservation_json)
-#    except place_models.Place.DoesNotExist:
-#        print('플레이스 없음')
-#        response.status_code = 401
-#        return response
-
-
 @method_decorator(csrf_exempt, name="dispatch")
-def reservation_check(request):
+def reservation_check(request,id):
     """예약상황을 확인하기 위한 함수"""
 
     reservation_json = {  # client로 전송할 예약정보 형태
         "data": [],
     }
     received_json_data = json.loads(request.body.decode("utf-8"))
- #   date_data = request.GET.get("date")
- #   room_data = request.GET.get("room")
-    print(received_json_data)
-    place = received_json_data.get("place")
-    place_id = place.get("id")
+ #   place_id = request.POST.get("id")
 
     try:
-        place = place_models.Place.objects.get(contentid=place_id)  # <place id from client = place id from place model> 객체 얻어오기
-        reservation_db = place.reservation.all()  # 전달되어온 장소 id와 일치하는 reservation 정보 얻어오기
+        place = place_models.Place.objects.get(contentid=id)  # 전달되어 온 id와 일치하는 장소 객체 얻어오기
+
+        today = datetime.now().strftime('%Y-%m-%d') #오늘날짜 저장
+        reservation_db = place.reservation.filter(check_out__gte=today)  # 체크아웃 날짜가 체크인 하려는 날짜와 같거나 이후(체크인<=체크아웃)인 경우 정보 가져오기
 
         # 예약상황을 프론트쪽에 전달하기 위한 json 데이터 생성
         for reservation in reservation_db:
@@ -92,10 +61,9 @@ def reservation_check(request):
 @method_decorator(csrf_exempt, name="dispatch")
 def reservation_confirm(request):
     """예약을 진행하기 위한 함수(전제 : 장소 정보 존재)"""
-
+    """인원체크, """
     # get json data from client
     received_json_data = json.loads(request.body.decode("utf-8"))
-    print(received_json_data)
 
     # place 정보
     hotel = received_json_data.get("place")
@@ -127,6 +95,18 @@ def reservation_confirm(request):
     totalPrice = price.get("pay")
     stay = price.get("stay")
     number_of_people = received_json_data.get("peopleCount")
+
+    # 인원수 초과시 룸타입별 처리
+ #   if room_type == "ROOM_SINGLE" and number_of_people > 1 :
+ #       print("처리할 방식 고민해보기")
+ #       return 
+ #   elif (room_type == "ROOM_DOUBLE" or room_type == "ROOM_TWIN") and number_of_people > 2 :
+ #       print("처리할 방식 고민해보기")
+ #   elif room_type == "room_TRIPLE" and number_of_people > 3 :
+ #       print("처리할 방식 고민해보기")
+ #   elif room_type == "room_SUITE" and number_of_people > 6 :
+ #       print("처리할 방식 고민해보기")
+    
 
     # 날짜 정보
     date = received_json_data.get("date")
