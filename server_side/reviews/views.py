@@ -35,9 +35,8 @@ def write_review(request):
     place_address = content.get("addressName")
     place_mapx = content.get("mapx")
     place_mapy = content.get("mapy")
-    try:
-        place = place_models.Place.objects.get(contentid=place_contentid)
-    except place_models.Place.DoesNotExist:
+    place = place_models.Place.objects.get_or_none(contentid=place_contentid)
+    if place is None:
         place = place_models.Place.objects.create(
             name= place_name,
             contentid= place_contentid,

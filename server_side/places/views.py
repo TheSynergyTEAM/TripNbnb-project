@@ -29,9 +29,10 @@ def place_view(request, id):
       "images": [],
   }
   place_name = request.GET.get("name")
-  try:
-    places = models.Place.objects.filter(contentid=id)
-    for place in places:
+  place = models.Place.objects.get_or_none(contentid=id)
+  if not place:
+    pass
+  else:
       reviews = place.reviews_p.all() 
       for review in reviews:
         review_user = user_models.User.objects.get(username=review.user)
@@ -46,8 +47,6 @@ def place_view(request, id):
                 "created": str(review.created),
             }
         )
-  except models.Place.DoesNotExist:
-    pass
   images = get_images(str(place_name))
   for img in images:
     place_json["images"].append(img["link"])

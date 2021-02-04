@@ -57,16 +57,14 @@ def create_list(request):
     place_mapx = content.get("mapx")
     place_mapy = content.get("mapy")
 
-    try:
-        user_list = models.List.objects.get(user_id = user)
-        place = place_models.Place.objects.get(contentid = place_pk)
-
-    except models.List.DoesNotExist:
+    user_list = models.List.objects.get_or_none(user_id=user)
+    place = place_models.Place.objects.get_or_none(contentid=place_pk)
+    if user_list is None:
         user_list = models.List.objects.create(
             name = f"{user.username}'s List",
             user = user,
         )
-    except place_models.Place.DoesNotExist:
+    if place is None:
         place = place_models.Place.objects.create(
             name = place_name,
             contentid = place_pk,
@@ -74,9 +72,8 @@ def create_list(request):
             mapx = place_mapx,
             mapy = place_mapy,
         )
-    finally:
-        user_list.places.add(place)
-        user_list.save()
+    user_list.places.add(place)
+    user_list.save()
 
     user_list_json = {
         "username": str(user.username),
