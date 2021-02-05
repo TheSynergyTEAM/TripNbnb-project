@@ -6,11 +6,13 @@ import SearchContext from 'context/Search'
 import styled from 'styled-components'
 
 type ResultItem = daum.maps.services.PlacesSearchResultItem
+type Pagination = daum.maps.Pagination
 
 export type SearchState = {
   resultItem: ResultItem[] | []
   setSearchResult: (t: ResultItem[] | [], k: string) => void
   keyword: string
+  pagination: Pagination | null
 }
 
 const SearchContainer = styled.section`
@@ -34,7 +36,8 @@ export default class Search extends Component<
   state: SearchState = {
     resultItem: [],
     setSearchResult: this.setSearchResult,
-    keyword: ''
+    keyword: '',
+    pagination: null
   }
 
   render() {

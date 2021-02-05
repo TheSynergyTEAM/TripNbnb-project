@@ -20,10 +20,20 @@ const { Consumer: SearchConsumer } = SearchContext
 class NoResult extends Component {
   render() {
     return (
-      <Empty
-        description={<strong>데이터가 없습니다.</strong>}
-        style={{ padding: '1rem' }}
-      />
+      <SearchConsumer>
+        {(provide) => (
+          <Empty
+            description={
+              <strong>
+                {provide.keyword
+                  ? `${provide.keyword}에 대한 검색 결과가 없습니다.`
+                  : '키워드로 검색을 해주세요.'}
+              </strong>
+            }
+            style={{ padding: '1rem' }}
+          />
+        )}
+      </SearchConsumer>
     )
   }
 }

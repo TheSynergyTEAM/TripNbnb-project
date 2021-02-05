@@ -4,5 +4,6 @@ import React from 'react'
 export default React.createContext<SearchState>({
   resultItem: [],
   setSearchResult: (e, k) => {},
-  keyword: ''
+  keyword: '',
+  pagination: null
 })

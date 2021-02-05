@@ -45,6 +45,6 @@ describe('Basic rendering in List Components', () => {
   )
 
   test('Render no data message when mounted component', () => {
-    expect(screen.getByText('데이터가 없습니다.')).toBeInTheDocument()
+    expect(screen.getByText('키워드로 검색을 해주세요.')).toBeInTheDocument()
   })
 })
