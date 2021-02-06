@@ -13,6 +13,7 @@ requests = "*"
 django-environ = "*"
 django-cors-headers = "*"
 djangorestframework = "*"
+django-seed = "*"
 
 [requires]
 python_version = "3.8"

@@ -39,7 +39,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["corsheaders", "rest_framework"]
+THIRD_PARTY_APPS = ["corsheaders", "rest_framework", "django_seed",]
 
 PROJECT_APPS = [
     "core.apps.CoreConfig",
