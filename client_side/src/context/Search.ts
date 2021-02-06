@@ -5,5 +5,6 @@ export default React.createContext<SearchState>({
   resultItem: [],
   setSearchResult: (e, k) => {},
   keyword: '',
-  pagination: null
+  pagination: null,
+  setPagination: (e) => {}
 })

@@ -65,20 +65,21 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
   }
 
   handleSearch = (provide: SearchState) => {
-    if (!this.state.place || !this.state.inputValue) {
+    if (!this.state.isPlace || !this.state.inputValue || !this.state.place) {
       return
     }
 
     this.setState({ isLoading: true })
 
     provide.setSearchResult([], this.state.inputValue)
+    provide.setPagination(null)
 
     this.state.place.keywordSearch(
       this.state.inputValue,
       (result, status, pagination) => {
         if (status === daum.maps.services.Status.OK) {
-          provide.pagination = pagination
           provide.setSearchResult([...result], this.state.inputValue)
+          provide.setPagination(pagination)
 
           this.setState({ isLoading: false })
         } else {

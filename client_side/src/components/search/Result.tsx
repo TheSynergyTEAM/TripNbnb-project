@@ -17,6 +17,20 @@ const ResultHeader = styled.section`
 
 const { Consumer: SearchConsumer } = SearchContext
 
+class List extends Component {
+  render() {
+    return (
+      <SearchConsumer>
+        {(provide) => (
+          <div>
+            {provide.resultItem.length}, {provide.pagination?.totalCount}
+          </div>
+        )}
+      </SearchConsumer>
+    )
+  }
+}
+
 class NoResult extends Component {
   render() {
     return (
@@ -53,7 +67,7 @@ export default class Result extends Component {
                       </PrimaryText>
                       에 대한 검색 결과
                     </ResultHeader>
-                    <div style={{ padding: '1rem' }}>Heello</div>
+                    <List />
                   </>
                 ) : (
                   <NoResult />

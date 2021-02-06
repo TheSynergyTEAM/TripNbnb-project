@@ -13,6 +13,7 @@ export type SearchState = {
   setSearchResult: (t: ResultItem[] | [], k: string) => void
   keyword: string
   pagination: Pagination | null
+  setPagination: (pagination: Pagination | null) => void
 }
 
 const SearchContainer = styled.section`
@@ -33,11 +34,18 @@ export default class Search extends Component<
     })
   }
 
+  setPagination = (pagination: Pagination | null) => {
+    this.setState((state) => {
+      return { ...state, pagination }
+    })
+  }
+
   state: SearchState = {
     resultItem: [],
     setSearchResult: this.setSearchResult,
     keyword: '',
-    pagination: null
+    pagination: null,
+    setPagination: this.setPagination
   }
 
   render() {
