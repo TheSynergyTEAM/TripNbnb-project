@@ -1,9 +1,10 @@
-import { Component } from 'react'
+import { Component, PureComponent } from 'react'
 import { Column } from './Bar'
 import styled from 'styled-components'
-import { Row, Col, Empty } from 'antd'
+import { Row, Col, Empty, Spin } from 'antd'
 import SearchContext from 'context/Search'
 import { PrimaryText } from 'components/common/typography'
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined'
 
 const ResultContainer = styled.section`
   background-color: white;
@@ -17,16 +18,42 @@ const ResultHeader = styled.section`
 
 const { Consumer: SearchConsumer } = SearchContext
 
-class List extends Component {
+interface ResultWrapperState {
+  open: boolean
+  itemLength: number
+}
+
+class ResultWrapper extends Component<any, ResultWrapperState> {
+  constructor(props: any) {
+    super(props)
+
+    this.state = {
+      open: false,
+      itemLength: 0
+    }
+  }
+
+  triggerOpen() {
+    this.setState((state) => ({ ...state, open: !state.open }))
+  }
+
+  render() {
+    return <div>{this.state.open ? <div>opened</div> : <div>closed</div>}</div>
+  }
+}
+
+class LoadingSpin extends PureComponent {
   render() {
     return (
-      <SearchConsumer>
-        {(provide) => (
-          <div>
-            {provide.resultItem.length}, {provide.pagination?.totalCount}
-          </div>
-        )}
-      </SearchConsumer>
+      <Spin
+        style={{
+          padding: '1rem',
+          margin: '0 auto',
+          textAlign: 'center',
+          display: 'block'
+        }}
+        indicator={<LoadingOutlined spin />}
+      />
     )
   }
 }
@@ -67,8 +94,10 @@ export default class Result extends Component {
                       </PrimaryText>
                       에 대한 검색 결과
                     </ResultHeader>
-                    <List />
+                    <ResultWrapper />
                   </>
+                ) : provide.loading ? (
+                  <LoadingSpin />
                 ) : (
                   <NoResult />
                 )

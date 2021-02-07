@@ -10,10 +10,12 @@ type Pagination = daum.maps.Pagination
 
 export type SearchState = {
   resultItem: ResultItem[] | []
-  setSearchResult: (t: ResultItem[] | [], k: string) => void
   keyword: string
   pagination: Pagination | null
+  loading: boolean
+  setSearchResult: (t: ResultItem[] | [], k: string) => void
   setPagination: (pagination: Pagination | null) => void
+  setLoading: (s: boolean) => void
 }
 
 const SearchContainer = styled.section`
@@ -40,12 +42,16 @@ export default class Search extends Component<
     })
   }
 
+  setLoading = (loading: boolean) => this.setState({ loading })
+
   state: SearchState = {
     resultItem: [],
-    setSearchResult: this.setSearchResult,
     keyword: '',
     pagination: null,
-    setPagination: this.setPagination
+    loading: false,
+    setSearchResult: this.setSearchResult,
+    setPagination: this.setPagination,
+    setLoading: this.setLoading
   }
 
   render() {

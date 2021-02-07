@@ -73,6 +73,7 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
 
     provide.setSearchResult([], this.state.inputValue)
     provide.setPagination(null)
+    provide.setLoading(true)
 
     this.state.place.keywordSearch(
       this.state.inputValue,
@@ -86,6 +87,9 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
           // 검색 결과가 없을 때
           provide.setSearchResult([], this.state.inputValue)
         }
+
+        // 검색 결과가 있든 없든 처리
+        provide.setLoading(false)
       }
     )
 

@@ -3,8 +3,10 @@ import React from 'react'
 
 export default React.createContext<SearchState>({
   resultItem: [],
-  setSearchResult: (e, k) => {},
   keyword: '',
   pagination: null,
-  setPagination: (e) => {}
+  loading: false,
+  setSearchResult: (e, k) => {},
+  setPagination: (e) => {},
+  setLoading: (e) => {}
 })
