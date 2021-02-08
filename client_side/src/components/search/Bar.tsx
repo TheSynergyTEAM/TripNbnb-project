@@ -87,34 +87,12 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
           // 검색 결과가 없을 때
           provide.setSearchResult([], this.state.inputValue)
         }
-
         // 검색 결과가 있든 없든 처리
         provide.setLoading(false)
       }
     )
 
     this.setState({ isLoading: false })
-
-    // provide.setSearchResult(
-    //   [
-    //     {
-    //       address_name: '경기 성남시 분당구 서현동 261-1',
-    //       // @ts-expect-error
-    //       category_group_code: 'AD5',
-    //       category_group_name: '숙박',
-    //       category_name: '여행 > 숙박 > 호텔',
-    //       distance: '1203',
-    //       id: '978338074',
-    //       phone: '1877-8006',
-    //       place_name: '서머셋센트럴분당',
-    //       place_url: 'http://place.map.kakao.com/978338074',
-    //       road_address_name: '경기 성남시 분당구 황새울로311번길 36',
-    //       x: '127.121207244573',
-    //       y: '37.3865566748732'
-    //     }
-    //   ],
-    //   this.state.inputValue
-    // )
   }
 
   render() {

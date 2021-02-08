@@ -5,6 +5,7 @@ import { Row, Col, Empty, Spin } from 'antd'
 import SearchContext from 'context/Search'
 import { PrimaryText } from 'components/common/typography'
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined'
+import ResultItem from './ResultItem'
 
 const ResultContainer = styled.section`
   background-color: white;
@@ -38,7 +39,17 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
   }
 
   render() {
-    return <div>{this.state.open ? <div>opened</div> : <div>closed</div>}</div>
+    return (
+      <SearchConsumer>
+        {(provide) =>
+          provide.resultItem.map(
+            (place: daum.maps.services.PlacesSearchResultItem) => (
+              <ResultItem place={place} load={() => {}} key={place.id} />
+            )
+          )
+        }
+      </SearchConsumer>
+    )
   }
 }
 
