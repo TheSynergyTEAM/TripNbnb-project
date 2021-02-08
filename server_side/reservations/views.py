@@ -24,38 +24,48 @@ class ReservationView(viewsets.ModelViewSet):
 def reservation_check(request,id):
     """예약상황을 확인하기 위한 함수"""
 
-    reservation_json = {  # client로 전송할 예약정보 형태
-        "data": [],
-    }
+
     received_json_data = json.loads(request.body.decode("utf-8"))
  #   place_id = request.POST.get("id")
+    hotel = received_json_data.get("place")
+    hotel_address = hotel.get("address_name")
+    hotel_mapx = hotel.get("x")
+    hotel_mapy = hotel.get("y")
+    hotel_name = hotel.get("place_name")
 
-    try:
-        place = place_models.Place.objects.get(contentid=id)  # 전달되어 온 id와 일치하는 장소 객체 얻어오기
+    place = place_models.Place.objects.get(contentid=id)  # 전달되어 온 id와 일치하는 장소 객체 얻어오기
 
-        today = datetime.now().strftime('%Y-%m-%d') #오늘날짜 저장
-        reservation_db = place.reservation.filter(check_out__gte=today)  # 체크아웃 날짜가 체크인 하려는 날짜와 같거나 이후(체크인<=체크아웃)인 경우 정보 가져오기
-
-        # 예약상황을 프론트쪽에 전달하기 위한 json 데이터 생성
-        for reservation in reservation_db:
-            reservation_json["data"].append(
-            {
-                "checkIn" : str(reservation.ckeck_in),
-                "checkOut": str(reservation.check_out),
-                "roomType" : str(reservation.room_type),
-            }
+    if place is None:   # 장소 정보가 존재하지 않을 경우
+        place = place_models.Place.objects.create(
+            name=hotel_name,
+            contentid=id,
+            address=hotel_address,
+            mapx=hotel_mapx,
+            mapy=hotel_mapy,
         )
-        return JsonResponse(reservation_json)
-    except models.Place.DoesNotExist:  # 장소 정보가 존재하지 않을 경우
-    #    reservation_json["data"].append(
-    #        {
-    #            "message" : "예약 정보가 없습니다."
-    #        }
-    #    )
-        response = HttpResponse("예약 정보가 없습니다.");
-    #    response = HttpResponse();
-    #    response.status_code = 400
-        return response
+            
+        return HttpResponse(status=204)
+
+    # new_체크인, new_체크아웃 날짜 저장
+    check_in_date = datetime.strptime(received_json_data.get("checkIn"), '%Y-%m-%d')
+    check_out_date = datetime.strptime(received_json_data.get("checkOut"), '%Y-%m-%d')
+
+    # 방타입 저장
+    room_type = received_json_data.get("roomType")
+    room_type_db = place.reservation.filter(room_type=room_type)
+
+    if room_type_db is None:   # 현재 방타입으로 예약된 방이 없다면(예약가능)
+        response.status_code = 204
+    else :  # 방타입과 일치하는 예약이 존재한다면
+        # -----예약 가능한 조건들-----
+        # 1. 체크인 : db_체크아웃 <= new_체크인
+        # 2. 체크아웃 : db_체크인 >= new_체크아웃
+        date_db = place.reservation.filter(room_type=room_type_db, check_out__gte=check_in_date, check_in__lte=check_out_date)
+        
+        if date_db is None: # 예약내역 無, 예약 가능한 경우
+            return HttpResponse(status=204)
+        else:   # 예약내역 有, 예약 불가능할 경우
+            return HttpResponse(status=403)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -66,32 +76,8 @@ def reservation_confirm(request):
     received_json_data = json.loads(request.body.decode("utf-8"))
 
     # place 정보
-    hotel = received_json_data.get("place")
-    hotel_id = hotel.get("id")
-    hotel_address = hotel.get("address_name")
-    hotel_mapx = hotel.get("x")
-    hotel_mapy = hotel.get("y")
-    hotel_name = hotel.get("place_name")
-
-    place = place_models.Place.objects.get(contentid=hotel_id)
-    if place is None:
-        place = place_models.Place.objects.create(
-            name=hotel_name,
-            contentid=hotel_id,
-            address=hotel_address,
-            mapx=hotel_mapx,
-            mapy=hotel_mapy,
-        )
-    # try:
-    #     place = place_models.Place.objects.get(contentid=hotel_id)
-    # except place_models.Place.DoesNotExist:
-    #     place = place_models.Place.objects.create(
-    #         name=hotel_name,
-    #         contentid=hotel_id,
-    #         address=hotel_address,
-    #         mapx=hotel_mapx,
-    #         mapy=hotel_mapy,
-    #     )
+    hotel_pk = received_json_data.get("place").get("id")
+    hotel = place_models.Place.objects.get(pk=hotel_pk)
 
     # user 정보
     guest_pk = received_json_data.get("user").get("id")
@@ -104,19 +90,7 @@ def reservation_confirm(request):
     totalPrice = price.get("pay")
     stay = price.get("stay")
     number_of_people = received_json_data.get("peopleCount")
-
-    # 인원수 초과시 룸타입별 처리
- #   if room_type == "ROOM_SINGLE" and number_of_people > 1 :
- #       print("처리할 방식 고민해보기")
- #       return 
- #   elif (room_type == "ROOM_DOUBLE" or room_type == "ROOM_TWIN") and number_of_people > 2 :
- #       print("처리할 방식 고민해보기")
- #   elif room_type == "room_TRIPLE" and number_of_people > 3 :
- #       print("처리할 방식 고민해보기")
- #   elif room_type == "room_SUITE" and number_of_people > 6 :
- #       print("처리할 방식 고민해보기")
     
-
     # 날짜 정보
     date = received_json_data.get("date")
     check_in = date.get("checkIn")
@@ -124,8 +98,8 @@ def reservation_confirm(request):
 
     # 예약내역 저장
     reservation = models.Reservation.objects.create(
-        hotel=place,  # 숙박업소명
-        guest=guest,  # 예약자명
+        hotel=hotel,  # 숙박업소 정보
+        guest=guest,  # 예약자 정보
         price=totalPrice,  # 가격
         room_type=room_type,  # 방 종류
         check_in=check_in,  # 체크인 날짜
