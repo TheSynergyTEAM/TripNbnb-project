@@ -34,19 +34,24 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
     }
   }
 
-  triggerOpen() {
+  triggerOpen = () => {
     this.setState((state) => ({ ...state, open: !state.open }))
   }
 
+  increaseCount = () => {
+    this.setState({ ...this.state, itemLength: this.state.itemLength + 1 })
+  }
+
   render() {
+    const ListRender = (places: daum.maps.services.PlacesSearchResult) =>
+      places.map((place, i) => (
+        <ResultItem place={place} load={this.increaseCount} key={place.id} />
+      ))
+
     return (
       <SearchConsumer>
         {(provide) =>
-          provide.resultItem.map(
-            (place: daum.maps.services.PlacesSearchResultItem) => (
-              <ResultItem place={place} load={() => {}} key={place.id} />
-            )
-          )
+          provide.resultItem.length && ListRender(provide.resultItem)
         }
       </SearchConsumer>
     )

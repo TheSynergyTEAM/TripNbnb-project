@@ -1,9 +1,10 @@
 import { List } from 'antd'
-import { fetchPlaceThumbnailData } from 'components/map/hooks/FetchPlace'
+import { fetchPlaceThumbnailDataTest } from 'components/map/hooks/FetchPlace'
 import { Component } from 'react'
 
 interface ResultItemState {
   loaded: boolean
+  data: any
 }
 
 interface ResultItemProps {
@@ -19,13 +20,20 @@ export default class ResultItem extends Component<
     super(props)
 
     this.state = {
-      loaded: false
+      loaded: false,
+      data: null
     }
   }
 
   componentDidMount() {
-    fetchPlaceThumbnailData(this.props.place.id, this.props.place.place_name)
-      .then((result) => console.log(result))
+    fetchPlaceThumbnailDataTest(
+      this.props.place.id,
+      this.props.place.place_name
+    )
+      .then((result) => {
+        this.setState({ data: result, loaded: true })
+        this.props.load()
+      })
       .catch((error) => console.error(error))
   }
 
