@@ -21,7 +21,6 @@ class PlaceView(viewsets.ModelViewSet):
   queryset = models.Place.objects.all()
   print()
 
-
 @method_decorator(csrf_exempt, name="dispatch")
 def place_view(request, id):
   place_json = {
@@ -48,17 +47,18 @@ def place_view(request, id):
             }
         )
   images = get_images(str(place_name))
-  for img in images:
-    place_json["images"].append(img["link"])
+  if len(images) > 0:
+    for img in images:
+      place_json["images"].append(img["link"])
 
   return JsonResponse(place_json)
 
 
-def get_images(keyword):
+def get_images(keyword, option=20, scale="all"):
   client_id = os.environ.get("NAVER_CLIENT_ID", "1w4UBQhhzX6BV8IMhq7t")
   client_secret = os.environ.get("NAVER_CLIENT_SECRET", "8_b5DV1kMO")
   encText = urllib.request.quote(keyword)
-  url = "https://openapi.naver.com/v1/search/image?query=" + encText + "&display=20"
+  url = "https://openapi.naver.com/v1/search/image?query=" + encText + f"&display={option}&sort=sim&filter={scale}"
   url_request = urllib.request.Request(url)
   url_request.add_header("X-Naver-Client-Id", client_id)
   url_request.add_header("X-Naver-Client-Secret", client_secret)
@@ -73,3 +73,26 @@ def get_images(keyword):
   else:
     print("Error Code:" + str(rescode))
     return
+
+@method_decorator(csrf_exempt, name="dispatch")
+def search_place_view(request):
+  places_id = request.GET.get("id")
+  places_keyword = request.GET.get("keyword")
+  places_id_l = places_id.split(',')
+  places_keyword_l = places_keyword.split(',')
+  
+  result_imgs = list()
+  link_list = list()
+  for pkl in places_keyword_l:
+    image = get_images(str(pkl), 1, "large")[0]
+    result_imgs.append(image)
+  
+  result_json = dict()
+  for img in result_imgs:
+    link = img["link"]
+    link_list.append(link)
+  for pid, l in zip(places_id_l, link_list):
+    result_json[pid] = l
+    
+  return JsonResponse(result_json)
+  
