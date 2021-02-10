@@ -1,7 +1,7 @@
 import { Component, PureComponent } from 'react'
 import { Column } from './Bar'
 import styled from 'styled-components'
-import { Row, Col, Empty, Spin } from 'antd'
+import { Row, Col, Empty, Spin, List } from 'antd'
 import SearchContext from 'context/Search'
 import { PrimaryText } from 'components/common/typography'
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined'
@@ -51,7 +51,11 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
     return (
       <SearchConsumer>
         {(provide) =>
-          provide.resultItem.length && ListRender(provide.resultItem)
+          provide.resultItem.length && (
+            <List loading={provide.loading}>
+              {ListRender(provide.resultItem)}
+            </List>
+          )
         }
       </SearchConsumer>
     )
