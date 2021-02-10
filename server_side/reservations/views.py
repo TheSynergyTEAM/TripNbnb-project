@@ -55,12 +55,12 @@ def reservation_check(request,id):
     room_type_db = place.reservation.filter(room_type=room_type)
 
     if room_type_db is None:   # 현재 방타입으로 예약된 방이 없다면(예약가능)
-        response.status_code = 204
+        return HttpResponse(status=204)
     else :  # 방타입과 일치하는 예약이 존재한다면
         # -----예약 가능한 조건들-----
         # 1. 체크인 : db_체크아웃 <= new_체크인
         # 2. 체크아웃 : db_체크인 >= new_체크아웃
-        date_db = place.reservation.filter(room_type=room_type_db, check_out__gte=check_in_date, check_in__lte=check_out_date)
+        date_db = place.reservation.filter(room_type=room_type, check_out__lte=check_in_date, check_in__gte=check_out_date)
         
         if date_db is None: # 예약내역 無, 예약 가능한 경우
             return HttpResponse(status=204)
