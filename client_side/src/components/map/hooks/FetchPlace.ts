@@ -2,6 +2,8 @@ import axios, { AxiosResponse } from 'axios'
 import MarkerContext from 'context/Marker'
 import { useEffect, useContext, useState } from 'react'
 
+type PlaceResultItem = daum.maps.services.PlacesSearchResultItem
+
 interface ReviewData {
   content: string
   created: string
@@ -25,28 +27,34 @@ interface PlaceData<T = Array<string>> {
   meta?: PlaceMeta
 }
 
-// 썸네일 테스트 함수
-export const fetchPlaceThumbnailDataTest = async (
-  placeId: string | number,
-  placeName: string
-): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    if (!placeId || !placeName) {
-      reject(new Error('아이디 값 혹은 장소 이름 누락'))
-    }
+interface PlaceThumbnail {
+  image: string
+  review: number
+  review_count: number
+}
 
-    // 1500ms 뒤 반환
-    setTimeout(() => {
-      resolve({
-        meta: {
-          rating: 3.5,
-          reviewCount: Math.floor(Math.random() * (10 + 2)) + 1
-        },
-        images:
-          'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.mk.co.kr%2Fnews%2Fculture%2Fview%2F2017%2F03%2F200812%2F&psig=AOvVaw3SaCyox-cg3LOpzat8aBQn&ust=1612951286693000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKDXq_bF3O4CFQAAAAAdAAAAABAD'
-      })
-    }, 1500)
-  })
+type PlaceThumbnailData = PlaceThumbnail & PlaceResultItem
+
+export const fetchPlaceThumbnailDataByResult = async (
+  result: daum.maps.services.PlacesSearchResult
+  // @ts-ignore
+): Promise<PlaceThumbnailData[]> => {
+  if (!result.length) {
+    throw new Error('no result')
+  }
+
+  try {
+    const ids = result.map((place) => place.id).join(',')
+    const keyword = result.map((place) => place.place_name).join(',')
+
+    const { data } = await axios.get(
+      `/places/image/?id=${ids}&keyword=${keyword}`
+    )
+
+    console.log(data)
+  } catch (error) {
+    throw error
+  }
 }
 
 export const fetchPlaceThumbnailData = async (

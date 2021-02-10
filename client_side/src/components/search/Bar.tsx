@@ -5,6 +5,7 @@ import { Component } from 'react'
 import styled from 'styled-components'
 import SearchContext from 'context/Search'
 import { SearchState } from 'pages/Search'
+import { fetchPlaceThumbnailDataByResult } from 'components/map/hooks/FetchPlace'
 
 type Place = daum.maps.services.Places
 
@@ -77,18 +78,20 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
 
     this.state.place.keywordSearch(
       this.state.inputValue,
-      (result, status, pagination) => {
+      async (result, status, pagination) => {
         if (status === daum.maps.services.Status.OK) {
+          await fetchPlaceThumbnailDataByResult(result)
+
           provide.setSearchResult([...result], this.state.inputValue)
           provide.setPagination(pagination)
+          provide.setLoading(false)
 
           this.setState({ isLoading: false })
         } else {
           // 검색 결과가 없을 때
           provide.setSearchResult([], this.state.inputValue)
+          provide.setLoading(false)
         }
-        // 검색 결과가 있든 없든 처리
-        provide.setLoading(false)
       }
     )
 
