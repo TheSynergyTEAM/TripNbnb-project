@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
+    "babel-plugin-import": "^1.13.3",
     "cors": "^2.8.5",
     "daum.maps.d.ts": "Musma/daum.maps.d.ts",
     "express": "^4.17.1",
