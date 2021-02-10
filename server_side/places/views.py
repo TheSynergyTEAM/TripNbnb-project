@@ -84,7 +84,10 @@ def search_place_view(request):
   result_imgs = list()
   link_list = list()
   for pkl in places_keyword_l:
-    image = get_images(str(pkl), 1, "large")[0]
+    # https://github.com/Tripandbnb/TripNbnb-project/issues/15
+    # image = get_images(str(pkl), 1, "large")[0]
+    # dummy image
+    image = { "link": "https://www.kagoshima-kankou.com/image.php?w=770&h=515&f=/db_img/cl_img/10244/D0251400458E4E3A7269065F2E4CD105.jpg" }
     result_imgs.append(image)
   
   result_json = dict()
