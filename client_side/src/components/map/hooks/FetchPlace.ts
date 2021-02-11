@@ -33,11 +33,10 @@ interface PlaceThumbnail {
   review_count: number
 }
 
-type PlaceThumbnailData = PlaceThumbnail & PlaceResultItem
+export type PlaceThumbnailData = PlaceThumbnail & PlaceResultItem
 
 export const fetchPlaceThumbnailDataByResult = async (
   result: daum.maps.services.PlacesSearchResult
-  // @ts-ignore
 ): Promise<PlaceThumbnailData[]> => {
   if (!result.length) {
     throw new Error('no result')
@@ -46,12 +45,26 @@ export const fetchPlaceThumbnailDataByResult = async (
   try {
     const ids = result.map((place) => place.id).join(',')
     const keyword = result.map((place) => place.place_name).join(',')
+    const places: PlaceThumbnailData[] = []
 
     const { data } = await axios.get(
       `/places/image/?id=${ids}&keyword=${keyword}`
     )
 
-    console.log(data)
+    for (const key in data) {
+      const target = result.find((place) => place.id === key)
+
+      if (target) {
+        places.push({
+          ...target,
+          image: data[key],
+          review: Math.floor(Math.random() * (5 + 1)) + 1,
+          review_count: Math.floor(Math.random() * (500 + 1)) + 1
+        })
+      }
+    }
+
+    return places
   } catch (error) {
     throw error
   }

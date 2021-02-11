@@ -80,9 +80,9 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
       this.state.inputValue,
       async (result, status, pagination) => {
         if (status === daum.maps.services.Status.OK) {
-          await fetchPlaceThumbnailDataByResult(result)
+          const places = await fetchPlaceThumbnailDataByResult(result)
 
-          provide.setSearchResult([...result], this.state.inputValue)
+          provide.setSearchResult([...places], this.state.inputValue)
           provide.setPagination(pagination)
           provide.setLoading(false)
 

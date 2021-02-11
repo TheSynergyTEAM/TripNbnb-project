@@ -6,6 +6,7 @@ import SearchContext from 'context/Search'
 import { PrimaryText } from 'components/common/typography'
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined'
 import ResultItem from './ResultItem'
+import { PlaceThumbnailData } from 'components/map/hooks/FetchPlace'
 
 const ResultContainer = styled.section`
   background-color: white;
@@ -42,8 +43,14 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
     this.setState({ ...this.state, itemLength: this.state.itemLength + 1 })
   }
 
+  shouldComponentUpdate(nextProps: any, nextState: ResultWrapperState) {
+    console.log(nextState)
+
+    return true
+  }
+
   render() {
-    const ListRender = (places: daum.maps.services.PlacesSearchResult) =>
+    const ListRender = (places: PlaceThumbnailData[]) =>
       places.map((place, i) => (
         <ResultItem place={place} load={this.increaseCount} key={place.id} />
       ))
@@ -52,7 +59,7 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
       <SearchConsumer>
         {(provide) =>
           provide.resultItem.length && (
-            <List loading={provide.loading}>
+            <List loading={provide.loading} itemLayout="vertical" size="large">
               {ListRender(provide.resultItem)}
             </List>
           )
