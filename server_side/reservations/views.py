@@ -1,6 +1,7 @@
 import os
 import json
 from datetime import datetime
+from django.utils.dateformat import DateFormat
 from django.http import JsonResponse, HttpResponse
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
@@ -58,10 +59,11 @@ def reservation_check(request,id):
         return HttpResponse(status=204)
     else :  # 방타입과 일치하는 예약이 존재한다면
         # -----예약 가능한 조건들-----
-        # 1. 체크인 : db_체크아웃 <= new_체크인
-        # 2. 체크아웃 : db_체크인 >= new_체크아웃
-        date_db = place.reservation.filter(room_type=room_type, check_out__lte=check_in_date, check_in__gte=check_out_date)
-        
+        # 1. 체크인 : db_체크아웃 <= new_체크인, db_체크인 >= 오늘날짜
+        # 2. 체크아웃 : db_체크인 >= new_체크아웃, db_체크아웃 > 오늘날짜
+        today = DateFormat(datetime.now()).format('Y-m-d')
+        date_db = place.reservation.filter(room_type=room_type, check_out__gte=check_in_date, check_in__lte=check_out_date).exclude(check_in__lt=today, check_out__lte=today)
+    
         if date_db is None: # 예약내역 無, 예약 가능한 경우
             return HttpResponse(status=204)
         else:   # 예약내역 有, 예약 불가능할 경우
@@ -71,7 +73,7 @@ def reservation_check(request,id):
 @method_decorator(csrf_exempt, name="dispatch")
 def reservation_confirm(request):
     """예약을 진행하기 위한 함수(전제 : 장소 정보 존재)"""
-    """인원체크, """
+    
     # get json data from client
     received_json_data = json.loads(request.body.decode("utf-8"))
 
@@ -85,10 +87,8 @@ def reservation_confirm(request):
 
     # room 정보
     room = received_json_data.get("room")
-    room_type = room.get("type")
-    price = received_json_data.get("price")
-    totalPrice = price.get("pay")
-    stay = price.get("stay")
+    room_type = room.get("name")
+    price = room.get("price")
     number_of_people = received_json_data.get("peopleCount")
     
     # 날짜 정보
@@ -100,14 +100,49 @@ def reservation_confirm(request):
     reservation = models.Reservation.objects.create(
         hotel=hotel,  # 숙박업소 정보
         guest=guest,  # 예약자 정보
-        price=totalPrice,  # 가격
+        price=price,  # 가격
         room_type=room_type,  # 방 종류
         check_in=check_in,  # 체크인 날짜
         check_out=check_out,  # 체크아웃 날짜
         number_of_people=number_of_people,  # 예약 인원
     )
 
-    response = HttpResponse()
-    response.status_code = 201
+    return HttpResponse(status=201)
 
-    return response
+
+@method_decorator(csrf_exempt, name="dispatch")
+def reservation_update(request, id):
+    """예약내역 수정"""
+    
+    reservation = models.Reservation.objects.get(pk=id)
+    received_json_data = json.loads(request.body.decode("utf-8"))
+
+    date = received_json_data.get("date")
+    check_in = date.get("checkIn")
+    check_out = date.get("checkOut")
+
+    room = received_json_data.get("room")
+    room_type = room.get("type")
+    price = received_json_data.get("price")
+
+    number_of_people = received_json_data.get("peopleCount")
+
+    reservation.update(
+        price=price,  # 가격
+        room_type=room_type,  # 방 종류
+        check_in=check_in,  # 체크인 날짜
+        check_out=check_out,  # 체크아웃 날짜
+        number_of_people=number_of_people,  # 예약 인원
+    )
+
+    return HttpResponse(status=201)
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+def reservation_cancel(request, id):
+    """예약 취소"""
+
+    reservation = models.Reservation.objects.get(pk=id)
+    reservation.delete()
+
+    return HttpResponse(status=200)

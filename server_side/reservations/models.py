@@ -31,7 +31,6 @@ class Reservation(models.Model):
     room_type = models.CharField(choices = ROOM_TYPE, max_length = 30)
     check_in = models.DateField()
     check_out = models.DateField()
-    is_reserved = models.BooleanField(default = False)
     number_of_people = models.PositiveIntegerField()
 
 #   def __str__(self):
