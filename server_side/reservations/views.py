@@ -73,13 +73,13 @@ def reservation_check(request,id):
 @method_decorator(csrf_exempt, name="dispatch")
 def reservation_confirm(request):
     """예약을 진행하기 위한 함수(전제 : 장소 정보 존재)"""
-    
+
     # get json data from client
     received_json_data = json.loads(request.body.decode("utf-8"))
 
     # place 정보
     hotel_pk = received_json_data.get("place").get("id")
-    hotel = place_models.Place.objects.get(pk=hotel_pk)
+    hotel = place_models.Place.objects.get(contentid=hotel_pk)
 
     # user 정보
     guest_pk = received_json_data.get("user").get("id")

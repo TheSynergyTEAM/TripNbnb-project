@@ -10,6 +10,5 @@ class ReservationSerializer(serializers.ModelSerializer):
             "price",
             "check_in",
             "check_out",
-            "is_reserved",
             "number_of_people",
         )
