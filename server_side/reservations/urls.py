@@ -4,8 +4,8 @@ from . import views
 app_name = "reservations"
 
 urlpatterns = [
-    path("place/<int:id>/", views.reservation_check, name = "check"),
+    path("place/<int:id>/", views.reservation_check, name = "select"),
     path("place/create/", views.reservation_confirm, name = "create"),
-#    path("place/<int:id>/create", views.reservation_check_test, name = "check")
-#    path("place/test/<int:id>/", views.reservation_check_test, name = "check")
+#    path("update/<int:id>/", views.reservation_update, name = "update")
+#    path("delete/<int:id>/", views.reservation_cancel, name = "delete")
 ]

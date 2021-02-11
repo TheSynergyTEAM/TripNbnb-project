@@ -12,6 +12,7 @@ from reviews import models as review_models
 from users import models as user_models
 from .serializers import PlaceSerializer
 from django.views.decorators.csrf import csrf_exempt
+from django.forms import URLField
 
 # Create your views here.
 
@@ -49,10 +50,18 @@ def place_view(request, id):
   images = get_images(str(place_name))
   if len(images) > 0:
     for img in images:
-      place_json["images"].append(img["link"])
-
+      img_link = img["link"]
+      if validate_url(img_link) == True:
+        place_json["images"].append(img["link"])
   return JsonResponse(place_json)
 
+def validate_url(url):
+    url_form_field = URLField()
+    try:
+        url = url_form_field.clean(url)
+    except ValidationError:
+        return False
+    return True
 
 def get_images(keyword, option=20, scale="all"):
   client_id = os.environ.get("NAVER_CLIENT_ID", "1w4UBQhhzX6BV8IMhq7t")
@@ -63,8 +72,8 @@ def get_images(keyword, option=20, scale="all"):
   url_request.add_header("X-Naver-Client-Id", client_id)
   url_request.add_header("X-Naver-Client-Secret", client_secret)
   response = urllib.request.urlopen(url_request)
-
   rescode = response.getcode()
+  print(f"resCode:{rescode}")
   if rescode == 200:
     response_body = response.read()
     received_json_data = json.loads(response_body.decode("utf-8"))
