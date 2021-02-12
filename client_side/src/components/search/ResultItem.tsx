@@ -1,4 +1,4 @@
-import { Image, List, Rate } from 'antd'
+import { Image, List, Rate, Skeleton } from 'antd'
 import type { PlaceThumbnailData } from 'components/map/hooks/FetchPlace'
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
@@ -13,6 +13,10 @@ interface ResultItemProps {
   load: Function
 }
 
+const FallbackImage = () => (
+  <Skeleton.Button active style={{ width: '160px', height: '160px' }} />
+)
+
 export default class ResultItem extends Component<
   ResultItemProps,
   ResultItemState
@@ -23,6 +27,16 @@ export default class ResultItem extends Component<
     this.state = {
       loaded: false,
       data: null
+    }
+  }
+
+  componentDidMount() {
+    const image = new window.Image()
+
+    image.src = this.props.place.image
+    image.onload = () => {
+      this.setState({ loaded: true })
+      this.props.load()
     }
   }
 
@@ -39,7 +53,15 @@ export default class ResultItem extends Component<
         <List.Item>
           <List.Item.Meta
             avatar={
-              <Image src={this.props.place.image} preview={false} width={160} />
+              this.state.loaded ? (
+                <Image
+                  src={this.props.place.image}
+                  preview={false}
+                  width={160}
+                />
+              ) : (
+                <FallbackImage />
+              )
             }
             title={this.props.place.place_name}
             description={

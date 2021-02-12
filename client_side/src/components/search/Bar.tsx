@@ -6,10 +6,11 @@ import styled from 'styled-components'
 import SearchContext from 'context/Search'
 import { SearchState } from 'pages/Search'
 import { fetchPlaceThumbnailDataByResult } from 'components/map/hooks/FetchPlace'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 
 type Place = daum.maps.services.Places
 
-type SearchBarProps = {
+type SearchBarState = {
   inputValue: string
   place: Place | null
   isPlace: boolean
@@ -36,7 +37,9 @@ export const Column = {
 
 const { Consumer: SearchConsumer } = SearchContext
 
-export default class SearchBar extends Component<{}, SearchBarProps> {
+class SearchBar extends Component<RouteComponentProps, SearchBarState> {
+  static contextType = SearchContext
+
   constructor(props: any) {
     super(props)
 
@@ -56,6 +59,27 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
         isPlace: true
       }))
     }
+
+    if (this.props.location.search) {
+      const { search } = this.props.location
+
+      if (search.includes('keyword')) {
+        const keyword = decodeURIComponent(search.split('keyword=')[1])
+
+        this.setState({ inputValue: keyword }, () => {
+          this.handleSearch(this.context)
+        })
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.setState({
+      inputValue: '',
+      place: null,
+      isPlace: false,
+      isLoading: false
+    })
   }
 
   handleInputChange = (v: string) => {
@@ -75,6 +99,11 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
     provide.setSearchResult([], this.state.inputValue)
     provide.setPagination(null)
     provide.setLoading(true)
+
+    this.props.history.push({
+      pathname: '/search',
+      search: `keyword=${this.state.inputValue}`
+    })
 
     this.state.place.keywordSearch(
       this.state.inputValue,
@@ -140,3 +169,5 @@ export default class SearchBar extends Component<{}, SearchBarProps> {
     )
   }
 }
+
+export default withRouter(SearchBar)

@@ -40,6 +40,10 @@ export default class SearchDetail extends Component<
     }
   }
 
+  componentWillUnmount() {
+    this.setState({ place: null })
+  }
+
   render() {
     return (
       <Row justify="center">
