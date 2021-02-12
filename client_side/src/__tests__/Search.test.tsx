@@ -2,15 +2,28 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import SearchContext from 'context/Search'
 import SearchBar from 'components/search/Bar'
 import SearchResult from 'components/search/Result'
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
+
+const mockProvider = {
+  loading: false,
+  pagination: null,
+  resultItem: [],
+  keyword: '',
+  setSearchResult: jest.fn(),
+  setLoading: jest.fn(),
+  setPagination: jest.fn()
+}
 
 describe('Basic rendering in Bar Components', () => {
   beforeEach(() =>
     render(
-      <SearchContext.Provider
-        value={{ resultItem: [], setSearchResult: jest.fn(), keyword: '' }}
-      >
-        <SearchBar />
-      </SearchContext.Provider>
+      <Router>
+        <Switch>
+          <SearchContext.Provider value={mockProvider}>
+            <Route component={SearchBar} />
+          </SearchContext.Provider>
+        </Switch>
+      </Router>
     )
   )
 
@@ -36,9 +49,7 @@ describe('Basic rendering in Bar Components', () => {
 describe('Basic rendering in List Components', () => {
   beforeEach(() =>
     render(
-      <SearchContext.Provider
-        value={{ resultItem: [], setSearchResult: jest.fn(), keyword: '' }}
-      >
+      <SearchContext.Provider value={mockProvider}>
         <SearchResult />
       </SearchContext.Provider>
     )
