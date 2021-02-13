@@ -33,7 +33,7 @@ interface PlaceThumbnail {
   review_count: number
 }
 
-export type PlaceThumbnailData = PlaceThumbnail & PlaceResultItem
+type PlaceThumbnailData = PlaceThumbnail & PlaceResultItem
 
 export const fetchPlaceThumbnailDataByResult = async (
   result: daum.maps.services.PlacesSearchResult
@@ -167,4 +167,4 @@ export const useFetchPlaceData = (): [
   return [placeData, reviews, setReviewsWrapper, images]
 }
 
-export type { ReviewData, PlaceData }
+export type { ReviewData, PlaceData, PlaceThumbnailData, PlaceResultItem }
