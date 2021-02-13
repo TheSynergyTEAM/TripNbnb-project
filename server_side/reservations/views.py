@@ -27,19 +27,19 @@ def reservation_check(request,id):
 
 
     received_json_data = json.loads(request.body.decode("utf-8"))
- #   place_id = request.POST.get("id")
     hotel = received_json_data.get("place")
+    hotel_id = hotel.get("id")
     hotel_address = hotel.get("address_name")
     hotel_mapx = hotel.get("x")
     hotel_mapy = hotel.get("y")
     hotel_name = hotel.get("place_name")
 
-    place = place_models.Place.objects.get(contentid=id)  # 전달되어 온 id와 일치하는 장소 객체 얻어오기
+    place = place_models.Place.objects.get(contentid=hotel_id)  # 전달되어 온 id와 일치하는 장소 객체 얻어오기
 
     if place is None:   # 장소 정보가 존재하지 않을 경우
         place = place_models.Place.objects.create(
             name=hotel_name,
-            contentid=id,
+            contentid=hotel_id,
             address=hotel_address,
             mapx=hotel_mapx,
             mapy=hotel_mapy,
@@ -57,17 +57,18 @@ def reservation_check(request,id):
 
     if room_type_db is None:   # 현재 방타입으로 예약된 방이 없다면(예약가능)
         return HttpResponse(status=204)
-    else :  # 방타입과 일치하는 예약이 존재한다면
-        # -----예약 가능한 조건들-----
-        # 1. 체크인 : db_체크아웃 <= new_체크인, db_체크인 >= 오늘날짜
-        # 2. 체크아웃 : db_체크인 >= new_체크아웃, db_체크아웃 > 오늘날짜
-        today = DateFormat(datetime.now()).format('Y-m-d')
-        date_db = place.reservation.filter(room_type=room_type, check_out__gte=check_in_date, check_in__lte=check_out_date).exclude(check_in__lt=today, check_out__lte=today)
     
-        if date_db is None: # 예약내역 無, 예약 가능한 경우
-            return HttpResponse(status=204)
-        else:   # 예약내역 有, 예약 불가능할 경우
-            return HttpResponse(status=403)
+    # 방타입과 일치하는 예약이 존재한다면
+    # -----예약 가능한 조건들-----
+    # 1. 체크인 : db_체크아웃 <= new_체크인, db_체크인 >= 오늘날짜
+    # 2. 체크아웃 : db_체크인 >= new_체크아웃, db_체크아웃 > 오늘날짜
+    today = DateFormat(datetime.now()).format('Y-m-d')
+    date_db = place.reservation.filter(room_type=room_type, check_out__gte=check_in_date, check_in__lte=check_out_date).exclude(check_in__lt=today, check_out__lte=today)
+    
+    if date_db is None: # 예약내역 無, 예약 가능한 경우
+        return HttpResponse(status=204)
+    else:   # 예약내역 有, 예약 불가능할 경우
+        return HttpResponse(status=403)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -85,16 +86,22 @@ def reservation_confirm(request):
     guest_pk = received_json_data.get("user").get("id")
     guest = user_models.User.objects.get(pk=guest_pk)
 
-    # room 정보
-    room = received_json_data.get("room")
-    room_type = room.get("name")
-    price = room.get("price")
-    number_of_people = received_json_data.get("peopleCount")
-    
     # 날짜 정보
     date = received_json_data.get("date")
     check_in = date.get("checkIn")
     check_out = date.get("checkOut")
+    stay_in = datetime.strptime(check_in, '%Y-%m-%d')
+    stay_out = datetime.strptime(check_out, '%Y-%m-%d')
+    stay = (stay_out-stay_in).days
+
+    # room 정보
+    room = received_json_data.get("room")
+    number_of_people = received_json_data.get("peopleCount")
+    room_limit = room.get("limit")
+    room_type = room.get("type")
+    room_price = room.get("price")
+    pay_per_people = (number_of_people-room_limit)*room_price if number_of_people > room_limit else 0
+    price = room_price*stay + pay_per_people
 
     # 예약내역 저장
     reservation = models.Reservation.objects.create(
