@@ -6,7 +6,7 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from . import models
 from users import models as user_models
 from places import models as place_models
@@ -24,8 +24,6 @@ class ReservationView(viewsets.ModelViewSet):
 @method_decorator(csrf_exempt, name="dispatch")
 def reservation_check(request,id):
     """예약상황을 확인하기 위한 함수"""
-
-
     received_json_data = json.loads(request.body.decode("utf-8"))
     hotel = received_json_data.get("place")
     hotel_id = hotel.get("id")
@@ -34,7 +32,7 @@ def reservation_check(request,id):
     hotel_mapy = hotel.get("y")
     hotel_name = hotel.get("place_name")
 
-    place = place_models.Place.objects.get(contentid=hotel_id)  # 전달되어 온 id와 일치하는 장소 객체 얻어오기
+    place = place_models.Place.objects.get_or_none(contentid=hotel_id)  # 전달되어 온 id와 일치하는 장소 객체 얻어오기
 
     if place is None:   # 장소 정보가 존재하지 않을 경우
         place = place_models.Place.objects.create(
@@ -46,29 +44,32 @@ def reservation_check(request,id):
         )
             
         return HttpResponse(status=204)
-
-    # new_체크인, new_체크아웃 날짜 저장
+        # 장소 정보 존재할 경우
+        # new_체크인, new_체크아웃 날짜 저장
     check_in_date = datetime.strptime(received_json_data.get("checkIn"), '%Y-%m-%d')
     check_out_date = datetime.strptime(received_json_data.get("checkOut"), '%Y-%m-%d')
 
     # 방타입 저장
     room_type = received_json_data.get("roomType")
+    #room_type = room.get("room")
     room_type_db = place.reservation.filter(room_type=room_type)
 
     if room_type_db is None:   # 현재 방타입으로 예약된 방이 없다면(예약가능)
         return HttpResponse(status=204)
+    else :
+        # 방타입과 일치하는 예약이 존재한다면
+        # -----예약 가능한 조건들-----
+        # 1. 체크인 : db_체크아웃 <= new_체크인, db_체크인 >= 오늘날짜
+        # 2. 체크아웃 : db_체크인 >= new_체크아웃, db_체크아웃 > 오늘날짜
+        today = DateFormat(datetime.now()).format('Y-m-d')
+        date_db = place.reservation.filter(room_type=room_type, check_out__gte=check_in_date, check_in__lte=check_out_date).exclude(check_in__lt=today, check_out__lte=today)
     
-    # 방타입과 일치하는 예약이 존재한다면
-    # -----예약 가능한 조건들-----
-    # 1. 체크인 : db_체크아웃 <= new_체크인, db_체크인 >= 오늘날짜
-    # 2. 체크아웃 : db_체크인 >= new_체크아웃, db_체크아웃 > 오늘날짜
-    today = DateFormat(datetime.now()).format('Y-m-d')
-    date_db = place.reservation.filter(room_type=room_type, check_out__gte=check_in_date, check_in__lte=check_out_date).exclude(check_in__lt=today, check_out__lte=today)
-    
-    if date_db is None: # 예약내역 無, 예약 가능한 경우
-        return HttpResponse(status=204)
-    else:   # 예약내역 有, 예약 불가능할 경우
-        return HttpResponse(status=403)
+        print(date_db)
+
+        if date_db is None: # 예약내역 無, 예약 가능한 경우
+            return HttpResponse(status=204)
+        else:   # 예약내역 有, 예약 불가능할 경우
+             return HttpResponse(status=409)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
