@@ -54,7 +54,8 @@ def reservation_check(request,id):
     #room_type = room.get("room")
     room_type_db = place.reservation.filter(room_type=room_type)
 
-    if room_type_db is None:   # 현재 방타입으로 예약된 방이 없다면(예약가능)
+    # if room_type_db is None:   # 현재 방타입으로 예약된 방이 없다면(예약가능)
+    if not len(room_type_db):
         return HttpResponse(status=204)
     else :
         # 방타입과 일치하는 예약이 존재한다면
