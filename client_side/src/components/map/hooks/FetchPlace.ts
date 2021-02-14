@@ -28,9 +28,9 @@ interface PlaceData<T = Array<string>> {
 }
 
 interface PlaceThumbnail {
-  image: string
-  review: number
-  review_count: number
+  place_image: string
+  place_rating: number
+  place_review_cnt: number
 }
 
 type PlaceThumbnailData = PlaceThumbnail & PlaceResultItem
@@ -47,8 +47,6 @@ export const fetchPlaceDataById = async (
     const placeData: AxiosResponse<PlaceData> = await axios.get(
       `/places/${placeId}?name=${placeName}/`
     )
-
-    console.log(placeData.data)
 
     return placeData.data
   } catch (error) {
@@ -75,12 +73,14 @@ export const fetchPlaceThumbnailDataByResult = async (
     for (const key in data) {
       const target = result.find((place) => place.id === key)
 
+      console.log(key)
+
       if (target) {
         places.push({
           ...target,
-          image: data[key],
-          review: Math.floor(Math.random() * (5 + 1)) + 1,
-          review_count: Math.floor(Math.random() * (500 + 1)) + 1
+          place_image: data[key].place_image,
+          place_review_cnt: data[key].place_review_cnt,
+          place_rating: data[key].place_rating
         })
       }
     }

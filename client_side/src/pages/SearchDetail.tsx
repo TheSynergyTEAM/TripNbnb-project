@@ -1,4 +1,5 @@
 import { Row, Col } from 'antd'
+import Reviews from 'components/map/detail/Reviews'
 import {
   PlaceThumbnailData,
   PlaceData,
@@ -55,6 +56,7 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
         <Container>
           <Provider value={{ ...placeState }}>
             <Header />
+            {placeState.customPlace && <Reviews reviews={[]} />}
           </Provider>
         </Container>
       </Col>
