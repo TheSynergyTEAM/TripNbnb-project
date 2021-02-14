@@ -104,7 +104,20 @@ def search_place_view(request):
     link = img["link"]
     link_list.append(link)
   for pid, l in zip(places_id_l, link_list):
-    result_json[pid] = l
+    place = models.Place.objects.get_or_none(contentid=pid)
+
+    if place is None:
+      result_json[pid] = {
+        "place_rating" : 0,
+        "place_review_cnt" : 0,
+        "place_image" : l
+      }
+    else:
+      result_json[pid] = {
+        "place_rating" : place.place_rating(),
+        "place_review_cnt" : place.review_cnt(),
+        "place_image" : l
+      }
     
   return JsonResponse(result_json)
   

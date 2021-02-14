@@ -45,3 +45,11 @@ class Place(core_models.TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def review_cnt(self):
+        return len(self.reviews_p.all())
+
+    def place_rating(self):
+        all_rating = sum([x.rating for x in self.reviews_p.all()])
+        print(type(all_rating))
+        return round((all_rating / self.review_cnt()), 2)
