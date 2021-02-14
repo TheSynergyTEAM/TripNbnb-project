@@ -56,7 +56,12 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
         <Container>
           <Provider value={{ ...placeState }}>
             <Header />
-            {placeState.customPlace && <Reviews reviews={[]} />}
+            {placeState.customPlace && placeState.place && (
+              <Reviews
+                reviews={placeState.customPlace.data}
+                place={placeState.place}
+              />
+            )}
           </Provider>
         </Container>
       </Col>

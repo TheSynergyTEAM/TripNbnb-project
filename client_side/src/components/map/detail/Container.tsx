@@ -36,7 +36,7 @@ const Container: React.FC<any> = () => {
 
   return (
     <StyledDetailWrapper direction="vertical">
-      {placeData ? (
+      {placeData && detailItem ? (
         <PlaceDataProvider updateCallback={updateCallback}>
           {images.length ? (
             <Thumbnails thumbnails={images.slice(0, 5)} />
@@ -44,7 +44,7 @@ const Container: React.FC<any> = () => {
           <Intro />
           {detailItem?.category_group_code === 'AD5' && <Reservation />}
           {images.length >= 5 && <Photos images={images.slice(5)} />}
-          <Reviews reviews={reviews} />
+          <Reviews reviews={reviews} place={detailItem} />
         </PlaceDataProvider>
       ) : (
         <FullLoading />

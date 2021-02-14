@@ -43,10 +43,6 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
     this.setState({ ...this.state, itemLength: this.state.itemLength + 1 })
   }
 
-  shouldComponentUpdate(nextProps: any, nextState: ResultWrapperState) {
-    return true
-  }
-
   render() {
     const ListRender = (places: PlaceThumbnailData[]) =>
       places.map((place, i) => (

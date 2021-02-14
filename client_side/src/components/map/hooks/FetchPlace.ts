@@ -48,6 +48,8 @@ export const fetchPlaceDataById = async (
       `/places/${placeId}?name=${placeName}/`
     )
 
+    placeData.data.data = addMetaReviews(placeData.data.data)
+
     return placeData.data
   } catch (error) {
     throw error
@@ -72,8 +74,6 @@ export const fetchPlaceThumbnailDataByResult = async (
 
     for (const key in data) {
       const target = result.find((place) => place.id === key)
-
-      console.log(key)
 
       if (target) {
         places.push({

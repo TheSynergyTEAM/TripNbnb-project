@@ -3,7 +3,7 @@ import ExtendTag from 'components/common/Tag'
 import { SecondaryText } from 'components/common/typography'
 import SearchDetailContext from 'context/SearchDetail'
 import { Component } from 'react'
-import PlaceCarousel from './Carousel'
+import PlaceCarousel from 'components/search/detail/Carousel'
 import RiseOutlined from '@ant-design/icons/RiseOutlined'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 

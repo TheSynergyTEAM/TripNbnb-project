@@ -13,6 +13,7 @@ import { deleteReivew, updateReview } from 'api/reviews'
 
 interface ReviewsComponentProps {
   reviews: Array<ReviewData>
+  place: daum.maps.services.PlacesSearchResultItem
 }
 
 function useReviewOwner(review: ReviewData) {
@@ -57,7 +58,7 @@ const ReviewAction: React.FC<{
   ) : null
 }
 
-const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
+const Reviews: React.FC<ReviewsComponentProps> = ({ reviews, place }) => {
   const [isSpread, setIsSpread] = useState(false)
   const [tabActive, setTabActive] = useState(0)
   const [editing, setEditing] = useState(false)
@@ -202,7 +203,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
       ) : (
         <SecondaryText>등록된 리뷰가 없습니다.</SecondaryText>
       )}
-      <ReviewsInput />
+      <ReviewsInput item={place} />
     </Section>
   )
 }
