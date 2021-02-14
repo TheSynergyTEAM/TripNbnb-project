@@ -1,4 +1,4 @@
-import { Row, Col } from 'antd'
+import { Row, Col, Skeleton } from 'antd'
 import Reviews from 'components/map/detail/Reviews'
 import {
   PlaceThumbnailData,
@@ -25,7 +25,79 @@ const Container = styled.section`
   background-color: white;
 `
 
+const SkeletonWrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+`
+
 const { Provider } = SearchDetailContext
+
+const Loading: React.FC = () => {
+  const skeletons = [
+    {
+      style: {
+        width: '15rem'
+      }
+    },
+    {
+      style: {
+        width: '8rem'
+      }
+    },
+    {
+      children: {
+        style: {
+          width: '5rem'
+        },
+        length: 4
+      }
+    },
+    {
+      style: {
+        width: '100%',
+        height: '15rem',
+        borderRadius: '5px'
+      }
+    },
+    {
+      style: {
+        width: '12rem'
+      }
+    },
+    {
+      style: {
+        width: '7rem'
+      }
+    }
+  ]
+
+  return (
+    <SkeletonWrap>
+      {skeletons.map((skeleton, i) =>
+        !skeleton.children ? (
+          <Skeleton.Input
+            active
+            key={i}
+            style={{ marginBottom: '10px', ...skeleton.style }}
+            size="small"
+          />
+        ) : (
+          <div style={{ marginBottom: '10px' }} key={i}>
+            {new Array(skeleton.children.length).fill(0).map((i, j) => (
+              <Skeleton.Input
+                active
+                key={j}
+                style={{ marginRight: '10px', ...skeleton.children.style }}
+                size="small"
+              />
+            ))}
+          </div>
+        )
+      )}
+    </SkeletonWrap>
+  )
+}
 
 const SearchDetail: React.FC<RouteComponentProps> = () => {
   const location = useLocation()
@@ -55,12 +127,16 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
       <Col {...Column}>
         <Container>
           <Provider value={{ ...placeState }}>
-            <Header />
-            {placeState.customPlace && placeState.place && (
-              <Reviews
-                reviews={placeState.customPlace.data}
-                place={placeState.place}
-              />
+            {placeState.customPlace && placeState.place ? (
+              <>
+                <Header />
+                <Reviews
+                  reviews={placeState.customPlace.data}
+                  place={placeState.place}
+                />
+              </>
+            ) : (
+              <Loading />
             )}
           </Provider>
         </Container>
