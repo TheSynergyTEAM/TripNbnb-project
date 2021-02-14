@@ -151,11 +151,13 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
         value[1].format('YYYY-MM-DD')
       )
         .then((result) => {
-          console.log(result)
+          setDisabled(false)
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          console.log(error)
+          setDisabled(true)
+        })
     } else {
-      console.log(detailItem, selectValue, value)
       setDisabled(true)
     }
 
@@ -169,6 +171,10 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
       return !(value.length < 2)
     }
   }, [value])
+
+  const checked = useCallback(() => {
+    return !settledDates() || disabled
+  }, [disabled, settledDates])
 
   const handleClose = () => {
     setPrice(null)
@@ -187,7 +193,7 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
       title={<ModalTitle name={detailItem?.place_name} />}
       footer={
         <Footer
-          disabled={!settledDates() && disabled}
+          disabled={checked()}
           date={{ checkIn: value?.[0], checkOut: value?.[1] }}
           peopleCount={peopleCount}
           room={selectValue}
@@ -224,6 +230,7 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
         )}
         {price && selectValue && (
           <PriceText
+            disabled={checked()}
             stay={price.stay}
             pay={price.pay}
             distance={value}

@@ -3,7 +3,6 @@ import {
   postReservation,
   Reservation,
   ReservationInformation
-  // postReservation
 } from 'components/map/hooks/reservation-hooks'
 import { useContext, useState } from 'react'
 import UserContext from 'context/User'
@@ -76,7 +75,7 @@ const Footer: React.FC<FooterProps> = ({
         loading={loading || checkLoading}
         onClick={handleReservation}
       >
-        예약하기
+        {disabled ? '예약불가' : '예약하기'}
       </RButton>
     </>
   )

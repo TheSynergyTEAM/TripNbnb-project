@@ -11,7 +11,7 @@ const StyledButton = styled(Button)`
 
 const RButton: React.FC<any> = (props) => (
   <StyledButton type="primary" shape="round" {...props} icon={<SendOutlined />}>
-    예약하기
+    {props.children || '예약하기'}
   </StyledButton>
 )
 
