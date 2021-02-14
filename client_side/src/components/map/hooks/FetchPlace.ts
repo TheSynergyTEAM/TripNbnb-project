@@ -22,7 +22,7 @@ interface PlaceMeta {
 }
 
 interface PlaceData<T = Array<string>> {
-  data: Array<ReviewData>
+  data: Array<ReviewData> | []
   images: T
   meta?: PlaceMeta
 }
@@ -34,6 +34,27 @@ interface PlaceThumbnail {
 }
 
 type PlaceThumbnailData = PlaceThumbnail & PlaceResultItem
+
+export const fetchPlaceDataById = async (
+  placeId: string | number,
+  placeName: string
+): Promise<PlaceData> => {
+  if (!placeId || !placeName) {
+    throw new Error('1')
+  }
+
+  try {
+    const placeData: AxiosResponse<PlaceData> = await axios.get(
+      `/places/${placeId}?name=${placeName}/`
+    )
+
+    console.log(placeData.data)
+
+    return placeData.data
+  } catch (error) {
+    throw error
+  }
+}
 
 export const fetchPlaceThumbnailDataByResult = async (
   result: daum.maps.services.PlacesSearchResult

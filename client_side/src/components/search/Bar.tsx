@@ -72,15 +72,14 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
       }
     }
   }
-
-  componentWillUnmount() {
-    this.setState({
-      inputValue: '',
-      place: null,
-      isPlace: false,
-      isLoading: false
-    })
-  }
+  // componentWillUnmount() {
+  //   this.setState({
+  //     inputValue: '',
+  //     place: null,
+  //     isPlace: false,
+  //     isLoading: false
+  //   })
+  // }
 
   handleInputChange = (v: string) => {
     this.setState((state) => ({

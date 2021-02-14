@@ -1,5 +1,9 @@
 import { Row, Col } from 'antd'
-import { PlaceThumbnailData, PlaceData } from 'components/map/hooks/FetchPlace'
+import {
+  PlaceThumbnailData,
+  PlaceData,
+  fetchPlaceDataById
+} from 'components/map/hooks/FetchPlace'
 import { Column } from 'components/search/Bar'
 import Header from 'components/search/detail/Header'
 import SearchDetailContext from 'context/SearchDetail'
@@ -10,7 +14,8 @@ import 'styles/search-page.css'
 
 export interface SearchDetailState {
   place: PlaceThumbnailData | null
-  customPlace: (PlaceThumbnailData & PlaceData) | null
+  customPlace: PlaceData<Array<string>> | null
+  // customPlace: (PlaceThumbnailData & PlaceData) | null
 }
 
 const Container = styled.section`
@@ -29,11 +34,20 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
   })
 
   useEffect(() => {
-    setPlaceState({
-      place: location.state as PlaceThumbnailData,
-      customPlace: null
-    })
-  }, [])
+    if (location.state) {
+      fetchPlaceDataById(
+        (location.state as any).id,
+        (location.state as any).place_name
+      )
+        .then((r) => {
+          setPlaceState({
+            place: location.state as PlaceThumbnailData,
+            customPlace: r
+          })
+        })
+        .catch((e) => console.error(e))
+    }
+  }, [location.state])
 
   return (
     <Row justify="center">
@@ -49,43 +63,3 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
 }
 
 export default withRouter(SearchDetail)
-
-// export default class SearchDetail extends Component<
-//   RouteComponentProps,
-//   SearchDetailState
-// > {
-//   constructor(props: RouteComponentProps) {
-//     super(props)
-
-//     this.state = {
-//       place: this.props.location.state as PlaceThumbnailData,
-//       customPlace: null
-//     }
-//   }
-
-//   componentDidMount() {
-//     if (!this.state.place) {
-//       console.log('not loaded place data')
-//     } else {
-//       console.log(this.state.place)
-//     }
-//   }
-
-//   componentWillUnmount() {
-//     this.setState({ place: null, customPlace: null })
-//   }
-
-//   render() {
-//     return (
-//       <Row justify="center">
-//         <Col {...Column}>
-//           <Container>
-//             <Provider value={{ ...this.state }}>
-//               <Header />
-//             </Provider>
-//           </Container>
-//         </Col>
-//       </Row>
-//     )
-//   }
-// }

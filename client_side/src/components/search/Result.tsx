@@ -44,8 +44,6 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
   }
 
   shouldComponentUpdate(nextProps: any, nextState: ResultWrapperState) {
-    console.log(nextState)
-
     return true
   }
 
