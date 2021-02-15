@@ -201,8 +201,8 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews, place }) => {
           )}
         </>
       ) : (
-          <SecondaryText>등록된 리뷰가 없습니다.</SecondaryText>
-        )}
+        <SecondaryText>등록된 리뷰가 없습니다.</SecondaryText>
+      )}
       <ReviewsInput item={place} />
     </Section>
   )

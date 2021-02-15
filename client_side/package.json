@@ -31,7 +31,8 @@
     "build": "craco build",
     "test": "craco test --testPathIgnorePatterns=__tests__/server",
     "eject": "react-scripts eject",
-    "test:server": "node src/__tests__/server/index.js"
+    "test:server": "node src/__tests__/server/index.js",
+    "lint": "prettier --check --write ./src/**/*"
   },
   "eslintConfig": {
     "extends": [

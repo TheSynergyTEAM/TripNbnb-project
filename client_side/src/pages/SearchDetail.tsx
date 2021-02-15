@@ -85,17 +85,17 @@ const Loading: React.FC = () => {
             size="small"
           />
         ) : (
-            <div style={{ marginBottom: '10px' }} key={i}>
-              {new Array(skeleton.children.length).fill(0).map((i, j) => (
-                <Skeleton.Input
-                  active
-                  key={j}
-                  style={{ marginRight: '10px', ...skeleton.children.style }}
-                  size="small"
-                />
-              ))}
-            </div>
-          )
+          <div style={{ marginBottom: '10px' }} key={i}>
+            {new Array(skeleton.children.length).fill(0).map((i, j) => (
+              <Skeleton.Input
+                active
+                key={j}
+                style={{ marginRight: '10px', ...skeleton.children.style }}
+                size="small"
+              />
+            ))}
+          </div>
+        )
       )}
     </SkeletonWrap>
   )
@@ -129,7 +129,7 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
       place: placeState.place,
       customPlace: {
         data: addMetaReviews(reviewData),
-        images: (placeState.customPlace?.images) as string[],
+        images: placeState.customPlace?.images as string[],
         meta: placeState.customPlace?.meta
       }
     })
@@ -143,7 +143,9 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
             {placeState.customPlace && placeState.place ? (
               <>
                 <Header />
-                <PlaceDataHandler.Provider value={{ updateCallback: updateReview }}>
+                <PlaceDataHandler.Provider
+                  value={{ updateCallback: updateReview }}
+                >
                   <Reviews
                     reviews={placeState.customPlace.data}
                     place={placeState.place}
@@ -151,8 +153,8 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
                 </PlaceDataHandler.Provider>
               </>
             ) : (
-                <Loading />
-              )}
+              <Loading />
+            )}
           </Provider>
         </Container>
       </Col>
