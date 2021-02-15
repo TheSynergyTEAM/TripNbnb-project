@@ -44,33 +44,32 @@ def reservation_check(request,id):
         )
             
         return HttpResponse(status=204)
-        # 장소 정보 존재할 경우
-        # new_체크인, new_체크아웃 날짜 저장
-    check_in_date = datetime.strptime(received_json_data.get("checkIn"), '%Y-%m-%d')
-    check_out_date = datetime.strptime(received_json_data.get("checkOut"), '%Y-%m-%d')
+
+    # 장소 정보 존재할 경우
+    # new_체크인, new_체크아웃 날짜 저장
+    new_check_in = datetime.strptime(received_json_data.get("checkIn"), '%Y-%m-%d')
+    new_check_out = datetime.strptime(received_json_data.get("checkOut"), '%Y-%m-%d')
 
     # 방타입 저장
     room_type = received_json_data.get("roomType")
-    #room_type = room.get("room")
     room_type_db = place.reservation.filter(room_type=room_type)
 
-    # if room_type_db is None:   # 현재 방타입으로 예약된 방이 없다면(예약가능)
-    if not len(room_type_db):
+    if not len(room_type_db):   # 현재 방타입으로 예약된 방이 없다면(예약가능)
         return HttpResponse(status=204)
-    else :
-        # 방타입과 일치하는 예약이 존재한다면
-        # -----예약 가능한 조건들-----
-        # 1. 체크인 : db_체크아웃 <= new_체크인, db_체크인 >= 오늘날짜
-        # 2. 체크아웃 : db_체크인 >= new_체크아웃, db_체크아웃 > 오늘날짜
-        today = DateFormat(datetime.now()).format('Y-m-d')
-        date_db = place.reservation.filter(room_type=room_type, check_out__gte=check_in_date, check_in__lte=check_out_date).exclude(check_in__lt=today, check_out__lte=today)
-    
-        print(date_db)
+    else :  # 방타입과 일치하는 예약이 존재한다면
 
-        if date_db is None: # 예약내역 無, 예약 가능한 경우
-            return HttpResponse(status=204)
-        else:   # 예약내역 有, 예약 불가능할 경우
-             return HttpResponse(status=409)
+        # -----예약 불가능한 조건들-----
+        # case_1 : db_체크인 <= new_체크인 < db_체크아웃
+        case_1 = place.reservation.filter(room_type=room_type, check_in__lte=new_check_in, check_out__gt=new_check_in).exists()
+        # case_2 : db_체크인 < new_체크아웃 <= db_체크아웃
+        case_2 = place.reservation.filter(room_type=room_type, check_in__lt=new_check_out, check_out__gte=new_check_out).exists()
+        # case_3 : new_체크인 <= db_체크인, db_체크아웃 <= new_체크아웃
+        case_3 = place.reservation.filter(room_type=room_type, check_in__gte=new_check_in, check_out__lte=new_check_out).exists()
+
+        if case_1 or case_2 or case_3:  # 예약내역 有, 예약 불가능할 경우
+            return HttpResponse(status=409)
+        else:   # 예약내역 無, 예약 가능한 경우
+             return HttpResponse(status=204)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
