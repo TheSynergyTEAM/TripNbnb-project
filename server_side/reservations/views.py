@@ -22,7 +22,7 @@ class ReservationView(viewsets.ModelViewSet):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-def reservation_check(request,id):
+def reservation_check(request):
     """예약상황을 확인하기 위한 함수"""
     received_json_data = json.loads(request.body.decode("utf-8"))
     hotel = received_json_data.get("place")
