@@ -14,7 +14,6 @@ import { useEffect, useState } from 'react'
 import { RouteComponentProps, useLocation, withRouter } from 'react-router-dom'
 import PlaceDataHandler from 'context/PlaceDataHandler'
 import styled from 'styled-components'
-import 'styles/search-page.css'
 
 export interface SearchDetailState {
   place: PlaceThumbnailData | null

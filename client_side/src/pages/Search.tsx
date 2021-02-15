@@ -4,7 +4,6 @@ import { Component } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import SearchContext from 'context/Search'
 import type { PlaceThumbnailData } from 'components/map/hooks/FetchPlace'
-import 'styles/search-page.css'
 
 type Pagination = daum.maps.Pagination
 
