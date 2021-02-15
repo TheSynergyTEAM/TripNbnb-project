@@ -6,6 +6,7 @@ import { Component } from 'react'
 import PlaceCarousel from 'components/search/detail/Carousel'
 import RiseOutlined from '@ant-design/icons/RiseOutlined'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
+import Reservation from 'components/map/detail/reservation/Container'
 
 const { Consumer } = SearchDetailContext
 
@@ -44,15 +45,19 @@ class SearchDetailHeader extends Component<RouteComponentProps, any> {
                     <ExtendTag key={category}>{category.trim()}</ExtendTag>
                   ))}
                 </Col>
-                <Col sm={2} lg={1}>
-                  <Tooltip title="지도에서 보기" placement="top" defaultVisible>
+                <Col xs={2} lg={1}>
+                  <Tooltip title="지도에서 보기" placement="top">
                     <Button
                       icon={<RiseOutlined />}
                       shape="circle"
                       type="default"
                       onClick={(e) => this.handleMoveMap(place)}
+                      style={{ marginBottom: '0.3rem' }}
                     />
                   </Tooltip>
+                  {place.category_group_code === 'AD5' && (
+                    <Reservation place={place} />
+                  )}
                 </Col>
               </Row>
               <PlaceCarousel effect="fade" autoplay autoplaySpeed={3000} />

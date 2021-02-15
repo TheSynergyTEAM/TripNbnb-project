@@ -42,7 +42,9 @@ const Container: React.FC<any> = () => {
             <Thumbnails thumbnails={images.slice(0, 5)} />
           ) : null}
           <Intro />
-          {detailItem?.category_group_code === 'AD5' && <Reservation />}
+          {detailItem?.category_group_code === 'AD5' && (
+            <Reservation place={detailItem} map />
+          )}
           {images.length >= 5 && <Photos images={images.slice(5)} />}
           <Reviews reviews={reviews} place={detailItem} />
         </PlaceDataProvider>
