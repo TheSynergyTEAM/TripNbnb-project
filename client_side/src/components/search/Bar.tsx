@@ -54,7 +54,6 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
   componentDidMount() {
     if (window.daum) {
       this.setState((state) => ({
-        ...state,
         place: new daum.maps.services.Places(),
         isPlace: true
       }))
@@ -72,18 +71,9 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
       }
     }
   }
-  // componentWillUnmount() {
-  //   this.setState({
-  //     inputValue: '',
-  //     place: null,
-  //     isPlace: false,
-  //     isLoading: false
-  //   })
-  // }
 
   handleInputChange = (v: string) => {
     this.setState((state) => ({
-      ...state,
       inputValue: v
     }))
   }

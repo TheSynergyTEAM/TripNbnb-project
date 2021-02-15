@@ -30,13 +30,13 @@ export default class Search extends Component<
     keyword: string
   ) => {
     this.setState((state) => {
-      return { ...state, resultItem: searchResultItem, keyword }
+      return { resultItem: searchResultItem, keyword }
     })
   }
 
   setPagination = (pagination: Pagination | null) => {
     this.setState((state) => {
-      return { ...state, pagination }
+      return { pagination }
     })
   }
 

@@ -36,11 +36,11 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
   }
 
   triggerOpen = () => {
-    this.setState((state) => ({ ...state, open: !state.open }))
+    this.setState((state) => ({ open: !state.open }))
   }
 
   increaseCount = () => {
-    this.setState({ ...this.state, itemLength: this.state.itemLength + 1 })
+    this.setState({ itemLength: this.state.itemLength + 1 })
   }
 
   render() {
