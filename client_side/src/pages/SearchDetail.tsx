@@ -3,13 +3,16 @@ import Reviews from 'components/map/detail/Reviews'
 import {
   PlaceThumbnailData,
   PlaceData,
-  fetchPlaceDataById
+  fetchPlaceDataById,
+  ReviewData,
+  addMetaReviews
 } from 'components/map/hooks/FetchPlace'
 import { Column } from 'components/search/Bar'
 import Header from 'components/search/detail/Header'
 import SearchDetailContext from 'context/SearchDetail'
 import { useEffect, useState } from 'react'
 import { RouteComponentProps, useLocation, withRouter } from 'react-router-dom'
+import PlaceDataHandler from 'context/PlaceDataHandler'
 import styled from 'styled-components'
 import 'styles/search-page.css'
 
@@ -83,17 +86,17 @@ const Loading: React.FC = () => {
             size="small"
           />
         ) : (
-          <div style={{ marginBottom: '10px' }} key={i}>
-            {new Array(skeleton.children.length).fill(0).map((i, j) => (
-              <Skeleton.Input
-                active
-                key={j}
-                style={{ marginRight: '10px', ...skeleton.children.style }}
-                size="small"
-              />
-            ))}
-          </div>
-        )
+            <div style={{ marginBottom: '10px' }} key={i}>
+              {new Array(skeleton.children.length).fill(0).map((i, j) => (
+                <Skeleton.Input
+                  active
+                  key={j}
+                  style={{ marginRight: '10px', ...skeleton.children.style }}
+                  size="small"
+                />
+              ))}
+            </div>
+          )
       )}
     </SkeletonWrap>
   )
@@ -122,6 +125,17 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
     }
   }, [location.state])
 
+  const updateReview = (reviewData: ReviewData[]) => {
+    setPlaceState({
+      place: placeState.place,
+      customPlace: {
+        data: addMetaReviews(reviewData),
+        images: (placeState.customPlace?.images) as string[],
+        meta: placeState.customPlace?.meta
+      }
+    })
+  }
+
   return (
     <Row justify="center">
       <Col {...Column}>
@@ -130,14 +144,16 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
             {placeState.customPlace && placeState.place ? (
               <>
                 <Header />
-                <Reviews
-                  reviews={placeState.customPlace.data}
-                  place={placeState.place}
-                />
+                <PlaceDataHandler.Provider value={{ updateCallback: updateReview }}>
+                  <Reviews
+                    reviews={placeState.customPlace.data}
+                    place={placeState.place}
+                  />
+                </PlaceDataHandler.Provider>
               </>
             ) : (
-              <Loading />
-            )}
+                <Loading />
+              )}
           </Provider>
         </Container>
       </Col>

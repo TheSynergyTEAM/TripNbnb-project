@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import Section from 'components/map/detail/common/Section'
 import { SecondaryText, Title } from 'components/common/typography'
 import { List, Modal, notification, Rate, Space, Typography } from 'antd'
@@ -65,7 +65,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews, place }) => {
   const { user } = useContext(UserContext)
   const isOverflow = reviews.length > 5
 
-  const slicedReviews = useCallback(() => {
+  const slicedReviews = useMemo(() => {
     switch (tabActive) {
       case 0:
         reviews.sort((a, b) => b.date - a.date)
@@ -145,7 +145,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews, place }) => {
         <>
           <ReviewsTabs active={tabActive} onChange={handleTabChange} />
           <List
-            dataSource={slicedReviews()}
+            dataSource={slicedReviews}
             itemLayout="vertical"
             renderItem={(review, index) => (
               <List.Item
@@ -201,8 +201,8 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews, place }) => {
           )}
         </>
       ) : (
-        <SecondaryText>등록된 리뷰가 없습니다.</SecondaryText>
-      )}
+          <SecondaryText>등록된 리뷰가 없습니다.</SecondaryText>
+        )}
       <ReviewsInput item={place} />
     </Section>
   )
