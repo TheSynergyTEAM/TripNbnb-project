@@ -31,6 +31,7 @@ const RButton: React.FC<any> = (props) =>
         shape="circle"
         icon={<SendOutlined />}
         onClick={props.onClick}
+        style={{ marginLeft: '5px' }}
       />
     </Tooltip>
   )

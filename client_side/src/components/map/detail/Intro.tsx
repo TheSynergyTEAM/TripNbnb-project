@@ -30,7 +30,7 @@ const Intro: React.FC = () => {
         <SecondaryText>{detailItem?.address_name}</SecondaryText>
       </IntroWrapper>
       <IntroRightWrapper>
-        <LikesPlace />
+        {detailItem && <LikesPlace place={detailItem} />}
       </IntroRightWrapper>
     </Container>
   )

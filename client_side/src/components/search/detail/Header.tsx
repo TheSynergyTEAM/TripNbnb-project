@@ -7,6 +7,7 @@ import PlaceCarousel from 'components/search/detail/Carousel'
 import RiseOutlined from '@ant-design/icons/RiseOutlined'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Reservation from 'components/map/detail/reservation/Container'
+import LikesPlace from 'components/map/detail/LikesPlace'
 
 const { Consumer } = SearchDetailContext
 
@@ -32,7 +33,7 @@ class SearchDetailHeader extends Component<RouteComponentProps, any> {
           place && (
             <>
               <Row justify="space-between">
-                <Col sm={22} lg={23}>
+                <Col span={20}>
                   <h2 style={{ fontWeight: 'bold', margin: 0 }}>
                     {place.place_name}
                   </h2>
@@ -45,19 +46,22 @@ class SearchDetailHeader extends Component<RouteComponentProps, any> {
                     <ExtendTag key={category}>{category.trim()}</ExtendTag>
                   ))}
                 </Col>
-                <Col xs={2} lg={1}>
-                  <Tooltip title="지도에서 보기" placement="top">
-                    <Button
-                      icon={<RiseOutlined />}
-                      shape="circle"
-                      type="default"
-                      onClick={(e) => this.handleMoveMap(place)}
-                      style={{ marginBottom: '0.3rem' }}
-                    />
-                  </Tooltip>
-                  {place.category_group_code === 'AD5' && (
-                    <Reservation place={place} />
-                  )}
+                <Col span={4}>
+                  <Row justify="end">
+                    <Tooltip title="지도에서 보기" placement="top">
+                      <Button
+                        icon={<RiseOutlined />}
+                        shape="circle"
+                        type="default"
+                        onClick={(e) => this.handleMoveMap(place)}
+                        style={{ marginBottom: '0.3rem' }}
+                      />
+                    </Tooltip>
+                    {place.category_group_code === 'AD5' && (
+                      <Reservation place={place} />
+                    )}
+                    <LikesPlace place={place} />
+                  </Row>
                 </Col>
               </Row>
               <PlaceCarousel effect="fade" autoplay autoplaySpeed={3000} />
