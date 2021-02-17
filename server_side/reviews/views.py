@@ -55,23 +55,25 @@ def write_review(request):
     all_review = models.Review.objects.all()
     
     all_review_json = {
-        "data" : [],
+        "data" : dict(),
     }
     for created_review in all_review:
         if created_review.place_id == place.id:
             review_user = user_models.User.objects.get(username=created_review.user)
-            all_review_json["data"].append(
-                {
+            print(f"review_user:{review_user}")
+            all_review_json["data"] = {
                     "username": str(created_review.user),
                     "user_id" : str(review_user.id),
-                    "user_profile": (review_user.profile_img.url),
                     "review_id" : str(created_review.id),
                     "review": str(created_review.review),
                     "rating": str(created_review.rating),
                     "created": str(created_review.created),
-                }
-            )
-    
+            }
+            try:
+                all_review_json["data"]["user_profile"] = review_user.profile_img.url
+            except ValueError as e:
+                all_review_json["data"]["user_profile"] = ""
+                pass
     return JsonResponse(all_review_json)
 
 @method_decorator(csrf_exempt, name="dispatch")

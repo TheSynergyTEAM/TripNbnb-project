@@ -27,6 +27,7 @@ def kakao_login(request):
   properties = received_json_data.get("properties")
   nickname = properties.get("nickname")
   profile_image = properties.get("profile_image")
+  print(profile_image)
   try:
     user = models.User.objects.get(pk=pk)
   except models.User.DoesNotExist:
@@ -62,10 +63,15 @@ def get_profile(request, pk):
   user_reviews = user.reviews_u.all()
   user_json = {
       "username": str(user.username),
-      "user_profile": (user.profile_img.url),
       "user_reviews": [],
       "user_biography": str(user.biography),
+      "user_profile" : None,
   }
+  try:
+    user_json["user_profile"]= (user.profile_img.url)
+  except ValueError as e:
+    pass
+  print("pin")
   for user_review in user_reviews:
     user_json["user_reviews"].append(
         {

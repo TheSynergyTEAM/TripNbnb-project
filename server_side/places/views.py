@@ -13,6 +13,8 @@ from users import models as user_models
 from .serializers import PlaceSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.forms import URLField
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -51,17 +53,21 @@ def place_view(request, id):
   if len(images) > 0:
     for img in images:
       img_link = img["link"]
-      if validate_url(img_link) == True:
+      validate = URLValidator()
+      try:
+        validate(img_link)
         place_json["images"].append(img["link"])
+      except ValidationError as e:
+        print(e)
   return JsonResponse(place_json)
 
-def validate_url(url):
-    url_form_field = URLField()
-    try:
-        url = url_form_field.clean(url)
-    except ValidationError:
-        return False
-    return True
+# def validate_url(url):
+#     url_form_field = URLField()
+#     try:
+#         url = url_form_field.clean(url)
+#     except ValidationError:
+#         return False
+#     return True
 
 def get_images(keyword, option=20, scale="all"):
   client_id = os.environ.get("NAVER_CLIENT_ID", "1w4UBQhhzX6BV8IMhq7t")
