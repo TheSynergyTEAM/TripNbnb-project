@@ -15,10 +15,15 @@ import { RouteComponentProps, useLocation, withRouter } from 'react-router-dom'
 import PlaceDataHandler from 'context/PlaceDataHandler'
 import styled from 'styled-components'
 
-export interface SearchDetailState {
+export type SearchDetailState = {
   place: PlaceThumbnailData | null
   customPlace: PlaceData<Array<string>> | null
+  originPlace: PlaceData<Array<string>> | null
   // customPlace: (PlaceThumbnailData & PlaceData) | null
+}
+
+export type SerachDetailAction = {
+  setPlaceList: (places: PlaceData<Array<string>>) => void
 }
 
 const Container = styled.section`
@@ -105,8 +110,18 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
   const location = useLocation()
   const [placeState, setPlaceState] = useState<SearchDetailState>({
     customPlace: null,
-    place: null
+    place: null,
+    originPlace: null
   })
+
+  const setPlaceList = (places: PlaceData<Array<string>>) => {
+    if (places.data.length) {
+      setPlaceState({
+        ...placeState,
+        customPlace: places
+      })
+    }
+  }
 
   useEffect(() => {
     if (location.state) {
@@ -117,7 +132,8 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
         .then((r) => {
           setPlaceState({
             place: location.state as PlaceThumbnailData,
-            customPlace: r
+            customPlace: r,
+            originPlace: JSON.parse(JSON.stringify(r))
           })
         })
         .catch((e) => console.error(e))
@@ -131,7 +147,8 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
         data: addMetaReviews(reviewData),
         images: placeState.customPlace?.images as string[],
         meta: placeState.customPlace?.meta
-      }
+      },
+      originPlace: placeState.originPlace
     })
   }
 
@@ -139,7 +156,7 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
     <Row justify="center">
       <Col {...Column}>
         <Container>
-          <Provider value={{ ...placeState }}>
+          <Provider value={{ ...placeState, setPlaceList }}>
             {placeState.customPlace && placeState.place ? (
               <>
                 <Header />

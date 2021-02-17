@@ -7,6 +7,7 @@ import SearchContext from 'context/Search'
 import { SearchState } from 'pages/Search'
 import { fetchPlaceThumbnailDataByResult } from 'components/map/hooks/FetchPlace'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
+import SortTab from './SortTab'
 
 type Place = daum.maps.services.Places
 
@@ -18,7 +19,7 @@ type SearchBarState = {
 }
 
 const StyledBar = styled.section`
-  padding: 1rem;
+  padding-top: 1rem;
   background-color: white;
   border-bottom: 1px solid #ddd;
   position: sticky;
@@ -154,6 +155,7 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
             </Row>
           </Col>
         </Row>
+        <SortTab />
       </StyledBar>
     )
   }
