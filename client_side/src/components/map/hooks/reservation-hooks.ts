@@ -34,7 +34,7 @@ export async function checkReservation(
   checkOut: string
 ) {
   try {
-    const { data } = await axios.post(`/reservations/place/${place.id}/`, {
+    const { data } = await axios.post(`/reservations/place/check/`, {
       place,
       roomType: room,
       checkIn,

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import SearchDetail from './SearchDetail'
 import Header from 'components/common/Header'
 import styled from 'styled-components'
-import { Spin } from 'antd';
+import { Spin } from 'antd'
 import LoadingIcon from '@ant-design/icons/LoadingOutlined'
 
 const SwitchWrapper = styled.section`
@@ -29,9 +29,11 @@ const Info = React.lazy(() => import('./Info'))
 const Search = React.lazy(() => import('./Search'))
 
 const GlobalLoading: React.FC = () => {
-  return <StyledGlobalLoading>
-    <Spin indicator={<LoadingIcon spin />} />
-  </StyledGlobalLoading>
+  return (
+    <StyledGlobalLoading>
+      <Spin indicator={<LoadingIcon spin />} />
+    </StyledGlobalLoading>
+  )
 }
 
 const RouteWrapper: React.FC = () => {

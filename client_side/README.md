@@ -19,6 +19,7 @@ npm start # start server on http://localhost:3000
 │   ├── __tests__
 │   │   ├── Filter.test.tsx
 │   │   ├── RequiredLogin.test.tsx
+│   │   ├── Search.test.tsx
 │   │   ├── UserContext.test.tsx
 │   │   └── server
 │   │       ├── config
@@ -35,6 +36,7 @@ npm start # start server on http://localhost:3000
 │   │   ├── common
 │   │   │   ├── GridContainer.tsx
 │   │   │   ├── Header.tsx
+│   │   │   ├── Tag.tsx
 │   │   │   ├── typography
 │   │   │   │   └── index.tsx
 │   │   │   └── user
@@ -76,6 +78,13 @@ npm start # start server on http://localhost:3000
 │   │   │       ├── Function.tsx
 │   │   │       ├── HighlightOverlay.tsx
 │   │   │       └── List.tsx
+│   │   ├── search
+│   │   │   ├── Bar.tsx
+│   │   │   ├── Result.tsx
+│   │   │   ├── ResultItem.tsx
+│   │   │   └── detail
+│   │   │       ├── Carousel.tsx
+│   │   │       └── Header.tsx
 │   │   └── user
 │   │       ├── Divider.tsx
 │   │       ├── Information.tsx
@@ -88,10 +97,12 @@ npm start # start server on http://localhost:3000
 │   │   ├── Map.ts
 │   │   ├── Marker.tsx
 │   │   ├── PlaceDataHandler.tsx
+│   │   ├── Search.ts
+│   │   ├── SearchDetail.ts
 │   │   └── User.ts
 │   ├── event
 │   │   ├── Login.tsx
-│   │   ├── MapCenter.ts
+│   │   ├── MapCenter.tsx
 │   │   ├── Marker.tsx
 │   │   └── TileLoaded.tsx
 │   ├── index.tsx
@@ -100,12 +111,15 @@ npm start # start server on http://localhost:3000
 │   │   ├── Main.tsx
 │   │   ├── Map.tsx
 │   │   ├── OAuth.tsx
+│   │   ├── Search.tsx
+│   │   ├── SearchDetail.tsx
 │   │   └── index.tsx
 │   ├── react-app-env.d.ts
 │   ├── reportWebVitals.ts
 │   ├── setupTests.ts
 │   ├── styles
-│   │   └── global.less
+│   │   ├── global.less
+│   │   └── search-page.css
 │   └── type.d.ts
 ├── tsconfig.json
 └── yarn.lock
@@ -150,3 +164,6 @@ CRA에서 reject 하지 않고 웹팩 설정을 수정하기 위해 `craco`를 �
 - `src/type.d.ts`
 
 외부 SDK를 사용해 동적으로 바인딩되는 객체들을 전역적으로 타이핑하기 위함. 혹은 너무 긴 인터페이스 명을 짧게 별칭으로 사용하기 위함.
+
+## TODO
+

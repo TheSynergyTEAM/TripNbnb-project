@@ -33,7 +33,7 @@ export default class ResultItem extends Component<
   componentDidMount() {
     const image = new window.Image()
 
-    image.src = this.props.place.image
+    image.src = this.props.place.place_image
     image.onload = () => {
       this.setState({ loaded: true })
       this.props.load()
@@ -55,7 +55,7 @@ export default class ResultItem extends Component<
             avatar={
               this.state.loaded ? (
                 <Image
-                  src={this.props.place.image}
+                  src={this.props.place.place_image}
                   preview={false}
                   width={160}
                 />
@@ -68,7 +68,7 @@ export default class ResultItem extends Component<
               <>
                 <div>{this.props.place.address_name}</div>
                 <div>
-                  <Rate value={this.props.place.review} disabled />
+                  <Rate value={this.props.place.place_rating} disabled />
                 </div>
               </>
             }

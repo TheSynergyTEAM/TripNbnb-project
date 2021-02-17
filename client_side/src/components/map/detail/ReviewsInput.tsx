@@ -2,7 +2,6 @@ import { useContext, useState } from 'react'
 import UserContext from 'context/User'
 import { Input, Button, notification, Rate } from 'antd'
 import { writeReview } from 'api/reviews'
-import MarkerContext from 'context/Marker'
 import styled from 'styled-components'
 import { purple } from '@ant-design/colors'
 import PlaceDataHandler from 'context/PlaceDataHandler'
@@ -28,8 +27,10 @@ const StyledRate = styled(Rate)`
   color: ${purple[4]};
 `
 
-const ReviewsInput: React.FC = () => {
-  const { detailItem } = useContext(MarkerContext)
+const ReviewsInput: React.FC<{
+  item: daum.maps.services.PlacesSearchResultItem
+}> = ({ item }) => {
+  const detailItem = item
   const { isLoggedIn, user } = useContext(UserContext)
   const placeDataHandler = useContext(PlaceDataHandler)
   const [value, setValue] = useState('')

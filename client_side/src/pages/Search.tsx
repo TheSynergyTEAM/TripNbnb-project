@@ -4,7 +4,6 @@ import { Component } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import SearchContext from 'context/Search'
 import type { PlaceThumbnailData } from 'components/map/hooks/FetchPlace'
-import 'styles/search-page.css'
 
 type Pagination = daum.maps.Pagination
 
@@ -30,13 +29,13 @@ export default class Search extends Component<
     keyword: string
   ) => {
     this.setState((state) => {
-      return { ...state, resultItem: searchResultItem, keyword }
+      return { resultItem: searchResultItem, keyword }
     })
   }
 
   setPagination = (pagination: Pagination | null) => {
     this.setState((state) => {
-      return { ...state, pagination }
+      return { pagination }
     })
   }
 

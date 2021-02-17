@@ -71,7 +71,6 @@ def get_profile(request, pk):
     user_json["user_profile"]= (user.profile_img.url)
   except ValueError as e:
     pass
-  print("pin")
   for user_review in user_reviews:
     user_json["user_reviews"].append(
         {
