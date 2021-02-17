@@ -1,18 +1,19 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
-import Section from './common/Section'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import Section from 'components/map/detail/common/Section'
 import { SecondaryText, Title } from 'components/common/typography'
 import { List, Modal, notification, Rate, Space, Typography } from 'antd'
 import Avatar from 'antd/lib/avatar/avatar'
 import styled from 'styled-components'
 import dayjs from 'api/date'
-import ReviewsTabs from './ReviewsTab'
-import ReviewsInput from './ReviewsInput'
+import ReviewsTabs from 'components/map/detail/ReviewsTab'
+import ReviewsInput from 'components/map/detail/ReviewsInput'
 import { ReviewData } from 'components/map/hooks/FetchPlace'
 import UserContext from 'context/User'
 import { deleteReivew, updateReview } from 'api/reviews'
 
 interface ReviewsComponentProps {
   reviews: Array<ReviewData>
+  place: daum.maps.services.PlacesSearchResultItem
 }
 
 function useReviewOwner(review: ReviewData) {
@@ -57,14 +58,14 @@ const ReviewAction: React.FC<{
   ) : null
 }
 
-const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
+const Reviews: React.FC<ReviewsComponentProps> = ({ reviews, place }) => {
   const [isSpread, setIsSpread] = useState(false)
   const [tabActive, setTabActive] = useState(0)
   const [editing, setEditing] = useState(false)
   const { user } = useContext(UserContext)
   const isOverflow = reviews.length > 5
 
-  const slicedReviews = useCallback(() => {
+  const slicedReviews = useMemo(() => {
     switch (tabActive) {
       case 0:
         reviews.sort((a, b) => b.date - a.date)
@@ -144,7 +145,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
         <>
           <ReviewsTabs active={tabActive} onChange={handleTabChange} />
           <List
-            dataSource={slicedReviews()}
+            dataSource={slicedReviews}
             itemLayout="vertical"
             renderItem={(review, index) => (
               <List.Item
@@ -202,7 +203,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews }) => {
       ) : (
         <SecondaryText>등록된 리뷰가 없습니다.</SecondaryText>
       )}
-      <ReviewsInput />
+      <ReviewsInput item={place} />
     </Section>
   )
 }

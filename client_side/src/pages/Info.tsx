@@ -16,7 +16,10 @@ const Info: React.FC<RouteComponentProps> = () => {
 
   return (
     <GridContainer>
-      <Space direction="vertical" style={{ display: 'flex' }}>
+      <Space
+        direction="vertical"
+        style={{ display: 'flex', backgroundColor: 'white', padding: '1rem' }}
+      >
         {loading ? (
           <UserLoading />
         ) : user ? (

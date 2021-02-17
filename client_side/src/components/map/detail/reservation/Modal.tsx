@@ -1,19 +1,19 @@
 import { Space, Modal, DatePicker, ConfigProvider, notification } from 'antd'
 import locale from 'antd/lib/locale/ko_KR'
 import { SecondaryText, Title } from 'components/common/typography'
-import MarkerContext from 'context/Marker'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import '../style/picker_panel.css'
+import 'components/map/detail/style/picker_panel.css'
 import moment, { Moment } from 'moment'
 import PriceText, { PriceInformation } from './Price'
-import Footer from './Footer'
-import Information from './Information'
+import Footer from 'components/map/detail/reservation/Footer'
+import Information from 'components/map/detail/reservation/Information'
 import { checkReservation } from 'components/map/hooks/reservation-hooks'
 
-interface ReservationModalProps {
+type ReservationModalProps = {
   active: boolean
   handle: Function
+  place: daum.maps.services.PlacesSearchResultItem
 }
 
 interface Room {
@@ -65,8 +65,7 @@ const defaultSelectOptions: Array<Room> = [
 ]
 
 const ReservationModal: React.FC<ReservationModalProps> = (props) => {
-  const { active, handle } = props
-  const { detailItem } = useContext(MarkerContext)
+  const { active, handle, place } = props
   const [price, setPrice] = useState<PriceInformation | null>(null)
   const [value, setValue] = useState<[Moment, Moment] | undefined>(undefined)
   const [peopleCount, setPeopleCount] = useState<number>(2)
@@ -140,11 +139,11 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
 
     setCheckLoading(true)
 
-    if (detailItem && value && value[0] && value[1]) {
+    if (place && value && value[0] && value[1]) {
       const room = selectValue || selectOptions[0]
 
       checkReservation(
-        detailItem,
+        place,
         // @ts-ignore
         room.type,
         value[0].format('YYYY-MM-DD'),
@@ -190,7 +189,7 @@ const ReservationModal: React.FC<ReservationModalProps> = (props) => {
     <StyledModal
       visible={active}
       onCancel={handleClose}
-      title={<ModalTitle name={detailItem?.place_name} />}
+      title={<ModalTitle name={place?.place_name} />}
       footer={
         <Footer
           disabled={checked()}

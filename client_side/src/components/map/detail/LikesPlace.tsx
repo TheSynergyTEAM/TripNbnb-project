@@ -2,12 +2,17 @@ import { Button } from 'antd'
 import { HeartFilled, HeartOutlined } from '@ant-design/icons'
 import { useContext, useEffect, useState } from 'react'
 import UserContext from 'context/User'
-import MarkerContext from 'context/Marker'
 import { fetchPlaceLists, pushPlaceLists } from 'api/user'
 
-const LikesPlace: React.FC = () => {
+type LikesPlaceProps = {
+  place: daum.maps.services.PlacesSearchResultItem
+  map?: boolean
+}
+
+const LikesPlace: React.FC<LikesPlaceProps> = ({ place, map }) => {
+  const detailItem = place
+  const onMap = map || false
   const { user, isLoggedIn, setPlaceLists } = useContext(UserContext)
-  const { detailItem } = useContext(MarkerContext)
   const [loading, setLoading] = useState<boolean>(true)
   const [disabled, setDisabled] = useState<boolean>(false)
   const [heart, setHeart] = useState<boolean>(false)
@@ -38,12 +43,13 @@ const LikesPlace: React.FC = () => {
     }
 
     setLoading(false)
+    setDisabled(false)
   }
 
   useEffect(() => {
     placeLists()
     // eslint-disable-next-line
-  }, [])
+  }, [isLoggedIn])
 
   const handleClick = async () => {
     if (heart || !detailItem || !user) {
@@ -74,6 +80,7 @@ const LikesPlace: React.FC = () => {
         heart ? <HeartFilled style={{ color: 'white' }} /> : <HeartOutlined />
       }
       onClick={handleClick}
+      style={{ marginLeft: !onMap ? '5px' : '' }}
     />
   )
 }

@@ -32,7 +32,7 @@ def list_view(request, pk):
             if not o:
                 photos = [
                     image["link"]
-                    for image in place_views.get_images(str(place.name), limit=1)
+                    for image in place_views.get_images(str(place.name), option=1)
                 ]
             user_list_json.get("places").append({
                 "id": place.contentid,
