@@ -38,17 +38,21 @@ def place_view(request, id):
       reviews = place.reviews_p.all() 
       for review in reviews:
         review_user = user_models.User.objects.get(username=review.user)
-        place_json["data"].append(
-            {
-                "username": str(review.user),
-                "user_id" : str(review_user.id),
-                "user_profile": (review_user.profile_img.url),
-                "review_id": review.id,
-                "review": str(review.review),
-                "rating": str(review.rating),
-                "created": str(review.created),
-            }
-        )
+        place_info = {
+          "username": str(review.user),
+          "user_id" : str(review_user.id),
+          "user_profile": (review_user.profile_img.url),
+          "review_id": review.id,
+          "review": str(review.review),
+          "rating": str(review.rating),
+          "created": str(review.created),
+        }
+        try:
+          place_info["user_profile"] = review_user.profile_img.url
+        except ValueError as e:
+          place_info["user_profile"] = ""
+          pass
+        place_json["data"].append(place_info)
   images = get_images(str(place_name))
   if len(images) > 0:
     for img in images:
