@@ -66,6 +66,7 @@ def get_profile(request, pk):
       "user_reviews": [],
       "user_biography": str(user.biography),
       "user_profile" : None,
+      "user_reservation" : []
   }
   try:
     user_json["user_profile"]= (user.profile_img.url)
@@ -78,5 +79,20 @@ def get_profile(request, pk):
             "review": str(user_review.review),
         }
     )
+  user_reservations = user.reservation.all()
+  for user_review in user_reservations:
+    reservation_info = {
+      "place" : user_review.hotel.name,
+      "place_type" : user_review.room_type,
+      "check_in" : "",
+      "check_out" : "",
+      "price" : user_review.price,
+    }
+    check_in_d = user_review.check_in.strftime("%Y-%m-%d")
+    check_out_d = user_review.check_out.strftime("%Y-%m-%d")
+    reservation_info["check_in"] += check_in_d
+    reservation_info["check_out"] += check_out_d
+    user_json["user_reservation"].append(reservation_info)
+  
   print(user_json)
   return JsonResponse(user_json)
