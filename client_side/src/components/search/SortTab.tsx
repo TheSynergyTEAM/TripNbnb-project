@@ -59,12 +59,12 @@ const SortTab: React.FC = () => {
   const handleTabChange = (e: React.SyntheticEvent, item: FilterItem) => {
     if (item.active) return
 
-    const noActives = filter.map(d => {
+    const noActives = filter.map((d) => {
       d.active = false
       return d
     })
 
-    const target = filter.find(d => d === item) as FilterItem
+    const target = filter.find((d) => d === item) as FilterItem
     target.active = true
 
     setCurrentFilter(target)
@@ -79,7 +79,9 @@ const SortTab: React.FC = () => {
     if (currentFilter.action === 'ALL') {
       setSortedResultItem(resultItem)
     } else {
-      const filter = resultItem.filter(item => item.category_group_code === currentFilter.action)
+      const filter = resultItem.filter(
+        (item) => item.category_group_code === currentFilter.action
+      )
       setSortedResultItem(filter)
     }
     // eslint-disable-next-line
@@ -93,7 +95,7 @@ const SortTab: React.FC = () => {
             <StyledTab
               key={item.action}
               className={item.active ? 'active' : ''}
-              onClick={e => handleTabChange(e, item)}
+              onClick={(e) => handleTabChange(e, item)}
             >
               {item.name}
             </StyledTab>
