@@ -8,8 +8,10 @@ const mockProvider = {
   loading: false,
   pagination: null,
   resultItem: [],
+  sortedResultItem: [],
   keyword: '',
   setSearchResult: jest.fn(),
+  setSortedResultItem: jest.fn(),
   setLoading: jest.fn(),
   setPagination: jest.fn()
 }
