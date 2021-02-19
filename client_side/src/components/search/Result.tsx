@@ -1,4 +1,4 @@
-import { Component, PureComponent } from 'react'
+import { Component, PureComponent, useContext } from 'react'
 import { Column } from './Bar'
 import styled from 'styled-components'
 import { Row, Col, Empty, Spin, List } from 'antd'
@@ -7,6 +7,7 @@ import { PrimaryText } from 'components/common/typography'
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined'
 import ResultItem from './ResultItem'
 import { PlaceThumbnailData } from 'components/map/hooks/FetchPlace'
+import LoadMore from './LoadMore'
 
 const ResultContainer = styled.section`
   background-color: white;
@@ -99,34 +100,34 @@ class NoResult extends Component {
     )
   }
 }
-export default class Result extends Component {
-  render() {
-    return (
-      <Row justify="center" gutter={10}>
-        <Col {...Column}>
-          <ResultContainer>
-            <SearchConsumer>
-              {(provide) =>
-                provide.sortedResultItem.length ? (
-                  <>
-                    <ResultHeader>
-                      <PrimaryText style={{ fontWeight: 'bold' }}>
-                        {provide.keyword}
-                      </PrimaryText>
-                      에 대한 검색 결과
-                    </ResultHeader>
-                    <ResultWrapper />
-                  </>
-                ) : provide.loading ? (
-                  <LoadingSpin />
-                ) : (
-                  <NoResult />
-                )
-              }
-            </SearchConsumer>
-          </ResultContainer>
-        </Col>
-      </Row>
-    )
-  }
+
+const Result: React.FC = () => {
+  const { sortedResultItem, keyword, loading } = useContext(SearchContext)
+
+  return (
+    <Row justify="center" gutter={10}>
+      <Col {...Column}>
+        <ResultContainer>
+          {sortedResultItem.length ? (
+            <>
+              <ResultHeader>
+                <PrimaryText style={{ fontWeight: 'bold' }}>
+                  {keyword}
+                </PrimaryText>
+                에 대한 검색 결과
+              </ResultHeader>
+              <ResultWrapper />
+              <LoadMore />
+            </>
+          ) : loading ? (
+            <LoadingSpin />
+          ) : (
+            <NoResult />
+          )}
+        </ResultContainer>
+      </Col>
+    </Row>
+  )
 }
+
+export default Result
