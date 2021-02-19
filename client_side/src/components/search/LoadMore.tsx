@@ -1,5 +1,5 @@
-import { useContext } from 'react'
-import SearchContext from 'context/Search'
+// import { useContext } from 'react'
+// import SearchContext from 'context/Search'
 import { Button } from 'antd'
 import DownOutlined from '@ant-design/icons/DownOutlined'
 import styled from 'styled-components'
@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 const LoadMore: React.FC = () => {
-  const { pagination, setPagination } = useContext(SearchContext)
+  // const { pagination, setPagination } = useContext(SearchContext)
 
   return (
     <Container>
