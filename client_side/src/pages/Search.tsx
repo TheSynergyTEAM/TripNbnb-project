@@ -9,10 +9,12 @@ type Pagination = daum.maps.Pagination
 
 export type SearchState = {
   resultItem: Array<PlaceThumbnailData> | []
+  sortedResultItem: Array<PlaceThumbnailData>
   keyword: string
   pagination: Pagination | null
   loading: boolean
   setSearchResult: (t: PlaceThumbnailData[] | [], k: string) => void
+  setSortedResultItem: (t: PlaceThumbnailData[]) => void
   setPagination: (pagination: Pagination | null) => void
   setLoading: (s: boolean) => void
 }
@@ -33,6 +35,10 @@ export default class Search extends Component<
     })
   }
 
+  setSortedResultItem = (resultItem: PlaceThumbnailData[]) => {
+    this.setState((state) => ({ ...state, sortedResultItem: resultItem }))
+  }
+
   setPagination = (pagination: Pagination | null) => {
     this.setState((state) => {
       return { pagination }
@@ -43,10 +49,12 @@ export default class Search extends Component<
 
   state: SearchState = {
     resultItem: [],
+    sortedResultItem: [],
     keyword: '',
     pagination: null,
     loading: false,
     setSearchResult: this.setSearchResult,
+    setSortedResultItem: this.setSortedResultItem,
     setPagination: this.setPagination,
     setLoading: this.setLoading
   }

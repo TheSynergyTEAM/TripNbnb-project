@@ -18,12 +18,6 @@ import styled from 'styled-components'
 export type SearchDetailState = {
   place: PlaceThumbnailData | null
   customPlace: PlaceData<Array<string>> | null
-  originPlace: PlaceData<Array<string>> | null
-  // customPlace: (PlaceThumbnailData & PlaceData) | null
-}
-
-export type SerachDetailAction = {
-  setPlaceList: (places: PlaceData<Array<string>>) => void
 }
 
 const Container = styled.section`
@@ -110,18 +104,8 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
   const location = useLocation()
   const [placeState, setPlaceState] = useState<SearchDetailState>({
     customPlace: null,
-    place: null,
-    originPlace: null
+    place: null
   })
-
-  const setPlaceList = (places: PlaceData<Array<string>>) => {
-    if (places.data.length) {
-      setPlaceState({
-        ...placeState,
-        customPlace: places
-      })
-    }
-  }
 
   useEffect(() => {
     if (location.state) {
@@ -132,8 +116,7 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
         .then((r) => {
           setPlaceState({
             place: location.state as PlaceThumbnailData,
-            customPlace: r,
-            originPlace: JSON.parse(JSON.stringify(r))
+            customPlace: r
           })
         })
         .catch((e) => console.error(e))
@@ -147,8 +130,7 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
         data: addMetaReviews(reviewData),
         images: placeState.customPlace?.images as string[],
         meta: placeState.customPlace?.meta
-      },
-      originPlace: placeState.originPlace
+      }
     })
   }
 
@@ -156,7 +138,7 @@ const SearchDetail: React.FC<RouteComponentProps> = () => {
     <Row justify="center">
       <Col {...Column}>
         <Container>
-          <Provider value={{ ...placeState, setPlaceList }}>
+          <Provider value={{ ...placeState }}>
             {placeState.customPlace && placeState.place ? (
               <>
                 <Header />

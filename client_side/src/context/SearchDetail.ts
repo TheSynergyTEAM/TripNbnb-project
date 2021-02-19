@@ -1,13 +1,11 @@
 import { createContext } from 'react'
-import type { SearchDetailState, SerachDetailAction } from 'pages/SearchDetail'
+import type { SearchDetailState } from 'pages/SearchDetail'
 
 const SearchDetailContext = createContext<
-  SearchDetailState & SerachDetailAction
+  SearchDetailState
 >({
   place: null,
-  customPlace: null,
-  originPlace: null,
-  setPlaceList: (a) => {}
+  customPlace: null
 })
 
 export default SearchDetailContext

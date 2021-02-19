@@ -52,9 +52,9 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
     return (
       <SearchConsumer>
         {(provide) =>
-          provide.resultItem.length && (
+          provide.sortedResultItem.length && (
             <List loading={provide.loading} itemLayout="vertical" size="large">
-              {ListRender(provide.resultItem)}
+              {ListRender(provide.sortedResultItem)}
             </List>
           )
         }
@@ -107,7 +107,7 @@ export default class Result extends Component {
           <ResultContainer>
             <SearchConsumer>
               {(provide) =>
-                provide.resultItem.length ? (
+                provide.sortedResultItem.length ? (
                   <>
                     <ResultHeader>
                       <PrimaryText style={{ fontWeight: 'bold' }}>

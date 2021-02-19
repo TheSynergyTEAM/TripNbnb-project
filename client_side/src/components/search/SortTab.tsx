@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd'
 import { Column } from 'components/search/Bar'
-import SearchDetailContext from 'context/SearchDetail'
-import { useContext, useState } from 'react'
+import SearchContext from 'context/Search'
+import { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { purple } from '@ant-design/colors'
 
@@ -52,12 +52,38 @@ const filtering: FilterItem[] = [
 ]
 
 const SortTab: React.FC = () => {
-  const { customPlace } = useContext(SearchDetailContext)
+  const { resultItem, setSortedResultItem } = useContext(SearchContext)
   const [filter, setFilter] = useState<FilterItem[]>(filtering)
+  const [currentFilter, setCurrentFilter] = useState<FilterItem>(filter[0])
 
-  const handleTabChange = (e: React.SyntheticEvent) => {
-    console.log(e)
+  const handleTabChange = (e: React.SyntheticEvent, item: FilterItem) => {
+    if (item.active) return
+
+    const noActives = filter.map(d => {
+      d.active = false
+      return d
+    })
+
+    const target = filter.find(d => d === item) as FilterItem
+    target.active = true
+
+    setCurrentFilter(target)
+    setFilter(noActives)
   }
+
+  useEffect(() => {
+    if (!resultItem.length) {
+      return
+    }
+
+    if (currentFilter.action === 'ALL') {
+      setSortedResultItem(resultItem)
+    } else {
+      const filter = resultItem.filter(item => item.category_group_code === currentFilter.action)
+      setSortedResultItem(filter)
+    }
+    // eslint-disable-next-line
+  }, [currentFilter])
 
   return (
     <Row justify="center">
@@ -67,7 +93,7 @@ const SortTab: React.FC = () => {
             <StyledTab
               key={item.action}
               className={item.active ? 'active' : ''}
-              onClick={handleTabChange}
+              onClick={e => handleTabChange(e, item)}
             >
               {item.name}
             </StyledTab>

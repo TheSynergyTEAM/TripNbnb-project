@@ -87,6 +87,7 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
     this.setState({ isLoading: true })
 
     provide.setSearchResult([], this.state.inputValue)
+    provide.setSortedResultItem([])
     provide.setPagination(null)
     provide.setLoading(true)
 
@@ -102,6 +103,7 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
           const places = await fetchPlaceThumbnailDataByResult(result)
 
           provide.setSearchResult([...places], this.state.inputValue)
+          provide.setSortedResultItem([...places])
           provide.setPagination(pagination)
           provide.setLoading(false)
 
@@ -109,6 +111,7 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
         } else {
           // 검색 결과가 없을 때
           provide.setSearchResult([], this.state.inputValue)
+          provide.setSortedResultItem([])
           provide.setLoading(false)
         }
       }
