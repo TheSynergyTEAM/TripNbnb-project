@@ -1,23 +1,25 @@
-import { Divider as AntDivider } from 'antd'
 import styled from 'styled-components'
 
-interface DividerProps {
+type DividerProps = {
   title: string | React.ReactNode
 }
 
 const StyledDivider = styled.div`
-  margin: 5rem 0;
+  /* 컨텐츠 묶음끼리의 간격 */
+  margin-bottom: 5rem;
 `
 
-const StyledAntDivider = styled(AntDivider)`
-  font-size: 1.25rem !important;
-  border-top-color: rgba(0, 0, 0, 0.15) !important;
+const StyledTitle = styled.div`
+  /* 제목과 컨텐츠 간격 */
+  margin-bottom: 1.5rem;
 `
 
 const Divider: React.FC<DividerProps> = ({ title, children }) => {
   return (
     <StyledDivider>
-      <StyledAntDivider plain>{title}</StyledAntDivider>
+      <StyledTitle>
+        <h2>{title}</h2>
+      </StyledTitle>
       {children}
     </StyledDivider>
   )

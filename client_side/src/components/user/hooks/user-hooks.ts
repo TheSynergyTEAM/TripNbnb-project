@@ -2,9 +2,9 @@ import { fetchUserById, fetchPlaceLists } from 'api/user'
 import { PlaceList } from 'context/User'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import type { UserProfileContext } from 'context/UserProfile'
+import type { UserProfileContextType } from 'context/UserProfile'
 
-type ReturnUserProfile = UserProfileContext | null
+type ReturnUserProfile = UserProfileContextType | null
 
 export function useFetchUser(): [ReturnUserProfile, boolean] {
   const { id } = useParams<{ id: string }>()

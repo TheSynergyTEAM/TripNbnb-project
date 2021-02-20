@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { PlaceList } from 'context/User'
-import { UserProfileContext } from 'context/UserProfile'
+import { UserProfileContextType } from 'context/UserProfile'
 
 export async function fetchUserById(
   id: string | number
-): Promise<UserProfileContext | null> {
+): Promise<UserProfileContextType | null> {
   try {
     const { data: user } = await axios.get(`/users/${id}`)
     console.log(user)

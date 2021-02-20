@@ -26,7 +26,7 @@ export type UserReview = {
   review: string
 }
 
-export type UserProfileContext = {
+export type UserProfileContextType = {
   user_biography: string
   user_profile: string // url
   user_reservation: UserReservation[] | []
@@ -35,7 +35,7 @@ export type UserProfileContext = {
   loading: boolean
 }
 
-export const initialContext: UserProfileContext = {
+export const initialContext: UserProfileContextType = {
   user_biography: '',
   user_profile: '',
   user_reservation: [],
@@ -44,8 +44,6 @@ export const initialContext: UserProfileContext = {
   loading: true
 }
 
-const userProfileContext = createContext<UserProfileContext>(
-  initialContext
-)
+const UserProfileContext = createContext<UserProfileContextType>(initialContext)
 
-export default userProfileContext
+export default UserProfileContext

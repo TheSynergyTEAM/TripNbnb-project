@@ -1,34 +1,32 @@
 import { Avatar } from 'antd'
-import { PrimaryText } from 'components/common/typography'
+import UserProfileContext from 'context/UserProfile'
+import { useContext } from 'react'
 import styled from 'styled-components'
 
-interface UserInformationProps {
-  profile: string
-  name: string
-}
-
 const StyledInformationWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin: 0 auto;
+  text-align: center;
+  position: relative;
+
+  @media screen and (min-width: 720px) {
+    position: sticky;
+    top: 5rem;
+  }
 `
 
 const StyledTitle = styled.div`
-  font-size: 1.2rem;
-  margin-left: 0.8rem;
+  margin-top: 1rem;
 `
 
-const UserInformation: React.FC<UserInformationProps> = ({ profile, name }) => {
+const UserInformation: React.FC = () => {
+  const { user_profile, username } = useContext(UserProfileContext)
+
   return (
     <StyledInformationWrapper>
-      <>
-        <Avatar src={profile} size={50} />
-        <StyledTitle>
-          <PrimaryText style={{ fontWeight: 'bold' }}>{name}</PrimaryText>
-          님의 프로필 정보
-        </StyledTitle>
-      </>
+      <Avatar src={user_profile} size={100} shape="square" />
+      <StyledTitle>
+        <h1>{username}</h1>
+      </StyledTitle>
     </StyledInformationWrapper>
   )
 }

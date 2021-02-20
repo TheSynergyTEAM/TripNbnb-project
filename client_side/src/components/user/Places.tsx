@@ -112,7 +112,7 @@ const PlacesListsItem: React.FC<PlacesListsItemProps> = ({
   })
 
   return (
-    <Col sm={12} md={8} xl={6}>
+    <Col xs={24} sm={12} lg={8}>
       <Link to={`/map?x=${place.x}&y=${place.y}`}>
         <StyledImageWrapper>
           <StyledButtonWrapper>
@@ -189,7 +189,7 @@ const Places: React.FC = () => {
       ) : placeList.length ? (
         <PlacesLists places={placeList} catchDelete={catchDelete} />
       ) : (
-        <div>데이터 없음</div>
+        <SecondaryText>장소 정보가 없습니다.</SecondaryText>
       )}
     </Divider>
   )
