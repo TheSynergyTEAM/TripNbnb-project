@@ -10,6 +10,7 @@ import ReviewsInput from 'components/map/detail/ReviewsInput'
 import { ReviewData } from 'components/map/hooks/FetchPlace'
 import UserContext from 'context/User'
 import { deleteReivew, updateReview } from 'api/reviews'
+import PlaceDataHandler from 'context/PlaceDataHandler'
 
 interface ReviewsComponentProps {
   reviews: Array<ReviewData>
@@ -64,6 +65,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews, place }) => {
   const [editing, setEditing] = useState(false)
   const { user } = useContext(UserContext)
   const isOverflow = reviews.length > 5
+  const { updateCallback } = useContext(PlaceDataHandler)
 
   const slicedReviews = useMemo(() => {
     switch (tabActive) {
@@ -120,6 +122,7 @@ const Reviews: React.FC<ReviewsComponentProps> = ({ reviews, place }) => {
       try {
         await deleteReivew(user, review)
         reviews.splice(index, 1)
+        updateCallback(reviews)
       } catch (error) {
         notification.error({
           message: error.message,
