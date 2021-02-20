@@ -5,7 +5,10 @@ import { Component } from 'react'
 import styled from 'styled-components'
 import SearchContext from 'context/Search'
 import { SearchState } from 'pages/Search'
-import { fetchPlaceThumbnailDataByResult } from 'components/map/hooks/FetchPlace'
+import {
+  fetchPlaceThumbnailDataByResult,
+  PlaceThumbnailData
+} from 'components/map/hooks/FetchPlace'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import SortTab from './SortTab'
 
@@ -86,9 +89,9 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
 
     this.setState({ isLoading: true })
 
-    provide.setSearchResult([], this.state.inputValue)
-    provide.setSortedResultItem([])
-    provide.setPagination(null)
+    // provide.setSearchResult([], this.state.inputValue)
+    // provide.setSortedResultItem([])
+    // provide.setPagination(null)
     provide.setLoading(true)
 
     this.props.history.push({
@@ -102,7 +105,15 @@ class SearchBar extends Component<RouteComponentProps, SearchBarState> {
         if (status === daum.maps.services.Status.OK) {
           const places = await fetchPlaceThumbnailDataByResult(result)
 
-          provide.setSearchResult([...places], this.state.inputValue)
+          if (pagination.current !== 1) {
+            provide.setSearchResult(
+              (provide.resultItem as PlaceThumbnailData[]).concat(places),
+              this.state.inputValue
+            )
+          } else {
+            provide.setSearchResult([...places], this.state.inputValue)
+          }
+
           provide.setSortedResultItem([...places])
           provide.setPagination(pagination)
           provide.setLoading(false)

@@ -47,7 +47,7 @@ class ResultWrapper extends Component<any, ResultWrapperState> {
   render() {
     const ListRender = (places: PlaceThumbnailData[]) =>
       places.map((place, i) => (
-        <ResultItem place={place} load={this.increaseCount} key={place.id} />
+        <ResultItem place={place} load={this.increaseCount} key={place.x} />
       ))
 
     return (

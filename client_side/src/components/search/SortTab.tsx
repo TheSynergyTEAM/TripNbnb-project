@@ -85,7 +85,16 @@ const SortTab: React.FC = () => {
       setSortedResultItem(filter)
     }
     // eslint-disable-next-line
-  }, [currentFilter])
+  }, [currentFilter, resultItem])
+
+  useEffect(() => {
+    setCurrentFilter(filter.filter((f) => f.active)[0])
+
+    return () => {
+      setCurrentFilter(filtering[0])
+    }
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <Row justify="center">

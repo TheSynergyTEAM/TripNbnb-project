@@ -1,5 +1,5 @@
-// import { useContext } from 'react'
-// import SearchContext from 'context/Search'
+import { useContext } from 'react'
+import SearchContext from 'context/Search'
 import { Button } from 'antd'
 import DownOutlined from '@ant-design/icons/DownOutlined'
 import styled from 'styled-components'
@@ -13,13 +13,26 @@ const Container = styled.div`
 `
 
 const LoadMore: React.FC = () => {
-  // const { pagination, setPagination } = useContext(SearchContext)
+  const { pagination } = useContext(SearchContext)
 
-  return (
+  const handleLoadMore = () => {
+    if (!pagination) {
+      return
+    }
+    
+    pagination.nextPage()
+  }
+
+  return pagination && pagination.hasNextPage ? (
     <Container>
-      <Button type="text" icon={<DownOutlined />} style={{ width: '100%' }} />
+      <Button
+        type="text"
+        icon={<DownOutlined />}
+        style={{ width: '100%' }}
+        onClick={handleLoadMore}
+      />
     </Container>
-  )
+  ) : null
 }
 
 export default LoadMore
