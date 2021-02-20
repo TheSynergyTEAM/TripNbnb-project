@@ -74,6 +74,7 @@ const Footer: React.FC<FooterProps> = ({
         disabled={disabled}
         loading={loading || checkLoading}
         onClick={handleReservation}
+        buttonShape={true}
       >
         {disabled ? '예약불가' : '예약하기'}
       </RButton>

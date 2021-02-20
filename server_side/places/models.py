@@ -52,4 +52,4 @@ class Place(core_models.TimeStampedModel):
     def place_rating(self):
         all_rating = sum([x.rating for x in self.reviews_p.all()])
         print(type(all_rating))
-        return round((all_rating / self.review_cnt()), 2)
+        return round((all_rating / self.review_cnt()), 2) if not self.review_cnt() == 0 else 0

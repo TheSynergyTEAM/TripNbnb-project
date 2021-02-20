@@ -2,23 +2,14 @@ import { fetchUserById, fetchPlaceLists } from 'api/user'
 import { PlaceList } from 'context/User'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import type { UserProfileContext } from 'context/UserProfile'
 
-interface FetchReview {
-  place: string
-  review: string
-}
+type ReturnUserProfile = UserProfileContext | null
 
-interface FetchUser {
-  user_biography: string
-  user_profile: string
-  user_reviews: FetchReview[]
-  username: string
-}
-
-export function useFetchUser(): [FetchUser | null, boolean] {
+export function useFetchUser(): [ReturnUserProfile, boolean] {
   const { id } = useParams<{ id: string }>()
   const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<FetchUser | null>(null)
+  const [user, setUser] = useState<ReturnUserProfile>(null)
 
   useEffect(() => {
     if (!id) {
@@ -62,5 +53,3 @@ export function usePlaceList(): [boolean, Array<PlaceList>, Function] {
 
   return [loading, placeList, setPlaceList]
 }
-
-export type { FetchReview, FetchUser }

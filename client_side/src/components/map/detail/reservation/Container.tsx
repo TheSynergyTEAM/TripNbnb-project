@@ -19,8 +19,10 @@ const RButton: React.FC<any> = (props) =>
     <StyledButton
       type="primary"
       shape="round"
-      {...props}
       icon={<SendOutlined />}
+      onClick={props.onClick}
+      disabled={props.disabled}
+      loading={props.loading}
     >
       {props.children || '예약하기'}
     </StyledButton>
@@ -32,6 +34,8 @@ const RButton: React.FC<any> = (props) =>
         icon={<SendOutlined />}
         onClick={props.onClick}
         style={{ marginLeft: '5px' }}
+        disabled={props.disabled}
+        loading={props.loading}
       />
     </Tooltip>
   )
@@ -57,6 +61,7 @@ const Reservation: React.FC<ReservationProps> = ({ place, map }) => {
         active={openReservationModal}
         handle={setOpenReservationModal}
         place={place}
+        buttonShape={buttonShape}
       />
     </>
   )

@@ -1,12 +1,13 @@
 import axios from 'axios'
-import { FetchUser } from 'components/user/hooks/user-hooks'
 import { PlaceList } from 'context/User'
+import { UserProfileContext } from 'context/UserProfile'
 
 export async function fetchUserById(
   id: string | number
-): Promise<FetchUser | null> {
+): Promise<UserProfileContext | null> {
   try {
     const { data: user } = await axios.get(`/users/${id}`)
+    console.log(user)
     return user
   } catch (error) {
     return null

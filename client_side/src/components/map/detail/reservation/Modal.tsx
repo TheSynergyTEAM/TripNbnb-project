@@ -9,18 +9,20 @@ import PriceText, { PriceInformation } from './Price'
 import Footer from 'components/map/detail/reservation/Footer'
 import Information from 'components/map/detail/reservation/Information'
 import { checkReservation } from 'components/map/hooks/reservation-hooks'
+import { RoomType } from 'context/UserProfile'
 
 type ReservationModalProps = {
   active: boolean
   handle: Function
   place: daum.maps.services.PlacesSearchResultItem
+  buttonShape: boolean
 }
 
 interface Room {
   name: string
   price: number
   limit: number
-  type: string
+  type: RoomType
 }
 
 const StyledModal = styled(Modal)`
@@ -36,31 +38,31 @@ const defaultSelectOptions: Array<Room> = [
     name: '싱글룸',
     price: 30000,
     limit: 1,
-    type: 'ROOM_SINGLE'
+    type: RoomType.TYPE_SINGLE
   },
   {
     name: '더블룸',
     price: 40000,
     limit: 2,
-    type: 'ROOM_DOUBLE'
+    type: RoomType.TYPE_DOUBLE
   },
   {
     name: '트윈룸',
     price: 50000,
     limit: 2,
-    type: 'ROOM_TWIN'
+    type: RoomType.TYPE_TWIN
   },
   {
     name: '트리플룸',
     price: 60000,
     limit: 3,
-    type: 'ROOM_TRIPLE'
+    type: RoomType.TYPE_TRIPLE
   },
   {
     name: '스위트룸',
     price: 70000,
     limit: 6,
-    type: 'ROOM_SUITE'
+    type: RoomType.TYPE_SUITE
   }
 ]
 
