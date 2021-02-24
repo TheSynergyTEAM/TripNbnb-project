@@ -1,1 +1,1 @@
-web: gunicorn tripnbnbserverapp.wsgi --log-file -
+web: gunicorn server_side.wsgi --log-file -
