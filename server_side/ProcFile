@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn server_side.wsgi --log-file -
+web: gunicorn tripProject.server_side.config.wsgi
