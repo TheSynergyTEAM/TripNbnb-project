@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import 'styles/global.less'
+import axios from 'axios'
+
+// global config of axios
+axios.defaults.baseURL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://tripnbnbserver.herokuapp.com'
+    : 'http://localhost:3000'
 
 ReactDOM.render(
   // <React.StrictMode>

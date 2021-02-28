@@ -1,70 +1,49 @@
 import styled from 'styled-components'
-import { Button, Row, Col } from 'antd'
-import { purple } from '@ant-design/colors'
-import { useContext, useState } from 'react'
+import { Button, Row, Col, Dropdown, Menu as AntMenu } from 'antd'
+import { createRef, useContext, useEffect, useState } from 'react'
 import UserContext from 'context/User'
 import Login from 'event/Login'
-import { NavLink } from 'react-router-dom'
-import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint'
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom'
 import PopoverAvatar from './user/PopoverAvatar'
+import GridContainer from './GridContainer'
+import DownOutlined from '@ant-design/icons/DownOutlined'
+import UserOutlined from '@ant-design/icons/UserOutlined'
+import { purple } from '@ant-design/colors'
 
-const Title = styled.div`
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: ${purple.primary};
-  display: inline-block;
-`
-
-const columns = {
-  outer: {
-    span: 12
-  },
-  inner: {
-    xs: 12,
-    md: 10,
-    lg: 8
-  }
+type GhostProps = {
+  active: boolean
 }
 
-const HeaderRow = styled(Row)`
-  background-color: white;
-  padding: 1rem;
-  border-bottom: 1px solid #ddd;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 25;
+const StyledTitle = styled.div`
+  font-family: 'Aquire Bold';
+  font-size: 1.5rem;
+  font-weight: bolder;
+  color: ${(props) => props.color};
+  transition: color 0.5s ease;
 `
 
-const StyledNavWrapper = styled.ul`
-  margin: 0;
-  padding: 0 0 0 2rem;
-  list-style-type: none;
-`
+const Title: React.FC<GhostProps> = ({ active }) => (
+  <NavLink to="/">
+    <StyledTitle color={active ? 'white' : purple[4]}>TRIPNBNB</StyledTitle>
+  </NavLink>
+)
 
-const NavWrapper: React.FC = ({ children }) => {
-  const breakpoints = useBreakpoint()
+const Menu = () => (
+  <AntMenu>
+    <AntMenu.Item key="map">
+      <NavLink to="/map">맵에서 검색하기</NavLink>
+    </AntMenu.Item>
+    <AntMenu.Item key="list">
+      <NavLink to="/search">리스트로 검색하기</NavLink>
+    </AntMenu.Item>
+  </AntMenu>
+)
 
-  return (
-    <StyledNavWrapper
-      style={{ display: breakpoints.lg ? 'inline-block' : 'none' }}
-    >
-      {children}
-    </StyledNavWrapper>
-  )
-}
-
-const NavItem: React.FC<{ to: string; name?: string }> = (props) => {
-  return (
-    <li style={{ display: 'inline-block', marginRight: '10px' }}>
-      <NavLink to={props.to}>{props.name || props.children}</NavLink>
-    </li>
-  )
-}
-
-const Header: React.FC = () => {
+const Header: React.FC<RouteComponentProps> = ({ location }) => {
+  const [ghost, setGhost] = useState(false)
   const [openPopup, setOpenPopup] = useState(false)
   const { isLoggedIn } = useContext(UserContext)
+  const headerRef = createRef<HTMLDivElement>()
 
   const handleLogin = () => {
     if (isLoggedIn) {
@@ -74,31 +53,77 @@ const Header: React.FC = () => {
     }
   }
 
+  const scrollEvent = (e: Event) => {
+    if (window.scrollY >= 100) {
+      setGhost(false)
+    } else {
+      setGhost(true)
+    }
+  }
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      setGhost(true)
+
+      window.addEventListener('scroll', scrollEvent)
+    } else {
+      setGhost(false)
+    }
+
+    return () => {
+      window.removeEventListener('scroll', scrollEvent)
+    }
+    // eslint-disable-next-line
+  }, [location.pathname])
+
   return (
-    <HeaderRow justify="space-between" align="middle">
-      <Col {...columns.inner}>
-        <NavItem to="/">
-          <Title>{process.env.REACT_APP_PROJECT_NAME?.toUpperCase()}</Title>
-        </NavItem>
-        <NavWrapper>
-          <NavItem to="/map" name="Map" />
-          <NavItem to="/search" name="Search" />
-        </NavWrapper>
-      </Col>
-      <Col {...columns.inner} style={{ textAlign: 'right' }}>
-        {isLoggedIn ? (
-          <div>
+    <GridContainer
+      ref={headerRef}
+      rowStyle={{
+        top: '0',
+        backgroundColor: ghost ? 'transparent' : 'white',
+        zIndex: 25,
+        position: 'fixed',
+        width: '100%'
+      }}
+    >
+      <Row justify="space-between" align="middle">
+        <Col>
+          <Title active={ghost} />
+        </Col>
+        <Col>
+          <Dropdown
+            placement="bottomCenter"
+            overlay={Menu}
+            trigger={['click']}
+            arrow
+          >
+            <Button
+              ghost={ghost}
+              {...(ghost ? { type: 'default' } : { type: 'primary' })}
+              shape="round"
+              style={{ marginRight: '10px' }}
+            >
+              검색 <DownOutlined />
+            </Button>
+          </Dropdown>
+          {isLoggedIn ? (
             <PopoverAvatar />
-          </div>
-        ) : (
-          <div className="login">
-            <Button onClick={handleLogin}>로그인</Button>
-            <Login popup={openPopup} onPopup={setOpenPopup} />
-          </div>
-        )}
-      </Col>
-    </HeaderRow>
+          ) : (
+            <>
+              <Button
+                type="default"
+                shape="circle"
+                icon={<UserOutlined />}
+                onClick={handleLogin}
+              />
+              <Login popup={openPopup} onPopup={setOpenPopup} />
+            </>
+          )}
+        </Col>
+      </Row>
+    </GridContainer>
   )
 }
 
-export default Header
+export default withRouter(Header)
