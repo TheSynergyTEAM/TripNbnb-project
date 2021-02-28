@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "hi^du)n!jw(8-ihbjacbn-eu@*p0h^
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
-DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
+DEBUG = bool( os.environ.get('DJANGO_DEBUG', False) )
 
 ALLOWED_HOSTS = ['*', 'https://tripnbnbserver.herokuapp.com/']
 
@@ -101,16 +101,9 @@ if DEBUG:
         }
     }
 else:
-    DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("RDS_NAME"),
-        "HOST": os.environ.get("RDS_HOST"),
-        "USER": os.environ.get("RDS_USER"),
-        "PASSWORD": os.environ.get("RDS_PASSWORD"),
-        "PORT": "5432"
-        }
-    }
+    db_from_env = dj_database_url.config(conn_max_age=500) 
+    DATABASES['default'].update(db_from_env)
+    django_heroku.settings(locals())
 
 
 # Password validation
