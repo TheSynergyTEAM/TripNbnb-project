@@ -1,2 +1,2 @@
 
-web: gunicorn tripProject.server_side.config.wsgi
+web: gunicorn --pythonpath server_side server_side.config.wsgi:application
