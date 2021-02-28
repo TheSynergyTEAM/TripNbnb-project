@@ -34,7 +34,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "hi^du)n!jw(8-ihbjacbn-eu@*p0h^
 # DEBUG = False
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', False) )
 
-ALLOWED_HOSTS = '*'
+ALLOWED_HOSTS = ['*', 'https://tripnbnbserver.herokuapp.com/']
 
 
 # Application definition
@@ -98,12 +98,24 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.sqlite3",
-#        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-#    }
-}
+if DEBUG:
+    DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
+else:
+    DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("RDS_NAME"),
+        "HOST": os.environ.get("RDS_HOST"),
+        "USER": os.environ.get("RDS_USER"),
+        "PASSWORD": os.environ.get("RDS_PASSWORD"),
+        "PORT": "5432"
+        }
+    }
 
 
 # Password validation
