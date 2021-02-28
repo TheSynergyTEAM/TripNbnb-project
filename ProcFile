@@ -1,1 +1,1 @@
-web: sh -c 'cd server_side/config && gunicorn django.wsgi:application'
+web: gunicorn server_side.config.wsgi:application —log-file -
