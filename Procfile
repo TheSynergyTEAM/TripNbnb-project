@@ -1,2 +1,2 @@
 
-web: gunicorn tripProject.server_side.config.wsgi
+web: gunicorn server_side.config.wsgi
