@@ -101,6 +101,7 @@ if DEBUG:
         }
     }
 else:
+    DATABASES = {}
     db_from_env = dj_database_url.config(conn_max_age=500) 
     DATABASES['default'].update(db_from_env)
     django_heroku.settings(locals())
@@ -153,7 +154,3 @@ CORS_ORIGIN_WHITELIST = ["https://localhost:3000", 'https://tripbnb.netlify.app/
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
 MEDIA_URL = "/media/"
-
-db_from_env = dj_database_url.config(conn_max_age=500) 
-DATABASES['default'].update(db_from_env)
-django_heroku.settings(locals())
