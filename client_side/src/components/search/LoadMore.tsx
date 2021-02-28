@@ -19,7 +19,7 @@ const LoadMore: React.FC = () => {
     if (!pagination) {
       return
     }
-    
+
     pagination.nextPage()
   }
 

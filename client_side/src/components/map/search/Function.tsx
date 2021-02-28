@@ -53,7 +53,7 @@ function initMarker(
   ctx: MarkerContextType
 ): void {
   const markerImageObj = {
-    src: `http://localhost:3000/images/${cat.marker}`,
+    src: process.env.PUBLIC_URL + `/images/${cat.marker}`,
     size: new daum.maps.Size(32, 32),
     option: {}
   }
