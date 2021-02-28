@@ -146,14 +146,9 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
 AUTH_USER_MODEL = "users.User"
 
-CORS_ORIGIN_WHITELIST = ["https://localhost:3000", 'https://tripbnb.netlify.app/']
+CORS_ORIGIN_WHITELIST = ["https://localhost:3000", 'https://tripbnb.netlify.app']
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
