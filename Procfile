@@ -1,2 +1,1 @@
-web: gunicorn server_side.config.wsgi
-web: python server_side.manage.py runserver
+web: gunicorn server_side.config.wsgi:application
