@@ -84,7 +84,9 @@ const Header: React.FC<RouteComponentProps> = ({ location }) => {
         backgroundColor: ghost ? 'transparent' : 'white',
         zIndex: 25,
         position: 'fixed',
-        width: '100%'
+        width: '100%',
+        overflow: 'hidden',
+        borderBottom: ghost ? 'none' : '1px solid #ddd'
       }}
     >
       <Row justify="space-between" align="middle">
