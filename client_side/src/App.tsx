@@ -28,7 +28,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="app">
+    <div className="app" style={{ position: 'relative' }}>
       <UserProvider value={{ user, isLoggedIn, toggleUser, setPlaceLists }}>
         <RouteWrapper />
       </UserProvider>

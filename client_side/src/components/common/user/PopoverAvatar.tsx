@@ -96,8 +96,9 @@ const PopoverAvatar: React.FC = () => {
         visible={visible}
         onVisibleChange={(visible: boolean) => setVisible(visible)}
       >
-        <Avatar user={user} />
-        <></>
+        <Avatar user={user} size={32} />
+        {/* Empty element to open popover */}
+        <span></span>
       </Popover>
     )
   )

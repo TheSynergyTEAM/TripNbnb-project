@@ -1,14 +1,38 @@
-import React, { Suspense } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import SearchDetail from './SearchDetail'
+import React, { Suspense, useMemo } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  withRouter,
+  RouteComponentProps
+} from 'react-router-dom'
 import Header from 'components/common/Header'
 import styled from 'styled-components'
 import { Spin } from 'antd'
 import LoadingIcon from '@ant-design/icons/LoadingOutlined'
 
-const SwitchWrapper = styled.section`
-  position: relative;
-`
+const SwitchWrapperComponent: React.FC<RouteComponentProps> = ({
+  children,
+  location
+}) => {
+  const styledMain = useMemo<React.CSSProperties>(() => {
+    if (location.pathname === '/') {
+      return {
+        position: 'static',
+        top: 0
+      }
+    } else {
+      return {
+        position: 'relative',
+        top: '64px'
+      }
+    }
+  }, [location.pathname])
+
+  return <main style={styledMain}>{children}</main>
+}
+
+const SwitchWrapper = withRouter(SwitchWrapperComponent)
 
 const StyledGlobalLoading = styled.div`
   position: fixed;
@@ -27,6 +51,7 @@ const Main = React.lazy(() => import('./Main'))
 const Map = React.lazy(() => import('./Map'))
 const Info = React.lazy(() => import('./Info'))
 const Search = React.lazy(() => import('./Search'))
+const SearchDetail = React.lazy(() => import('./SearchDetail'))
 
 const GlobalLoading: React.FC = () => {
   return (
