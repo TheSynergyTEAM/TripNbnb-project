@@ -148,11 +148,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 AUTH_USER_MODEL = "users.User"
 
-<<<<<<< HEAD
-CORS_ORIGIN_WHITELIST = ["https://localhost:3000", 'https://tripbnb.netlify.app']
-=======
-CORS_ORIGIN_WHITELIST = ["https://localhost:3000", "https://tripbnb.netlify.app/"]
->>>>>>> 1c8e7943d808c6f76a83db8ed6b52dc3767287d4
+# CORS_ORIGIN_WHITELIST = ["https://localhost:3000", 'https://tripbnb.netlify.app']
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
