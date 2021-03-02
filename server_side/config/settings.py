@@ -146,6 +146,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
+
 STATIC_URL = "/static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
@@ -160,5 +162,3 @@ CORS_ALLOW_CREDENTIALS = True
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
 MEDIA_URL = "/media/"
-
-COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
