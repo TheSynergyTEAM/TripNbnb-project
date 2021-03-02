@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "hi^du)n!jw(8-ihbjacbn-eu@*p0h^
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', False) )
 
 #ALLOWED_HOSTS = ['*', 'https://tripnbnbserver.herokuapp.com']
-ALLOWED_HOSTS = ["https://tripnbnbserver.herokuapp.com"]
+ALLOWED_HOSTS = ["tripnbnbserver.herokuapp.com", "localhost", "127.0.0.1", "0.0.0.0",]
 
 
 # Application definition
@@ -66,7 +66,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware"
+#    "whitenoise.middleware.WhiteNoiseMiddleware"
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -103,7 +103,7 @@ DATABASES = {
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=500) 
+db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True) 
 DATABASES['default'].update(db_from_env)
 django_heroku.settings(locals())
 
@@ -132,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-SITE_ID = 1
+#SITE_ID = 1
 
 TIME_ZONE = "Asia/Seoul"
 
@@ -149,6 +149,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 AUTH_USER_MODEL = "users.User"
 
