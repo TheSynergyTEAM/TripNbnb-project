@@ -46,4 +46,12 @@ export async function checkReservation(
   }
 }
 
+export async function cancelReservation(id: number) {
+  try {
+    await axios.post(`/reservations/delete/${id}/`)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export type { Reservation, ReservationInformation }
