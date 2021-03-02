@@ -99,4 +99,4 @@ def delete_list(request):
 
         if list_place.contentid == place_id:
             list_place.delete()
-    return redirect("http://localhost:3000")
+    return JsonResponse({})
