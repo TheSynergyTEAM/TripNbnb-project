@@ -26,10 +26,10 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "hi^du)n!jw(8-ihbjacbn-eu@*p0h^
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
-DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
+DEBUG = bool( os.environ.get('DJANGO_DEBUG', False) )
 
 #ALLOWED_HOSTS = ['*', 'https://tripnbnbserver.herokuapp.com']
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", "https://tripnbnbserver.herokuapp.com"]
 
 
 # Application definition
