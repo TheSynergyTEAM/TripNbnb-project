@@ -2,14 +2,18 @@ import UserProfileContext, {
   RoomType,
   UserReservation as UserReservationType
 } from 'context/UserProfile'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 import Divider from './Divider'
 import { purple } from '@ant-design/colors'
-import { Statistic } from 'antd'
+import { Button, Statistic } from 'antd'
+import CloseOutlined from '@ant-design/icons/CloseOutlined'
+import Modal from 'antd/lib/modal/Modal'
+import { cancelReservation } from 'components/map/hooks/reservation-hooks'
 
 type ReItemProps = {
   reservation: UserReservationType
+  update: (id: number) => void
 }
 
 const StyledReItem = styled.div`
@@ -28,6 +32,16 @@ const StyledReItem = styled.div`
     &.price {
       & .price-inner {
         display: inline-block;
+      }
+    }
+
+    &.cancel {
+      & button {
+        color: gray;
+
+        &:hover {
+          color: ${purple.primary};
+        }
       }
     }
 
@@ -50,7 +64,15 @@ const transform = (rt: RoomType) => {
   }
 }
 
-const ReItem: React.FC<ReItemProps> = ({ reservation }) => {
+const ReItem: React.FC<ReItemProps> = ({ reservation, update }) => {
+  const [cancelModal, setCancelModal] = useState(false)
+
+  const cancelReservationInComponent = async () => {
+    await cancelReservation(reservation.id)
+    update(reservation.id)
+    setCancelModal(false)
+  }
+
   return (
     <StyledReItem>
       <span className="check-in">{reservation.check_in}</span>
@@ -66,18 +88,47 @@ const ReItem: React.FC<ReItemProps> = ({ reservation }) => {
           valueStyle={{ fontSize: '1rem' }}
         />
       </span>
+      <span className="cancel">
+        <Button
+          icon={<CloseOutlined />}
+          type="text"
+          size="small"
+          onClick={(e) => setCancelModal(!cancelModal)}
+        />
+        <Modal
+          title="예약 취소"
+          visible={cancelModal}
+          width={300}
+          onOk={(e) => cancelReservationInComponent()}
+          onCancel={(e) => setCancelModal(false)}
+          okText="예약 취소"
+          cancelText="아니오"
+        >
+          예약을 취소할까요?
+        </Modal>
+      </span>
     </StyledReItem>
   )
 }
 
 const UserReservation: React.FC = () => {
-  const { user_reservation } = useContext(UserProfileContext)
+  const { user_reservation, updateReservation } = useContext(UserProfileContext)
+
+  const removeItemByID = (id: number) => {
+    const target = user_reservation.findIndex((item) => item.id === id)
+
+    if (target !== -1) {
+      user_reservation.splice(target, 1)
+    }
+
+    updateReservation(user_reservation)
+  }
 
   return (
     <Divider title="내 예약 정보">
       {user_reservation.length ? (
         (user_reservation as UserReservationType[]).map((re, i) => (
-          <ReItem reservation={re} key={i} />
+          <ReItem reservation={re} key={i} update={removeItemByID} />
         ))
       ) : (
         <p>예약 정보가 없습니다.</p>

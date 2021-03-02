@@ -82,6 +82,7 @@ def get_profile(request, pk):
   user_reservations = user.reservation.all()
   for user_review in user_reservations:
     reservation_info = {
+      "id": user_review.id,
       "place" : user_review.hotel.name,
       "place_type" : user_review.room_type,
       "check_in" : "",
