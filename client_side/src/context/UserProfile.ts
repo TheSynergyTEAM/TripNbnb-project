@@ -19,6 +19,7 @@ export type UserReservation = {
   place: string
   place_type: RoomType
   price: number
+  id: number
 }
 
 export type UserReview = {
@@ -33,6 +34,7 @@ export type UserProfileContextType = {
   user_reviews: UserReview[] | []
   username: string
   loading: boolean
+  updateReservation: (r: UserReservation[]) => void
 }
 
 export const initialContext: UserProfileContextType = {
@@ -41,7 +43,8 @@ export const initialContext: UserProfileContextType = {
   user_reservation: [],
   user_reviews: [],
   username: '',
-  loading: true
+  loading: true,
+  updateReservation: (r) => {}
 }
 
 const UserProfileContext = createContext<UserProfileContextType>(initialContext)

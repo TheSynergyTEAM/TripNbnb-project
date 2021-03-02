@@ -22,6 +22,10 @@ const Info: React.FC<RouteComponentProps> = () => {
     initialContext
   )
 
+  contextUser.updateReservation = (r) => {
+    setContextUser({ ...contextUser, user_reservation: r })
+  }
+
   useEffect(() => {
     if (!loading && user) {
       setContextUser(user)
