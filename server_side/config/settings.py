@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "hi^du)n!jw(8-ihbjacbn-eu@*p0h^
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', False) )
 
 #ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['*', 'https://tripnbnbserver.herokuapp.com']
+ALLOWED_HOSTS = ['https://tripnbnbserver.herokuapp.com', "https://127.0.0.1:8000", "https://localhost" ]
 
 
 # Application definition
@@ -150,7 +150,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 AUTH_USER_MODEL = "users.User"
 
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "https://tripbnb.netlify.app",]
+CORS_ORIGIN_WHITELIST = ["https://localhost:3000", "https://tripbnb.netlify.app",]
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 
