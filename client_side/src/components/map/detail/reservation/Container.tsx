@@ -54,7 +54,7 @@ const Reservation: React.FC<ReservationProps> = ({ place, map }) => {
         />
       ) : (
         <Tooltip title="로그인이 필요한 서비스입니다.">
-          <RButton type="default" />
+          <RButton type="default" buttonShape={buttonShape} />
         </Tooltip>
       )}
       <ReservationModal
