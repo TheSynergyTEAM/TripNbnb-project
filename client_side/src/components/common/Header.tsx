@@ -39,11 +39,24 @@ const Menu = () => (
   </AntMenu>
 )
 
+const useLocationList = (location: Partial<Location>): boolean => {
+  const [isLocationList, setIsLocationList] = useState(false)
+
+  useEffect(() => {
+    if (location.pathname)
+      setIsLocationList(location.pathname.startsWith('/search'))
+  }, [location.pathname])
+
+  return isLocationList
+}
+
 const Header: React.FC<RouteComponentProps> = ({ location }) => {
   const [ghost, setGhost] = useState(false)
   const [openPopup, setOpenPopup] = useState(false)
   const { isLoggedIn } = useContext(UserContext)
   const headerRef = createRef<HTMLDivElement>()
+
+  const isListPage = useLocationList(location)
 
   const handleLogin = () => {
     if (isLoggedIn) {
@@ -86,7 +99,7 @@ const Header: React.FC<RouteComponentProps> = ({ location }) => {
         position: 'fixed',
         width: '100%',
         overflow: 'hidden',
-        borderBottom: ghost ? 'none' : '1px solid #ddd'
+        borderBottom: ghost ? 'none' : isListPage ? 'none' : '1px solid #ddd'
       }}
     >
       <Row justify="space-between" align="middle">
